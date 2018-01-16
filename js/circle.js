@@ -80,7 +80,7 @@ var stumiView = {
 
 	init: function(){
 		var self = this;
-		self.timer = 0;
+		self.circleArr = [];
 		self.drawCon = $('#stimuli-con');
 		self.tipsCon = $('#tips-con');
 		self.buttonCon = $('#button-con');
@@ -91,22 +91,22 @@ var stumiView = {
 		self.render();
 	},
 
+
+	delay: function(timer){
+		var self = this;
+		return new Promise(function(resolve, reject){
+			self.tid = setTimeout(function(){
+				resolve();
+			}, timer);
+		});
+	},
+
 	clickButton: function(btIdx){
 		var self=this;
 		clearTimeout(self.tid)
 		octopus.setPicClick(btIdx);
 		self.picurl = octopus.getNextPic();
 		this.render();
-	},
-
-	delay: function(timer){
-		var self= this;
-		return new Promise(function(resolve, reject){
-			var timerID = setTimeout(function(){
-				resolve({timerID:timerID});
-			}, timer);
-			self.tid = timerID;
-		});
 	},
 
 	render: function(){
@@ -178,30 +178,35 @@ var stumiView = {
 		this.lButton.hide();
 	},
 
-	drawCircle: function(){
+	drawCircle: function(circleTag){
 		var self = this;
-
-        var $circle = null;  
+		var $circle = $('<div class="circle"></div>');
+		
+        this.circleArr.push({tag: circleTag, circleObj: $('<div class="circle"></div>')});
   
-        // 左上角
-        var topX = 0, topY = 0;
-        // 右下角
-        var bottomX = 0, bottomY = 0;
-        // 圆心
-        var centerX, centerY; 
+        // 画布  
+        //self.drawCon
+          
+        // 圆的左上角位置  
+        var circleX, circleY;
+
+        var topX, topY;
+        var width, height;
   
         // 是否正在画圆  
         var isDrawing = false;  
   
-        // 按下鼠标开始画圆  
-        this.drawCon.mousedown(function(event) {  
+		// 按下鼠标开始画圆  
+        $drawing.mousedown(function(event) {  
             $circle = $('<div class="circle"></div>');  
-            topX = event.pageX;
-            topY = event.pageY;
+            // centerX = event.pageX - $drawing.offset().left;  
+            // centerY = event.pageY - $drawing.offset().top; 
+            topX = event.pageX - $drawing.offset().left;
+            topY = event.pageY - $drawing.offset().top; 
             $(this).append($circle);  
             isDrawing = true;  
             event.preventDefault();  
-        });  
+        });   
   
         // 鼠标拖动  
         $(document).mousemove(function(event) {  

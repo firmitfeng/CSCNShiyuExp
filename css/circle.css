@@ -29,11 +29,11 @@ body {
 	text-align: center;
 }
 .circle {  
-  background-color: green;  
-  position: absolute;
-  text-align: center;
+    border:1px solid #000;
+    position: absolute;
+    text-align: center;
+    overflow: hidden;
 } 
-
 @media (min-width: 768px){
 #stimuli-con {
     width: 750px;
@@ -52,4 +52,3 @@ body {
     height:640px;
 }
 }
-@

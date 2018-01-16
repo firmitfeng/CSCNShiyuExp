@@ -17,16 +17,6 @@ function destoryLocalStorage(){
 	localStorage.clear();
 };
 
-var tid = null;
-
-// function delay(timer){
-// 	return new Promise(function(resolve, reject){
-// 		var timerID = setTimeout(function(){
-// 			resolve({timerID:timerID});
-// 		}, timer);
-// 	});
-// };
-
 
 var module = {
 
@@ -143,7 +133,6 @@ var stumiView = {
 
 	init: function(){
 		var self = this;
-		self.timer = 0;
 		self.picCon = $('#stimuli-con');
 		self.tipsCon = $('#tips-con');
 		self.buttonCon = $('#button-con');
@@ -172,10 +161,9 @@ var stumiView = {
 	delay: function(timer){
 		var self= this;
 		return new Promise(function(resolve, reject){
-			var timerID = setTimeout(function(){
-				resolve({timerID:timerID});
+			self.tid = setTimeout(function(){
+				resolve();
 			}, timer);
-			self.tid = timerID;
 		});
 	},
 
@@ -190,7 +178,6 @@ var stumiView = {
 		if (self.picurl == -1){
 			return;
 		}
-
 
 		//console.log(picUrl);
 		if (octopus.getMode() == mode.intu){
