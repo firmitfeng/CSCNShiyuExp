@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="Culture and Social Cognitive Neuroscience Laboratory (CSCN Lab), School of Psychological and Cognitive Sciences, Peking University">
+    <meta name="keywords" content="Culture, Social, Cognitive, Neuroscience">
+    <title>Culture and Social Cognitive Neuroscience Laboratory (CSCN Lab)</title>
+    <!-- Bootstrap -->
+    <link href="css/lib/bootstrap.min.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="css/lib/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/global.css" rel="stylesheet">
+
+    <script src="js/lib/ie-emulation-modes-warning.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="js/lib/html5shiv.min.js"></script>
+      <script src="js/lib/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <main class="container">
+      <div class="head"><h2>请点击下面的进度条，使下方的绿色条的长度尽量接近3英寸（约7.62cm)</h2></div>
+      <div class="content col-xs-12 col-sm-12 col-md-12">
+        <div id="tips-con"></div>
+<div class="progress">
+  <div id="progress-bar" class="progress-bar" role="progressbar" aria-valuenow="23" aria-valuemin="10" aria-valuemax="32" style="width: 30%;">
+    <span class="sr-only"></span>
+  </div>
+</div>
+        <div class="sqr_block" style="width:278px; height:10px; border:2px solid #0F0; background-color: #0F0;"></div>
+
+        <p><input type="hidden" id="screen_size" name="screen_size" value="22" min="10" max="32"></p>
+        <div id="button-con" class="center-block">
+          <button class="btn btn-default" type="button" id="next-button">next</button>
+        </div>
+      </div>
+    </main> <!-- /container -->
+
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">&copy; CSCN lab</p>
+      </div>
+    </footer>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/lib/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/lib/bootstrap.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+    	//$("div.sqr_block").html(window.screen.height + "  " + window.screen.width + "<br>" + $(window).width() + "<br>" + $(document).width());
+    	//以16：10的22寸显示器（viewsonic vx2269wm 1680 × 1050）为标准 22 => 1981px 所以，1英寸对应90.05px
+    	//标准显示器上的3英寸对应 1981×3/22 约270px
+    	//不同尺寸的显示器3英寸对应的像素数为 window.screen.width * sqrt（356）*3 / (16 * M) 其中 M 为显示器尺寸
+    	function getBlockWidth(screen_m){
+    		return Math.round(window.screen.width * 3.5377 / screen_m);
+    	}
+    	// var screen_m = $("input#screen_size").val();;
+    	// var x = getBlockWidth(screen_m);
+    	// console.log(Math.round(x));
+    	// $("div.sqr_block").css({"width":Math.round(x), "height":Math.round(x)})
+    	// 	.html(window.screen.width + "  " + window.screen.height + "<br>" + screen_m + "<br>" + Math.round(x) );
+    	// $("input#screen_size").change(function() {
+    	// 	var screen_m = $("input#screen_size").val();;
+    	// 	var x = getBlockWidth(screen_m);
+    	// 	$("div.sqr_block").css({"width":Math.round(x), "height":Math.round(x)})
+    	// 		.html(window.screen.width + "  " + window.screen.height + "<br>" + screen_m + "<br>" + Math.round(x) );
+    	// });
+    	 
+    	function changeSqrSize(){
+            var centerX = event.pageX - $progress.offset().left;
+
+            var min = 10, max = 32;
+    		var widthPerInch = progWidth / (max-min+1);
+
+    		var persent = centerX / progWidth * 100;
+
+    		var currSize = Math.floor(centerX * (max-min+1) / progWidth  + min);
+
+            $("input#screen_size").val(currSize);
+            $('#progress-bar').css({'width':persent+'%'});
+            var screen_m = $("input#screen_size").val();
+    		var x = getBlockWidth(screen_m);
+    		$("div.sqr_block").css({"width":Math.round(x)});
+
+    		// $("div.sqr_block").css({"width":Math.round(x), "height":Math.round(x)})
+    		// 	.html(window.screen.width + "  " + window.screen.height + "<br>" + screen_m + "<br>" + Math.round(x) );
+    	}
+
+    	var $progress = $('.progress');
+    	var progWidth = $progress.width();
+    	var mouseKeyDown = false;
+
+		$progress.mousedown(function(event) {
+			mouseKeyDown = true;
+			event.preventDefault();
+			changeSqrSize();
+        });
+
+		$(document).mousemove(function(event) {
+			if(mouseKeyDown){
+				changeSqrSize();
+            }
+        });
+                // 鼠标松开停止画圆  
+        $(document).mouseup(function() {  
+            mouseKeyDown = false;  
+        });
+    });
+  	</script>
+  </body>
+</html>  
