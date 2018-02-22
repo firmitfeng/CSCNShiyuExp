@@ -30,9 +30,7 @@
       <div class="content col-xs-12 col-sm-12 col-md-12">
         <div id="tips-con"></div>
 <div class="progress">
-  <div id="progress-bar" class="progress-bar" role="progressbar" aria-valuenow="23" aria-valuemin="10" aria-valuemax="32" style="width: 30%;">
-    <span class="sr-only"></span>
-  </div>
+  <div id="progress-bar" class="progress-bar" role="progressbar" aria-valuenow="23" aria-valuemin="10" aria-valuemax="32" style="width: 60%;">23 in.</div>
 </div>
         <div class="sqr_block" style="width:278px; height:10px; border:2px solid #0F0; background-color: #0F0;"></div>
 
@@ -85,7 +83,7 @@
     		var currSize = Math.floor(centerX * (max-min+1) / progWidth  + min);
 
             $("input#screen_size").val(currSize);
-            $('#progress-bar').css({'width':persent+'%'});
+            $('#progress-bar').css({'width':persent+'%'}).html(currSize + " in.");
             var screen_m = $("input#screen_size").val();
     		var x = getBlockWidth(screen_m);
     		$("div.sqr_block").css({"width":Math.round(x)});
@@ -113,6 +111,7 @@
         $(document).mouseup(function() {  
             mouseKeyDown = false;  
         });
+
     });
   	</script>
   </body>
