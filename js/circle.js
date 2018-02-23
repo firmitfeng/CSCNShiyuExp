@@ -19,12 +19,40 @@ const DEBUG = 1;
 
 const Characters = ['self', 'Your', 'Zhang', 'Wang', 'Li', 'Lala'];
 
+var Circle = function(chName){
+	this.chName = chName;
+	this.center = {x:-1, y:-1};
+	this.radius = -1;
+};
+
+Circle.prototype.shape = function(center, radius){
+	this.center = center;
+	this.radius = radius; 
+};
+
+var CircleHtml = function(HtmlText, center, radius){
+	this.htmlObj = $('<div class="circle"></div>');
+	this.htmlObj.html(HtmlText);
+    // 设置圆的大小和位置 
+    this.htmlObj.css("left", center.x - radius + "px");  
+    this.htmlObj.css("top", center.y - radius + "px");  
+    this.htmlObj.css("width", 2 * radius + "px");  
+    this.htmlObj.css("height", 2 * radius + "px");  
+    this.htmlObj.css("border-radius", radius + "px"); 
+}
+
 var module = {
 
 	initCharas: function(){
-		this.characters = Array.from(Characters,(val)=>({cht: val, circle_c: null}));
-		this.characters.shuffle();
-		console.log(this.characters);
+		//this.characters = Array.from(Characters,(val)=>({cht: val, circle_c: null}));
+		var characters = Characters;
+		characters.shuffle();
+		this.circleArr = [];
+		for(var i=0; i<characters.length; i++){
+			this.circleArr[i] = new Circle(characters[i]);
+		}
+
+		// console.log(this.circleArr);
 	},
 
 	init: function(m){
@@ -37,7 +65,11 @@ var module = {
 		}
 		this.mode = m;
 		this.initCharas();
-	}
+	},
+
+	getAllData: function(){
+		return this.circleArr;
+	},
 };
 
 var octopus = {
@@ -49,8 +81,6 @@ var octopus = {
 		}
 		module.init(this.mode);
 
-
-		
 	},
 
 	getRespTimer: function(){
@@ -65,7 +95,7 @@ var octopus = {
 		return this.mode;
 	},
 
-	setPicClick: function(btIdx){
+	setCircleShape: function(btIdx){
 		module.clickPic(btIdx);
 	},
 
