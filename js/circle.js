@@ -17,7 +17,7 @@ const mode = {intu: 0, ret: 1};
 
 const DEBUG = 1;
 
-const Characters = ['self', 'Your', 'Zhang', 'Wang', 'Li', 'Lala'];
+const CHARAS = ['self', 'Your', 'Zhang', 'Wang', 'Li', 'Lala'];
 
 var Circle = function(chName){
 	this.chName = chName;
@@ -45,26 +45,34 @@ var module = {
 
 	initCharas: function(){
 		//this.characters = Array.from(Characters,(val)=>({cht: val, circle_c: null}));
-		var characters = Characters;
+		var characters = CHARAS;
 		characters.shuffle();
 		this.circleArr = [];
 		for(var i=0; i<characters.length; i++){
 			this.circleArr[i] = new Circle(characters[i]);
 		}
-
 		// console.log(this.circleArr);
 	},
 
 	init: function(m){
-		if (m = mode.intu){
-			this.blankTimer = 0;	//白屏时间
-			this.respTimer = 3;		//反应时间
-		}else{
-			this.blankTimer = 7;
-			this.respTimer = 3;
-		}
 		this.mode = m;
 		this.initCharas();
+	},
+
+	setCircleShape: function(idx, center, radius){
+		this.circleArr[idx].shape(center, radius);
+	},
+
+	getCircle: function(idx){
+		if (idx < this.circleArr.length){
+			return this.circleArr[idx];
+		}else{
+			return false;
+		}
+	},
+
+	getCircleCount: function(){
+		return this.circleArr.length;
 	},
 
 	getAllData: function(){
@@ -79,24 +87,46 @@ var octopus = {
 		if (DEBUG) {
 			destoryLocalStorage();
 		}
-		module.init(this.mode);
 
+		if (m = mode.intu){
+			this.blankTimer = 0;	//白屏时间
+			this.respTimer = 3;		//反应时间
+		}else{
+			this.blankTimer = 7;
+			this.respTimer = 3;
+		}
+
+		this.currCircleIdx = -1;
+
+		module.init(this.mode);
+		stumiView.init();
 	},
 
 	getRespTimer: function(){
-		return module.respTimer * 1000;
+		return this.respTimer * 1000;
 	},
 
 	getBlankTimer: function () {
-		return module.blankTimer * 1000;
+		return this.blankTimer * 1000;
 	},
 
 	getMode: function(){
 		return this.mode;
 	},
 
-	setCircleShape: function(btIdx){
-		module.clickPic(btIdx);
+	setCircleShape: function(center, radius){
+		if (this.currCircleIdx != -1 && this.currCircleIdx < module.getCircleCount()){
+			module.setCircleShape(this.currCircleIdx, center, radius);
+		}
+	},
+
+	getCircle: function(){
+		this.currCircleIdx ++;
+		if (this.currCircleIdx < module.getCircleCount()){
+			return module.getCircle(this.currCircleIdx);
+		}else{
+			return false;
+		}
 	},
 
 	saveData: function(){
@@ -110,15 +140,17 @@ var stumiView = {
 
 	init: function(){
 		var self = this;
-		self.circleArr = [];
 		self.drawCon = $('#stimuli-con');
 		self.tipsCon = $('#tips-con');
 		self.buttonCon = $('#button-con');
 		self.nButton = $('#next-button');
+
+		self.isDrawing = false;
+
 		self.nButton.click(function(){ 
 			self.render();
 		}).hide();
-		self.render();
+		self.initRender();
 	},
 
 
@@ -132,11 +164,15 @@ var stumiView = {
 	},
 
 	clickButton: function(btIdx){
-		var self=this;
-		clearTimeout(self.tid)
-		octopus.setPicClick(btIdx);
-		self.picurl = octopus.getNextPic();
-		this.render();
+	},
+
+	initRender: function(){
+		if (octopus.getMode() == mode.intu){
+			this.dispTips('下面请你在屏幕下方的区域内画圆来代表一些人物，每个目标（人物）会依次呈现，对于每个圆你需要在3秒内画完，请你按照你的直觉来完成这个任务。');
+		}else{
+			this.dispTips('下面请你在屏幕下方的区域内画圆来代表一些人物，每个目标（人物）会依次呈现，对于每个目标你有至少7秒的思考时间，请你在充分思考后在3秒之内画完目标所代表的圆。');
+		}
+		this.nButton.show();
 	},
 
 	render: function(){
@@ -145,24 +181,14 @@ var stumiView = {
 
 		self.nButton.hide();
 		self.tipsCon.empty();
-		//self.clearScreen();
 
-		return ;
-
-		if (self.picurl == -1){
-			return;
-		}
-
+		var circle = octopus.getCircle();
 
 		//console.log(picUrl);
 		if (octopus.getMode() == mode.intu){
 			self.delay(0).then(function(args){
-				self.dispStumi('imgs/word/'+self.picurl);
-				self.dispButtons();
-				return self.delay(octopus.getRespTimer());
-			}).then(function(args){
-				self.clearScreen();
-				self.nButton.show();
+				self.dispTips(`请在3秒内画出表示 ${circle.chName} 的圆`);
+				self.drawCircle(circle);
 			});
 			
 		}else{
@@ -188,34 +214,16 @@ var stumiView = {
 
 	},
 
-	dispStumi: function(picurl){
-		this.pic.attr('src', picurl);
-		this.pic.show();
-	},
-
-	dispButtons: function(){
-		this.rButton.show();
-		this.lButton.show();
-	},
-
 	dispTips: function(tips){
 		this.tipsCon.empty().html(tips);
 	},
 
 	clearScreen: function(){
-		this.pic.hide();
-		this.rButton.hide();
-		this.lButton.hide();
+
 	},
 
-	drawCircle: function(circleTag){
+	drawCircle: function(circle){
 		var self = this;
-		var $circle = $('<div class="circle"></div>');
-		
-        this.circleArr.push({tag: circleTag, circleObj: $('<div class="circle"></div>')});
-  
-        // 画布  
-        //self.drawCon
           
         // 圆的左上角位置  
         var circleX, circleY;
@@ -224,15 +232,17 @@ var stumiView = {
         var width, height;
   
         // 是否正在画圆  
-        var isDrawing = false;  
-  
+        var isDrawing = false;
+
+        var $circle = $('<div class="circle"></div>');
+        $circle.html(circle.chName);
+
 		// 按下鼠标开始画圆  
-        $drawing.mousedown(function(event) {  
-            $circle = $('<div class="circle"></div>');  
+        self.drawCon.mousedown(function(event) {  
             // centerX = event.pageX - $drawing.offset().left;  
             // centerY = event.pageY - $drawing.offset().top; 
-            topX = event.pageX - $drawing.offset().left;
-            topY = event.pageY - $drawing.offset().top; 
+            topX = event.pageX - self.drawCon.offset().left;
+            topY = event.pageY - self.drawCon.offset().top; 
             $(this).append($circle);  
             isDrawing = true;  
             event.preventDefault();  
@@ -242,35 +252,52 @@ var stumiView = {
         $(document).mousemove(function(event) {  
             if(isDrawing) {
 
-            	bottomX = event.pageX;
-            	bottomY = event.pageY;
+                var newX = event.pageX - self.drawCon.offset().left;
+                var newY = event.pageY - self.drawCon.offset().top;
+                var circleX = 0;
+                var circleY = 0;
 
-            	console.log(topX, topY, bottomX, bottomY)
+                if(newX < 0 ){
+                    newX = 0;
+                }else if (newX > self.drawCon.width()){
+                    newX = self.drawCon.width();
+                }
+                if(newY < 0){
+                    newY = 0;
+                }else if (newY > self.drawCon.height()){
+                    newY = self.drawCon.height();
+                }
 
-                centerX = Math.abs(bottomX - topX) / 2;  
-                centerY = Math.abs(bottomY - topY) / 2;  
-                var radius = Math.sqrt(radiusX * radiusX + radiusY * radiusY); // 半径，勾股定理  
-                  
-                // 下面四个条件判断是限制圆不能超出画布区域，如果不需要这个限制可以去掉这段代码  
-                if(centerX - radius < 0) {  
-                    radius = centerX;  
-                }  
-                if(centerY - radius < 0) {  
-                    radius = centerY;  
-                }  
-                if(centerX + radius > $drawing.width()) {  
-                    radius = $drawing.width() - centerX;  
-                }  
-                if(centerY + radius > $drawing.height()) {  
-                    radius =  $drawing.height() - centerY;  
-                }  
+                width = Math.abs(newX - topX);
+                height = Math.abs(newY - topY);
+
+                if (width > height){
+                    width = height;
+                }else{
+                    height = width;
+                }
+
+                if(newX < topX){
+                    circleX = topX - width;
+                }else{
+                    circleX = topX;
+                }
+
+                if(newY < topY){
+                    circleY = topY - height;
+                }else{
+                    circleY = topY;
+                }
+
+                var radius = Math.sqrt(width * width + height * height) /2; // 半径，勾股定理  
   
                 // 设置圆的大小和位置  
-                $circle.css("left", centerX - radius + "px");  
-                $circle.css("top", centerY - radius + "px");  
-                $circle.css("width", 2 * radius + "px");  
-                $circle.css("height", 2 * radius + "px");  
-                $circle.css("border-radius", radius + "px");  
+                $circle.css("left", circleX + "px");  
+                $circle.css("top", circleY + "px");  
+                $circle.css("width", width + "px");  
+                $circle.css("height", height + "px");  
+                $circle.css("border-radius", radius + "px");
+                $circle.css("line-height", height + "px");
             }  
         });  
   
@@ -294,5 +321,5 @@ var completeView = {
 }
 
 $(document).ready(function(){
-	octopus.init(mode.ret);
+	octopus.init(mode.intu);
 });
