@@ -20,10 +20,12 @@ body {
 #tips-con{
   min-height: 25px;
 }
-#stimuli-con{
+#drawing-con{
 	min-height:360px;
   margin: 15px 0;
   border: 2px solid #000;
+  position: relative;  
+  overflow: hidden;  
 }
 #button-con{
 	text-align: center;
@@ -35,19 +37,19 @@ body {
     overflow: hidden;
 } 
 @media (min-width: 768px){
-#stimuli-con {
+#drawing-con {
     width: 750px;
     height: 405px;
 }
 }
 @media (min-width: 992px){
-#stimuli-con {
+#drawing-con {
     width: 970px;
     height:528px;
 }
 }
 @media (min-width: 1200px){
-#stimuli-con {
+#drawing-con {
     width: 1170px;
     height:640px;
 }

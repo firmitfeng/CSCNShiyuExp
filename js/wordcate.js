@@ -152,7 +152,7 @@ var stumiView = {
 
 	clickButton: function(btIdx){
 		var self=this;
-		clearTimeout(self.tid)
+		clearTimeout(self.tid);
 		octopus.setPicClick(btIdx);
 		self.picurl = octopus.getNextPic();
 		this.render();
