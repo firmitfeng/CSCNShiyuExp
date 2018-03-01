@@ -145,7 +145,7 @@ var stumiView = {
 	init: function() {
 		var self = this;
 		self.expCon = $('#exp-con');
-		self.drawCon = $('#drawing-con');
+		self.frameCon = $('#frame-con');
 		self.tipsCon = $('#tips-con');
 		self.buttonCon = $('#button-con');
 		self.nButton = $('#next-button');
