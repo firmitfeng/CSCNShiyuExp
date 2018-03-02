@@ -38,6 +38,14 @@
         text-align: center;
         overflow: hidden;
     }  
+
+    #div1 {  
+        width: 500px;  
+        height: 500px;  
+        border:1px solid;  
+        position: relative;  
+        overflow: hidden;  
+    }
 </style>  
 
   </head>
@@ -50,7 +58,7 @@
         	
         </div>
         <div id="drawing">  </div>
-        <div id="div1">  </div>
+        <div id="div1" style="text-align: -webkit-center; text-align: -moz-center; margin: 0; padding: 0;"> <hr style="display:block; margin:0; border:0; background: #000; width: 2px; height: 300px;" </div>
       </div>
     </div> <!-- /container -->
 
@@ -199,93 +207,93 @@ $('#div1').toLine({
     	});
 
     	        // 圆  
-        var $circle = null;  
+        // var $circle = null;  
   
-        // 画布  
-        var $drawing = $("#drawing");  
+        // // 画布  
+        // var $drawing = $("#drawing");  
   
-        // 圆心位置  
-        var centerX = 0;  
-        var centerY = 0;
+        // // 圆心位置  
+        // var centerX = 0;  
+        // var centerY = 0;
 
-        var topX, topY;
-        var width, height;
+        // var topX, topY;
+        // var width, height;
   
-        // 是否正在画圆  
-        var isDrawing = false;  
+        // // 是否正在画圆  
+        // var isDrawing = false;  
   
-        // 按下鼠标开始画圆  
-        $drawing.mousedown(function(event) {  
-            $circle = $('<div class="circle"></div>');  
-            // centerX = event.pageX - $drawing.offset().left;  
-            // centerY = event.pageY - $drawing.offset().top; 
-            topX = event.pageX - $drawing.offset().left;
-            topY = event.pageY - $drawing.offset().top; 
-            $(this).append($circle);  
-            isDrawing = true;  
-            event.preventDefault();  
-        });  
+        // // 按下鼠标开始画圆  
+        // $drawing.mousedown(function(event) {  
+        //     $circle = $('<div class="circle"></div>');  
+        //     // centerX = event.pageX - $drawing.offset().left;  
+        //     // centerY = event.pageY - $drawing.offset().top; 
+        //     topX = event.pageX - $drawing.offset().left;
+        //     topY = event.pageY - $drawing.offset().top; 
+        //     $(this).append($circle);  
+        //     isDrawing = true;  
+        //     event.preventDefault();  
+        // });  
   
-        // 鼠标拖动  
-        $(document).mousemove(function(event) {  
-            if(isDrawing) {
-                var newX = event.pageX - $drawing.offset().left;
-                var newY = event.pageY - $drawing.offset().top;
-                var circleX = 0;
-                var circleY = 0;
+        // // 鼠标拖动  
+        // $(document).mousemove(function(event) {  
+        //     if(isDrawing) {
+        //         var newX = event.pageX - $drawing.offset().left;
+        //         var newY = event.pageY - $drawing.offset().top;
+        //         var circleX = 0;
+        //         var circleY = 0;
 
-                if(newX < 0 ){
-                    newX = 0;
-                }else if (newX > $drawing.width()){
-                    newX = $drawing.width();
-                }
-                if(newY < 0){
-                    newY = 0;
-                }else if (newY > $drawing.height()){
-                    newY = $drawing.height();
-                }
+        //         if(newX < 0 ){
+        //             newX = 0;
+        //         }else if (newX > $drawing.width()){
+        //             newX = $drawing.width();
+        //         }
+        //         if(newY < 0){
+        //             newY = 0;
+        //         }else if (newY > $drawing.height()){
+        //             newY = $drawing.height();
+        //         }
 
-                                console.log(newX, newY);
-                console.log($drawing.offset().left , $drawing.width());
+        //                         console.log(newX, newY);
+        //         console.log($drawing.offset().left , $drawing.width());
 
-                width = Math.abs(newX - topX);
-                height = Math.abs(newY - topY);
+        //         width = Math.abs(newX - topX);
+        //         height = Math.abs(newY - topY);
 
-                if (width > height){
-                    width = height;
-                }else{
-                    height = width;
-                }
+        //         if (width > height){
+        //             width = height;
+        //         }else{
+        //             height = width;
+        //         }
 
-                if(newX < topX){
-                    circleX = topX - width;
-                }else{
-                    circleX = topX;
-                }
+        //         if(newX < topX){
+        //             circleX = topX - width;
+        //         }else{
+        //             circleX = topX;
+        //         }
 
-                if(newY < topY){
-                    circleY = topY - height;
-                }else{
-                    circleY = topY;
-                }
+        //         if(newY < topY){
+        //             circleY = topY - height;
+        //         }else{
+        //             circleY = topY;
+        //         }
 
-                var radius = Math.sqrt(width * width + height * height) /2; // 半径，勾股定理  
+        //         var radius = Math.sqrt(width * width + height * height) /2; // 半径，勾股定理  
   
-                // 设置圆的大小和位置  
-                $circle.css("left", circleX + "px");  
-                $circle.css("top", circleY + "px");  
-                $circle.css("width", width + "px");  
-                $circle.css("height", height + "px");  
-                $circle.css("border-radius", radius + "px");
-                $circle.css("line-height", height + "px");
-                $circle.html('测试!');
-            }  
-        });  
+        //         // 设置圆的大小和位置  
+        //         $circle.css("left", circleX + "px");  
+        //         $circle.css("top", circleY + "px");  
+        //         $circle.css("width", width + "px");  
+        //         $circle.css("height", height + "px");  
+        //         $circle.css("border-radius", radius + "px");
+        //         $circle.css("line-height", height + "px");
+        //         $circle.html('测试!');
+        //     }  
+        // });  
   
-        // 鼠标松开停止画圆  
-        $(document).mouseup(function() {  
-            isDrawing = false;  
-        });  
+        // // 鼠标松开停止画圆  
+        // $(document).mouseup(function() {  
+        //     isDrawing = false;  
+        // });  
 
     });
     </script>
