@@ -129,7 +129,7 @@ var octopus = {
 		}
 	},
 
-	saveCircle: function(circle){
+	saveLine: function(circle){
 		console.log(module.getCircle(this.currCircleIdx));
 	},
 
@@ -148,13 +148,18 @@ var stumiView = {
 		self.frameCon = $('#frame-con');
 		self.tipsCon = $('#tips-con');
 		self.buttonCon = $('#button-con');
+		self.selButtons = $('button.sbt');		//有问题，明天修改
 		self.nButton = $('#next-button');
 
 		self.isDrawing = false;
 
 		self.nButton.click(function() {
 			self.render();
+			self.clearFrameCon();
 		}).hide();
+
+		self.initSelButtons();
+
 		self.initRender();
 	},
 
@@ -188,6 +193,17 @@ var stumiView = {
 		this.nButton.show();
 	},
 
+	initSelButtons: function(){
+		var arr = new Array(1,2,3,4);
+		arr.shuffle();
+		for(var i=0; i<4; i++){
+			this.selButtons[i].html(arr[i]);
+			this.selButtons[i].click(function(e){
+				console.log(i);
+			});
+		}
+	},
+
 	render: function() {
 
 		var self = this;
@@ -203,12 +219,13 @@ var stumiView = {
 		if (octopus.getMode() == mode.intu) {
 			self.delay(0).then(function(args) {
 				self.dispTips('请在'+octopus.getRespTimer()/1000+'秒内画出表示'+circle.chName+'的圆');
-				self.drawCircle(circle);
+				self.drawLine(circle);
 				return self.delay(octopus.getRespTimer());
 			}).then(function(args){
 				self.dispTips('点击Next继续');
 				self.clearDrawing();
-				self.saveCircle(circle);
+				self.dispFrameMask();
+				self.saveLine(circle);
 				self.nButton.show();
 			});
 
@@ -218,15 +235,15 @@ var stumiView = {
 				return self.delay(octopus.getBlankTimer());
 			}).then(function(args){
 				self.dispTips('开始请单击画布');
-				return self.clickDelay(self.drawCon);
+				return self.clickDelay(self.frameCon);
 			}).then(function(args){
 				self.dispTips('请在'+octopus.getRespTimer()/1000+'秒内画出表示'+circle.chName+'的圆');
-				self.drawCircle(circle);
+				self.drawLine(circle);
 				return self.delay(octopus.getRespTimer());
 			}).then(function(args){
 				self.dispTips('点击Next继续');
 				self.clearDrawing();
-				self.saveCircle(circle);
+				self.saveLine(circle);
 				self.nButton.show();
 			});
 
@@ -238,37 +255,34 @@ var stumiView = {
 		this.tipsCon.empty().html(tips);
 	},
 
-	clearScreen: function() {
-
+	clearFrameCon: function() {
+		this.frameCon.empty();
+		this.frameCon.css('background','');
 	},
 
-	saveCircle: function(circle){
-		octopus.saveCircle(circle);
+	dispFrameMask: function() {
+		this.frameCon.empty();
+		this.frameCon.css('background', 'url("imgs/line/mask.jpg") repeat');
 	},
 
-	drawCircle: function(circle) {
+	saveLine: function(line){
+		octopus.saveLine(line);
+	},
+
+	drawLine: function(line) {
 		var self = this;
 
-		// 圆的左上角位置  
-		var circleX, circleY;
-		// 鼠标单击时候的相对于画布的位置
-		var topX, topY;
-		// 圆所在的div的宽高
+		// 线的宽高
 		var width, height;
 
 		// 是否正在画圆  
 		var isDrawing = false;
 
-		var $circle = $('<div class="circle" style="width:0; height:0;"></div>');
-		$circle.empty().html(circle.chName);
+		var $line = $('<hr>');
 
-		// 按下鼠标开始画圆  
-		self.drawCon.on("mousedown", function(event) {
-			// centerX = event.pageX - $drawing.offset().left;  
-			// centerY = event.pageY - $drawing.offset().top; 
-			topX = event.pageX - self.drawCon.offset().left;
-			topY = event.pageY - self.drawCon.offset().top;
-			$(this).append($circle);
+		// 按下鼠标划线
+		self.frameCon.on("mousedown", function(event) {
+			$(this).append($line);
 			isDrawing = true;
 			event.preventDefault();
 		});
@@ -277,54 +291,19 @@ var stumiView = {
 		self.expCon.on('mousemove', function(event) {
 			if (isDrawing) {
 
-				var newX = event.pageX - self.drawCon.offset().left;
-				var newY = event.pageY - self.drawCon.offset().top;
-				var circleX = 0;
-				var circleY = 0;
+				var newY = event.pageY - self.frameCon.offset().top;
 
-				if (newX < 0) {
-					newX = 0;
-				} else if (newX > self.drawCon.width()) {
-					newX = self.drawCon.width();
-				}
 				if (newY < 0) {
 					newY = 0;
-				} else if (newY > self.drawCon.height()) {
-					newY = self.drawCon.height();
+				} else if (newY > self.frameCon.height()) {
+					newY = self.frameCon.height();
 				}
 
-				width = Math.abs(newX - topX);
-				height = Math.abs(newY - topY);
+				height = newY;
 
-				if (width > height) {
-					width = height;
-				} else {
-					height = width;
-				}
-
-				if (newX < topX) {
-					circleX = topX - width;
-				} else {
-					circleX = topX;
-				}
-
-				if (newY < topY) {
-					circleY = topY - height;
-				} else {
-					circleY = topY;
-				}
-
-				var radius = Math.sqrt(width * width + height * height) / 2; // 半径，勾股定理  
-
-				// 设置圆的大小和位置  
-				$circle.css("left", circleX + "px");
-				$circle.css("top", circleY + "px");
-				$circle.css("width", width + "px");
-				$circle.css("height", height + "px");
-				$circle.css("border-radius", radius + "px");
-				$circle.css("line-height", height + "px");
-				circle.radius = radius;
-				circle.center = {x: (circleX + width/2), y: (circleY + height/2) };
+				// 设置线段
+				$line.css("height", height + "px");
+				console.log(height);
 			}
 		});
 
@@ -334,13 +313,13 @@ var stumiView = {
 			self.clearDrawing();
 		});
 
-		//return $circle;
+		//return $line;
 	},
 
 	clearDrawing: function(){
-		this.drawCon.off('mousedown');
-		this.expCon.on('mousemove');
-		this.expCon.on('mouseup');
+		this.frameCon.off('mousedown');
+		this.expCon.off('mousemove');
+		this.expCon.off('mouseup');
 	},
 }
 
@@ -356,5 +335,5 @@ var completeView = {
 }
 
 $(document).ready(function() {
-	octopus.init(mode.ret);
+	octopus.init(mode.intu);
 });

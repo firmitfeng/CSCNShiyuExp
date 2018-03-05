@@ -17,16 +17,26 @@ body {
 .footer .text-muted {
   margin: 20px 0;
 }
+#exp-con{
+  text-align: -webkit-center; 
+  text-align: -moz-center; 
+  padding: 0;
+}
 #tips-con{
   min-height: 25px;
 }
 #frame-con{
-	min-height: 360px;
-  min-height: 360px;
+  text-align: -webkit-center; 
+  text-align: -moz-center; 
+	height: 300px;
+  width: 300px;
   margin: 15px 0;
   border: 2px solid #000;
   position: relative;  
-  overflow: hidden;  
+  overflow: hidden;
+}
+#frame-con hr{
+  display:block; margin:0; border:0; background: #000; width: 2px;
 }
 #button-con{
 	text-align: center;

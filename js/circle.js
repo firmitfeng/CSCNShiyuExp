@@ -339,8 +339,8 @@ var stumiView = {
 
 	clearDrawing: function(){
 		this.drawCon.off('mousedown');
-		this.expCon.on('mousemove');
-		this.expCon.on('mouseup');
+		this.expCon.off('mousemove');
+		this.expCon.off('mouseup');
 	},
 }
 
