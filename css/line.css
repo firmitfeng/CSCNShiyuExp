@@ -22,6 +22,20 @@ body {
   text-align: -moz-center; 
   padding: 0;
 }
+#exp-con .row{
+  margin: 0;
+}
+#exp-con .mask{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: url("../imgs/line/mask.jpg") repeat;
+  display: none;
+}
+#exp-con .frame-container{
+  text-align: -webkit-center; 
+  text-align: -moz-center; 
+}
 #tips-con{
   min-height: 25px;
 }
@@ -38,7 +52,10 @@ body {
 #frame-con hr{
   display:block; margin:0; border:0; background: #000; width: 2px;
 }
-#button-con{
-	text-align: center;
+#top-con{
+	min-height: 25px;
+}
+#buttom-con{
+  min-height: 25px;
 }
 

@@ -21,60 +21,60 @@ const mode = {
 
 const DEBUG = 1;
 
-const CHARAS = ['self', 'Your', 'Zhang', 'Wang', 'Li', 'Lala'];
+const STUMITIME = 10;
+const MASKTIME = 0.2;
+const RESPTIME = 3;
+const BLANKTIME = 7;
 
-const MAX_INTEGER = Math.pow(2, 50);
-
-var Circle = function(chName) {
-	this.chName = chName;
-	this.center = {
-		x: -1,
-		y: -1
-	};
-	this.radius = -1;
-};
-
-Circle.prototype.shape = function(center, radius) {
-	this.center = center;
-	this.radius = radius;
-};
+const FRAMEhw = 300;
 
 var module = {
 
-	initCharas: function() {
-		//this.characters = Array.from(Characters,(val)=>({cht: val, circle_c: null}));
-		var characters = CHARAS;
-		characters.shuffle();
-		this.circleArr = [];
-		for (var i = 0; i < characters.length; i++) {
-			this.circleArr[i] = new Circle(characters[i]);
+	init: function() {
+		//这里的origin是原始刺激数据，其中hw是边框的长度，height是线的长度，都是使用比例
+		//target是反映的结果，格式同上
+		var stumis = [
+						{origin: {hw:1.0, height:0.5}, target: {hw:1.0, height:-1}},
+						{origin: {hw:1.0, height:0.2}, target: {hw:1.0, height:-1}},
+						{origin: {hw:1.0, height:0.7}, target: {hw:1.0, height:-1}},
+						{origin: {hw:1.2, height:0.3}, target: {hw:1.0, height:-1}},
+						{origin: {hw:0.8, height:0.2}, target: {hw:1.0, height:-1}},
+						{origin: {hw:1.4, height:0.5}, target: {hw:1.0, height:-1}},
+						{origin: {hw:0.6, height:0.4}, target: {hw:1.0, height:-1}}
+					  ];
+		this.stumis = [];
+		for(var i=0; i<stumis.length; i++){
+			this.stumis[i] = {
+								origin: {
+									hw: stumis[i].origin.hw*FRAMEhw, 
+									height: stumis[i].origin.height*FRAMEhw
+							  	}, 
+							  	target: {
+							  		hw: stumis[i].target.hw*FRAMEhw, 
+							  		height: -1
+							 	}
+							 };
 		}
-		// console.log(this.circleArr);
 	},
 
-	init: function(m) {
-		this.mode = m;
-		this.initCharas();
-	},
-
-	setCircleShape: function(idx, center, radius) {
-		this.circleArr[idx].shape(center, radius);
-	},
-
-	getCircle: function(idx) {
-		if (idx < this.circleArr.length) {
-			return this.circleArr[idx];
+	getStumi: function(idx) {
+		if (idx < this.stumis.length) {
+			return this.stumis[idx];
 		} else {
 			return false;
 		}
 	},
 
-	getCircleCount: function() {
-		return this.circleArr.length;
+	setStumiResult: function(idx, result){
+		this.stumis[idx].target.length = result;
+	},
+
+	getStumiCount: function() {
+		return this.stumis.length;
 	},
 
 	getAllData: function() {
-		return this.circleArr;
+		return this.stumis;
 	},
 };
 
@@ -86,42 +86,26 @@ var octopus = {
 			destoryLocalStorage();
 		}
 
-		if (m = mode.intu) {
-			this.blankTimer = 0; //白屏时间
-			this.respTimer = 3; //反应时间
-		} else {
-			this.blankTimer = 7;
-			this.respTimer = 3;
-		}
+		this.currStumiIdx = -1;
 
-		this.currCircleIdx = -1;
-
-		module.init(this.mode);
+		module.init();
 		stumiView.init();
-	},
-
-	getRespTimer: function() {
-		return this.respTimer * 1000;
-	},
-
-	getBlankTimer: function() {
-		return this.blankTimer * 1000;
 	},
 
 	getMode: function() {
 		return this.mode;
 	},
 
-	setCircleShape: function(center, radius) {
-		if (this.currCircleIdx != -1 && this.currCircleIdx < module.getCircleCount()) {
-			module.setCircleShape(this.currCircleIdx, center, radius);
+	setStumiResult: function(length) {
+		if (this.currStumiIdx != -1 && this.currStumiIdx < module.getStumiCount()) {
+			module.setStumiResult(this.currStumiIdx, length);
 		}
 	},
 
-	getCircle: function() {
-		this.currCircleIdx++;
-		if (this.currCircleIdx < module.getCircleCount()) {
-			return module.getCircle(this.currCircleIdx);
+	getStumi: function() {
+		this.currStumiIdx++;
+		if (this.currStumiIdx < module.getStumiCount()) {
+			return module.getStumi(this.currStumiIdx);
 		} else {
 			this.saveData();
 			completeView.init();
@@ -129,12 +113,13 @@ var octopus = {
 		}
 	},
 
-	saveLine: function(circle){
-		console.log(module.getCircle(this.currCircleIdx));
+	saveLine: function(line){
+		//this.setStumiResult();
+		console.log(module.getStumi(this.currStumiIdx));
 	},
 
 	saveData: function() {
-		var circleArr = module.getAllData();
+		var stumis = module.getAllData();
 		completeView.init();
 		console.log('Done!!');
 	}
@@ -148,7 +133,9 @@ var stumiView = {
 		self.frameCon = $('#frame-con');
 		self.tipsCon = $('#tips-con');
 		self.buttonCon = $('#button-con');
-		self.selButtons = $('button.sbt');		//有问题，明天修改
+
+		self.selButtons = $('button.sbt');
+		self.maskCon = $("#mask");
 		self.nButton = $('#next-button');
 
 		self.isDrawing = false;
@@ -158,7 +145,7 @@ var stumiView = {
 			self.clearFrameCon();
 		}).hide();
 
-		self.initSelButtons();
+		self.selButtons.hide();
 
 		self.initRender();
 	},
@@ -186,22 +173,12 @@ var stumiView = {
 
 	initRender: function() {
 		if (octopus.getMode() == mode.intu) {
-			this.dispTips('下面请你在屏幕下方的区域内画圆来代表一些人物，每个目标（人物）会依次呈现，对于每个圆你需要在3秒内画完，请你按照你的直觉来完成这个任务。');
+			this.dispTips('请你按照你的直觉来完成这个任务。');
 		} else {
-			this.dispTips('下面请你在屏幕下方的区域内画圆来代表一些人物，每个目标（人物）会依次呈现，对于每个目标你有至少7秒的思考时间，请你在充分思考后在3秒之内画完目标所代表的圆。');
+			this.dispTips('请按要求完成');
 		}
+		this.clearFrameCon();
 		this.nButton.show();
-	},
-
-	initSelButtons: function(){
-		var arr = new Array(1,2,3,4);
-		arr.shuffle();
-		for(var i=0; i<4; i++){
-			this.selButtons[i].html(arr[i]);
-			this.selButtons[i].click(function(e){
-				console.log(i);
-			});
-		}
 	},
 
 	render: function() {
@@ -211,21 +188,35 @@ var stumiView = {
 		self.nButton.hide();
 		self.tipsCon.empty();
 
-		var circle = octopus.getCircle();
-		if(!circle){
+		var stumi = octopus.getStumi();
+		if(!stumi){
 			return ;
 		}
 
 		if (octopus.getMode() == mode.intu) {
 			self.delay(0).then(function(args) {
-				self.dispTips('请在'+octopus.getRespTimer()/1000+'秒内画出表示'+circle.chName+'的圆');
-				self.drawLine(circle);
-				return self.delay(octopus.getRespTimer());
+				self.dispTips("请认真观看下面的图形，您有共计10s的时间");
+				self.dispStumi(stumi.origin);
+				return self.delay(STUMITIME*1000);
 			}).then(function(args){
-				self.dispTips('点击Next继续');
+				self.clearFrameCon();
+				self.maskCon.show();
+				return self.delay(MASKTIME*1000);
+			}).then(function(args){
+				var randIdx = Math.floor(Math.random()*4+1);
+				self.maskCon.hide();
+				self.selButtons.show();
+				self.dispTips("请点击"+randIdx+"号按钮");
+				return self.clickDelay($(self.selButtons[randIdx-1]));
+			}).then(function(){
+				self.dispTips('请在下面的方框中画出一条相对长度与您刚才见到的线段相等的线段');
+				self.selButtons.hide();
+				self.dispFrameCon(stumi.target);
+				self.drawLine(stumi.target);
+				return self.delay(RESPTIME*1000);
+			}).then(function(args){
 				self.clearDrawing();
-				self.dispFrameMask();
-				self.saveLine(circle);
+				self.saveLine();
 				self.nButton.show();
 			});
 
@@ -255,14 +246,21 @@ var stumiView = {
 		this.tipsCon.empty().html(tips);
 	},
 
-	clearFrameCon: function() {
+	dispStumi: function(origin) {
+		var $hr = $('<hr>').css("height", origin.height+"px");
 		this.frameCon.empty();
-		this.frameCon.css('background','');
+		this.frameCon.append($hr);
+		this.frameCon.css({'width': origin.hw+'px', 'height':origin.hw+'px', 'border':'2px solid #000'});
 	},
 
-	dispFrameMask: function() {
+	clearFrameCon: function() {
 		this.frameCon.empty();
-		this.frameCon.css('background', 'url("imgs/line/mask.jpg") repeat');
+		this.frameCon.css('border','0');
+	},
+
+	dispFrameCon: function(target) {
+		this.frameCon.empty();
+		this.frameCon.css({'width': target.hw+'px', 'height':target.hw+'px', 'border':'2px solid #000'});
 	},
 
 	saveLine: function(line){

@@ -25,7 +25,7 @@ var module = {
 
 		if (!localStorage.wordspic){
 			localStorage.wordspic = JSON.stringify({currIdx:0, picIdx:this.picIdxArr});
-			this.picIdxArr = Array.from(new Array(this.picCount),(val,index)=>({idx: index, img: '', click: ''}));;
+			this.picIdxArr = Array.from(new Array(this.picCount),(val,index)=>({idx: index, img: '', click: ''}));
 			this.picIdxArr.shuffle();
 			this.currIdx = 0;
 		}else{
