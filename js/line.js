@@ -26,55 +26,59 @@ const MASKTIME = 0.2;
 const RESPTIME = 3;
 const BLANKTIME = 7;
 
-const FRAMEhw = 300;
+//正方形外框的边长
+const FRAMESIZE = 300;
 
 var module = {
 
 	init: function() {
-		//这里的origin是原始刺激数据，其中hw是边框的长度，height是线的长度，都是使用比例
-		//target是反映的结果，格式同上
-		var stumis = [
-						{origin: {hw:1.0, height:0.5}, target: {hw:1.0, height:-1}},
-						{origin: {hw:1.0, height:0.2}, target: {hw:1.0, height:-1}},
-						{origin: {hw:1.0, height:0.7}, target: {hw:1.0, height:-1}},
-						{origin: {hw:1.2, height:0.3}, target: {hw:1.0, height:-1}},
-						{origin: {hw:0.8, height:0.2}, target: {hw:1.0, height:-1}},
-						{origin: {hw:1.4, height:0.5}, target: {hw:1.0, height:-1}},
-						{origin: {hw:0.6, height:0.4}, target: {hw:1.0, height:-1}}
-					  ];
-		this.stumis = [];
-		for(var i=0; i<stumis.length; i++){
-			this.stumis[i] = {
-								origin: {
-									hw: stumis[i].origin.hw*FRAMEhw, 
-									height: stumis[i].origin.height*FRAMEhw
+		//这里的stumi是原始刺激数据，其中hw是边框的长度，height是线的长度，都是使用比例
+		//respo是反映的结果，格式同上
+		var data = [
+						{stumi: {hw:1.0, height:0.5}, respo: {hw:1.0, height:-1}, mode: 'abs'},
+						{stumi: {hw:1.0, height:0.2}, respo: {hw:1.0, height:-1}, mode: 'abs'},
+						{stumi: {hw:1.0, height:0.7}, respo: {hw:1.0, height:-1}, mode: 'rel'},
+						{stumi: {hw:1.2, height:0.3}, respo: {hw:1.0, height:-1}, mode: 'abs'},
+						{stumi: {hw:0.8, height:0.2}, respo: {hw:1.0, height:-1}, mode: 'rel'},
+						{stumi: {hw:1.4, height:0.5}, respo: {hw:1.0, height:-1}, mode: 'abs'},
+						{stumi: {hw:0.6, height:0.4}, respo: {hw:1.0, height:-1}, mode: 'rel'}
+					];
+		this.data = [];
+		for(var i=0; i<data.length; i++){
+			this.data[i] = {
+								stumi: {
+									hw: data[i].stumi.hw*FRAMESIZE, 
+									height: data[i].stumi.height*FRAMESIZE
 							  	}, 
-							  	target: {
-							  		hw: stumis[i].target.hw*FRAMEhw, 
+							  	respo: {
+							  		hw: data[i].respo.hw*FRAMESIZE, 
 							  		height: -1
-							 	}
+							 	},
+							 	mode: data[i].mode
 							 };
 		}
+		//是否需要随机，需要的话取消以下注释
+		this.data.shuffle();
 	},
 
 	getStumi: function(idx) {
-		if (idx < this.stumis.length) {
-			return this.stumis[idx];
+		if (idx < this.data.length) {
+			return this.data[idx];
 		} else {
 			return false;
 		}
 	},
 
 	setStumiResult: function(idx, result){
-		this.stumis[idx].target.length = result;
+		this.data[idx].respo.length = result;
 	},
 
 	getStumiCount: function() {
-		return this.stumis.length;
+		return this.data.length;
 	},
 
 	getAllData: function() {
-		return this.stumis;
+		return this.data;
 	},
 };
 
@@ -113,14 +117,15 @@ var octopus = {
 		}
 	},
 
-	saveLine: function(line){
+	saveLine: function(exper){
 		//this.setStumiResult();
 		console.log(module.getStumi(this.currStumiIdx));
 	},
 
 	saveData: function() {
-		var stumis = module.getAllData();
+		var result = module.getAllData();
 		completeView.init();
+		console.log(result);
 		console.log('Done!!');
 	}
 };
@@ -188,15 +193,15 @@ var stumiView = {
 		self.nButton.hide();
 		self.tipsCon.empty();
 
-		var stumi = octopus.getStumi();
-		if(!stumi){
+		var exper = octopus.getStumi();
+		if(!exper){
 			return ;
 		}
 
 		if (octopus.getMode() == mode.intu) {
 			self.delay(0).then(function(args) {
 				self.dispTips("请认真观看下面的图形，您有共计10s的时间");
-				self.dispStumi(stumi.origin);
+				self.dispStumi(exper.stumi);
 				return self.delay(STUMITIME*1000);
 			}).then(function(args){
 				self.clearFrameCon();
@@ -209,32 +214,56 @@ var stumiView = {
 				self.dispTips("请点击"+randIdx+"号按钮");
 				return self.clickDelay($(self.selButtons[randIdx-1]));
 			}).then(function(){
-				self.dispTips('请在下面的方框中画出一条相对长度与您刚才见到的线段相等的线段');
+				if(exper.mode == 'abs'){
+					self.dispTips('请在'+RESPTIME+'s内，在下面的方框中画出一条绝对长度与您刚才见到的线段相等的线段');
+				}else{
+					self.dispTips('请在'+RESPTIME+'s内，在下面的方框中画出一条相对长度与您刚才见到的线段相等的线段');
+				}
 				self.selButtons.hide();
-				self.dispFrameCon(stumi.target);
-				self.drawLine(stumi.target);
+				self.dispFrameCon(exper.respo);
+				self.drawLine(exper.respo);
 				return self.delay(RESPTIME*1000);
 			}).then(function(args){
 				self.clearDrawing();
-				self.saveLine();
+				self.saveLine(exper);
 				self.nButton.show();
 			});
 
 		} else {
 			self.delay(0).then(function(args) {
-				self.dispTips('请思考'+circle.chName);
-				return self.delay(octopus.getBlankTimer());
+				self.dispTips("请认真观看下面的图形，您有共计10s的时间");
+				self.dispStumi(exper.stumi);
+				return self.delay(STUMITIME*1000);
 			}).then(function(args){
-				self.dispTips('开始请单击画布');
-				return self.clickDelay(self.frameCon);
+				self.clearFrameCon();
+				self.maskCon.show();
+				return self.delay(MASKTIME*1000);
 			}).then(function(args){
-				self.dispTips('请在'+octopus.getRespTimer()/1000+'秒内画出表示'+circle.chName+'的圆');
-				self.drawLine(circle);
-				return self.delay(octopus.getRespTimer());
+				var randIdx = Math.floor(Math.random()*4+1);
+				self.maskCon.hide();
+				self.selButtons.show();
+				self.dispTips("请点击"+randIdx+"号按钮");
+				return self.clickDelay($(self.selButtons[randIdx-1]));
+			}).then(function(){
+				self.dispTips('请思考'+BLANKTIME+'s');
+				self.selButtons.hide();
+				return self.delay(BLANKTIME*1000);
 			}).then(function(args){
-				self.dispTips('点击Next继续');
+				self.dispTips('开始请单击屏幕');
+				return self.clickDelay($(document));
+			}).then(function(args){
+				if(exper.mode == 'abs'){
+					self.dispTips('请在'+RESPTIME+'s内，在下面的方框中画出一条绝对长度与您刚才见到的线段相等的线段');
+				}else{
+					self.dispTips('请在'+RESPTIME+'s内，在下面的方框中画出一条相对长度与您刚才见到的线段相等的线段');
+				}
+				self.selButtons.hide();
+				self.dispFrameCon(exper.respo);
+				self.drawLine(exper.respo);
+				return self.delay(RESPTIME*1000);
+			}).then(function(args){
 				self.clearDrawing();
-				self.saveLine(circle);
+				self.saveLine(exper);
 				self.nButton.show();
 			});
 
@@ -246,11 +275,11 @@ var stumiView = {
 		this.tipsCon.empty().html(tips);
 	},
 
-	dispStumi: function(origin) {
-		var $hr = $('<hr>').css("height", origin.height+"px");
+	dispStumi: function(stumi) {
+		var $hr = $('<hr>').css("height", stumi.height+"px");
 		this.frameCon.empty();
 		this.frameCon.append($hr);
-		this.frameCon.css({'width': origin.hw+'px', 'height':origin.hw+'px', 'border':'2px solid #000'});
+		this.frameCon.css({'width': stumi.hw+'px', 'height':stumi.hw+'px', 'border':'2px solid #000'});
 	},
 
 	clearFrameCon: function() {
@@ -258,16 +287,16 @@ var stumiView = {
 		this.frameCon.css('border','0');
 	},
 
-	dispFrameCon: function(target) {
+	dispFrameCon: function(respo) {
 		this.frameCon.empty();
-		this.frameCon.css({'width': target.hw+'px', 'height':target.hw+'px', 'border':'2px solid #000'});
+		this.frameCon.css({'width': respo.hw+'px', 'height':respo.hw+'px', 'border':'2px solid #000'});
 	},
 
-	saveLine: function(line){
-		octopus.saveLine(line);
+	saveLine: function(exper){
+		octopus.saveLine(exper);
 	},
 
-	drawLine: function(line) {
+	drawLine: function(respo) {
 		var self = this;
 
 		// 线的宽高
@@ -301,13 +330,15 @@ var stumiView = {
 
 				// 设置线段
 				$line.css("height", height + "px");
-				console.log(height);
+				respo.height = height;
+				//console.log(height);
 			}
 		});
 
 		// 鼠标松开停止画圆  
 		self.expCon.on('mouseup', function() {
 			isDrawing = false;
+			respo.height = height;
 			self.clearDrawing();
 		});
 
@@ -333,5 +364,5 @@ var completeView = {
 }
 
 $(document).ready(function() {
-	octopus.init(mode.intu);
+	octopus.init(mode.rel);
 });
