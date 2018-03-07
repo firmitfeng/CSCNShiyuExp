@@ -58,7 +58,7 @@ var module = {
 							 };
 		}
 		//是否需要随机，需要的话取消以下注释
-		this.data.shuffle();
+		//this.data.shuffle();
 	},
 
 	getStumi: function(idx) {
