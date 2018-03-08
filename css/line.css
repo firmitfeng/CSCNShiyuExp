@@ -1,12 +1,13 @@
 html {
-  position: relative;
   height: 100%;
 }
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-  min-height: 100%;
-  overflow:hidden;
+  margin:0;
+  height: 100%;
+}
+.main{
+  height: 100%;
+  margin-bottom: -80px;
 }
 .footer {
   position: absolute;
@@ -29,9 +30,17 @@ body {
   text-align: -webkit-center; 
   text-align: -moz-center; 
   padding: 0;
+  display: flex;
+  display: -webkit-flex;
+  height: 80%;
+  min-height: 600px;
+  flex-direction: column;
+  align-items: center;
 }
 #exp-con .row{
-  margin: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 #mask{
   margin: 0;
@@ -48,6 +57,12 @@ body {
 #exp-con .frame-container{
   text-align: -webkit-center; 
   text-align: -moz-center; 
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 #tips-con{
   min-height: 25px;
@@ -59,7 +74,6 @@ body {
   width: 300px;
   margin: 15px 0;
   border: 2px solid #000;
-  position: relative;  
   overflow: hidden;
 }
 #frame-con hr{
