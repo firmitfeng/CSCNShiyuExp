@@ -33,6 +33,52 @@
         text-align: -webkit-center; 
         text-align: -moz-center; 
     }  
+
+    #fishball {  
+        width: 500px;  
+        height: 500px;  
+        border:1px solid;  
+        position: relative;  
+        overflow: hidden;
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+    }
+
+    #fishball .track{
+        width: 100%;
+        height: 25%;
+        position: relative;
+    }
+
+    #fishball .ball{
+        width: 75px;
+        height: 75px;
+        position: relative;
+        top: 50%;
+      transform: translateY(-50%);
+    }
+
+    #fishball #red.ball{
+        background: url("imgs/fishball/ball_red.png") center;
+    }
+
+    #fishball #yellow.ball{
+        background: url("imgs/fishball/ball_yellow.png") center;
+    }
+    
+    #fishball #blue.ball{
+        background: url("imgs/fishball/ball_blue.png") center;
+    }
+    
+    #fishball #green.ball{
+        background: url("imgs/fishball/ball_green.png") center;
+    }
+    
+    #fishball #black.ball{
+        background: url("imgs/fishball/ball_black.png") center;
+    }
+
   
     .circle {  
         border:1px solid #000;
@@ -62,6 +108,12 @@
         <p><input type="input" id="screen_size" name="screen_size" value="22"></p>
         <div class="sqr_block" style="width:278px; height:278px; border:2px solid #000;">
         	
+        </div>
+        <div id="fishball">
+            <div class="track"><div class="ball" id="green"></div></div>
+            <div class="track"><div class="ball" id="yellow"></div></div>
+            <div class="track"><div class="ball" id="black"></div><div class="ball" id="blue"></div></div>
+            <div class="track"><div class="ball" id="red"></div></div>
         </div>
         <div id="drawing">  </div>
         <div id="div1" style="text-align: -webkit-center; text-align: -moz-center; margin: 0; padding: 0;"> <hr style="display:block; margin:0; border:0; background: #000; width: 2px; height: 300px;" </div>
