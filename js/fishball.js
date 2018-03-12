@@ -21,43 +21,31 @@ const mode = {
 
 const DEBUG = 1;
 
-const STUMITIME = 10;
+const STUMITIME = 5;
 const MASKTIME = 0.2;
 const RESPTIME = 3;
 const BLANKTIME = 7;
 
-/*  将动画分解成两部分，撞击前的一部分，撞击后的一部分
-    从视频上看，每个动画长度大约4秒，撞击发生在大约2秒左右
-    编程方便，总时间算4.4s
-    前半程2s，大约走了2.25个球的宽度，170px
-    后半程2.2s，大约走了2.5个球的宽度，225px
-    黑球（白球）前半程走了
-*/
-const PATH1 = 180;
-const PATH2 = 300;
-
-var Ball = function(pos, direction, color){
-	this.pos = pos;
-	this.direction = direction;
-	this.color = color;
-}
-
-
 var module = {
 
 	init: function() {
-		this.data = [
-						{
-							direction: "left",
-							green:{pos:40, path1:PATH1, path2:PATH2},
-							yellow:{pos:5, path1:PATH1, path2:PATH2},
-							black:{pos:60, path1:},
-							blue:{pos:220, path1:300, path2:PATH2},
-							red:{pos:25}
-						},
 
-					];
-
+		this.data = [];
+		for(var i=0; i<FishBallMeta.length; i++){
+			var direct = FishBallMeta[i].direction;
+			this.data[i] = {};
+			for(var key in FishBallMeta[i]){
+				if(key == 'direction' || key == 'fb'){
+					this.data[i][key] = FishBallMeta[i][key];
+					continue;
+				}
+				this.data[i][key] = {pos:0, anima1: {}, anima2:{}, respo:''};
+				this.data[i][key]['pos'] = FishBallMeta[i][key]['pos'];
+				this.data[i][key]['anima1'][direct] = '+='+FishBallMeta[i][key]['path1'];
+				this.data[i][key]['anima2'][direct] = '+='+FishBallMeta[i][key]['path2'];
+			}
+		}
+		// console.log(this.data);
 	},
 
 	getStumi: function(idx) {
@@ -130,15 +118,20 @@ var stumiView = {
 	init: function() {
 		var self = this;
 		self.expCon = $('#exp-con');
-		self.frameCon = $('#frame-con');
+		self.fishballCon = $('#fishball');
+		self.trackCon = $('.track');
 		self.tipsCon = $('#tips-con');
 		self.buttonCon = $('#button-con');
+
+		self.red = $('#red');
+		self.white = $('#white');
+		self.yellow = $('#yellow');
+		self.blue = $('#blue');
+		self.green = $('#green');
 
 		self.selButtons = $('button.sbt');
 		self.maskCon = $("#mask");
 		self.nButton = $('#next-button');
-
-		self.isDrawing = false;
 
 		self.nButton.click(function() {
 			self.render();
@@ -181,6 +174,24 @@ var stumiView = {
 		this.nButton.show();
 	},
 
+	initFishBall: function(stumi){
+		this.trackCon.removeClass().addClass('track').addClass(stumi.fb);
+		this.red.css({left:'', right:''});
+		this.blue.css({left:'', right:''});
+		this.green.css({left:'', right:''});
+		this.yellow.css({left:'', right:''});
+		this.white.css({left:'', right:''});
+	},
+
+	disFishBall: function(stumi){
+		this.initFishBall(stumi);
+		this.red.css(stumi.direction, stumi.red.pos).animate(stumi.red.anima1, TIMER1, 'linear').animate(stumi.red.anima2, TIMER2, 'linear');
+		this.blue.css(stumi.direction, stumi.blue.pos).animate(stumi.blue.anima1, TIMER1, 'linear').animate(stumi.blue.anima2, TIMER2, 'linear');
+		this.green.css(stumi.direction, stumi.green.pos).animate(stumi.green.anima1, TIMER1, 'linear').animate(stumi.green.anima2, TIMER2, 'linear');
+		this.yellow.css(stumi.direction, stumi.yellow.pos).animate(stumi.yellow.anima1, TIMER1, 'linear').animate(stumi.yellow.anima2, TIMER2, 'linear');
+		this.white.css(stumi.direction, stumi.white.pos).animate(stumi.white.anima1, TIMER1, 'linear').animate(stumi.white.anima2, TIMER2, 'linear');
+	},
+
 	render: function() {
 
 		var self = this;
@@ -193,34 +204,14 @@ var stumiView = {
 			return ;
 		}
 
+
 		if (octopus.getMode() == mode.intu) {
 			self.delay(0).then(function(args) {
 				self.dispTips("请认真观看下面的图形，您有共计10s的时间");
-				self.dispStumi(exper.stumi);
+				self.dispStumi(exper);
 				return self.delay(STUMITIME*1000);
 			}).then(function(args){
 				self.clearFrameCon();
-				self.maskCon.show();
-				return self.delay(MASKTIME*1000);
-			}).then(function(args){
-				var randIdx = Math.floor(Math.random()*4+1);
-				self.maskCon.hide();
-				self.selButtons.show();
-				self.dispTips("请点击"+randIdx+"号按钮");
-				return self.clickDelay($(self.selButtons[randIdx-1]));
-			}).then(function(){
-				if(exper.mode == 'abs'){
-					self.dispTips('请在'+RESPTIME+'s内，在下面的方框中画出一条绝对长度与您刚才见到的线段相等的线段');
-				}else{
-					self.dispTips('请在'+RESPTIME+'s内，在下面的方框中画出一条相对长度与您刚才见到的线段相等的线段');
-				}
-				self.selButtons.hide();
-				self.dispFrameCon(exper.respo);
-				self.drawLine(exper.respo);
-				return self.delay(RESPTIME*1000);
-			}).then(function(args){
-				self.clearDrawing();
-				self.saveLine(exper);
 				self.nButton.show();
 			});
 
@@ -271,20 +262,16 @@ var stumiView = {
 	},
 
 	dispStumi: function(stumi) {
-		var $hr = $('<hr>').css("height", stumi.height+"px");
-		this.frameCon.empty();
-		this.frameCon.append($hr);
-		this.frameCon.css({'width': stumi.hw+'px', 'height':stumi.hw+'px', 'border':'2px solid #000'});
+		this.disFishBall(stumi);
+		this.fishballCon.show();
 	},
 
 	clearFrameCon: function() {
-		this.frameCon.empty();
-		this.frameCon.css('border','0');
+		this.fishballCon.hide();
 	},
 
 	dispFrameCon: function(respo) {
-		this.frameCon.empty();
-		this.frameCon.css({'width': respo.hw+'px', 'height':respo.hw+'px', 'border':'2px solid #000'});
+
 	}
 }
 
@@ -302,3 +289,4 @@ var completeView = {
 $(document).ready(function(){
 	octopus.init(mode.intu);
 });
+

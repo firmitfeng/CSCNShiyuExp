@@ -75,32 +75,55 @@ body {
   position: relative;
 }
 
-#exp-con #fishball .ball{
+#exp-con #fishball .track>div{
   width: 75px;
   height: 75px;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  background-size: 70px 70px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-#exp-con #fishball #red.ball{
-  background: url("../imgs/fishball/ball_red.png") center;
+#exp-con #fishball .ball #red{
+  background-image: url("../imgs/fishball/ball_red.png");
 }
 
-#exp-con #fishball #yellow.ball{
-  background: url("../imgs/fishball/ball_yellow.png") center;
+#exp-con #fishball .ball #yellow{
+  background-image: url("../imgs/fishball/ball_yellow.png");
 }
 
-#exp-con #fishball #blue.ball{
-  background: url("../imgs/fishball/ball_blue.png") center;
+#exp-con #fishball .ball #blue{
+  background-image: url("../imgs/fishball/ball_blue.png");
 }
 
-#exp-con #fishball #green.ball{
-  background: url("../imgs/fishball/ball_green.png") center;
+#exp-con #fishball .ball #green{
+  background-image: url("../imgs/fishball/ball_green.png");
 }
 
-#exp-con #fishball #black.ball{
-  background: url("../imgs/fishball/ball_black.png") center;
+#exp-con #fishball .ball #white{
+  background-image: url("../imgs/fishball/ball_white.png");
+}
+
+#exp-con #fishball .fish #red{
+  background-image: url("../imgs/fishball/fish_red.png");
+}
+
+#exp-con #fishball .fish #yellow{
+  background-image: url("../imgs/fishball/fish_yellow.png");
+}
+
+#exp-con #fishball .fish #blue{
+  background-image: url("../imgs/fishball/fish_blue.png");
+}
+
+#exp-con #fishball .fish #green{
+  background-image: url("../imgs/fishball/fish_green.png");
+}
+
+#exp-con #fishball .fish #white{
+  background-image: url("../imgs/fishball/fish_white.png");
 }
 
 #buttom-con{
