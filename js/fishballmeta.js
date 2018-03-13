@@ -5,13 +5,29 @@
     不参加撞击的球的总运动距离是150 + 220
 */
 
-const TIMER1 = 1600;
-const TIMER2 = 2400;
+const B_TIMER1 = 1600;
+const B_TIMER2 = 2400;
 const B_PATH1 = 155;
 const B_PATH2 = 220;
 
-const FishBallMeta = [
+const F_TIMER1 = 1500;
+const F_TIMER2 = 2500;
+const F_TIMER3 = 1000;
+const F_TIMER4 = 3000;
+const F_PATH1 = 0;
+const F_PATH2 = 220;
 
+const FishBallMeta = [
+	{
+		direction: "left",
+		fb: "fish",
+		patch: true,
+		green:{pos:40, path1:B_PATH1, path2:B_PATH2},
+		yellow:{pos:5, path1:B_PATH1, path2:B_PATH2},
+		white:{pos:75, path1:B_PATH1, path2:-40},
+		blue:{pos:525, path1:-200, path2:B_PATH2, flipx:true},
+		red:{pos:30, path1:B_PATH1, path2:B_PATH2}
+	},
 	//DVLCollisionDDDV
 	{
 		direction: "left",
