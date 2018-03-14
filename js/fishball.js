@@ -26,7 +26,7 @@ const MASKTIME = 0.2;
 const RESPTIME = 3;
 const BLANKTIME = 7;
 
-const FISHBALLTYPES = ['red', 'green', 'blue', 'yellow', 'white'];
+const COLORS = ['red', 'green', 'blue', 'yellow', 'white'];
 
 var module = {
 
@@ -36,27 +36,25 @@ var module = {
 		for (var i = 0; i < FishBallMeta.length; i++) {
 			var direct = FishBallMeta[i].direction;
 			this.data[i] = {};
-			//需要修改
-			for (var key in FishBallMeta[i]) {
-				if (key == 'direction' || key == 'fb' || key == 'patch') {
-					this.data[i][key] = FishBallMeta[i][key];
-					continue;
-				}
-				this.data[i][key] = {
+			for (var c_idx = COLORS.length; c_idx--;) {
+				var color = COLORS[c_idx];
+				this.data[i][color] = {
 					pos: 0,
 					anima1: {},
 					anima2: {},
 					respo: ''
 				};
-				this.data[i][key]['pos'] = FishBallMeta[i][key]['pos'];
-				this.data[i][key]['anima1'][direct] = '+=' + FishBallMeta[i][key]['path1'];
-				this.data[i][key]['anima2'][direct] = '+=' + FishBallMeta[i][key]['path2'];
-				if ('flipx' in FishBallMeta[i][key]) {
-					this.data[i][key]['flipx'] = true;
+				this.data[i][color]['pos'] = FishBallMeta[i][color]['pos'];
+				this.data[i][color]['anima1'][direct] = '+=' + FishBallMeta[i][color]['path1'];
+				this.data[i][color]['anima2'][direct] = '+=' + FishBallMeta[i][color]['path2'];
+				if ('flipx' in FishBallMeta[i][color]) {
+					this.data[i][color]['flipx'] = true;
 				} else {
-					this.data[i][key]['flipx'] = false;
+					this.data[i][color]['flipx'] = false;
 				}
 			}
+			this.data[i]['direction'] = FishBallMeta[i]['direction'];
+			this.data[i]['fb'] = FishBallMeta[i]['fb'];
 		}
 		// console.log(this.data);
 	},
@@ -193,32 +191,43 @@ var stumiView = {
 			left: '',
 			right: ''
 		};
-		console.log(stumi);
-		for (var i = FISHBALLTYPES.length; i--;) {
-			temp[stumi['direction']] = stumi[FISHBALLTYPES[i]].pos;
-			this[FISHBALLTYPES[i]].css(temp);
-			console.log(stumi.direction + '    ' + stumi[FISHBALLTYPES[i]].flipx );
-			if(stumi.fb == 'fish'){
-				if((stumi.direction == 'left' && stumi[FISHBALLTYPES[i]].flipx) 
-					|| (stumi.direction == 'right' && !stumi[FISHBALLTYPES[i]].flipx)){
-					this[FISHBALLTYPES[i]].addClass('flipx');
+		for (var i = COLORS.length; i--;) {
+			temp[stumi['direction']] = stumi[COLORS[i]].pos;
+			this[COLORS[i]].css(temp).removeClass();
+			if(stumi.fb != 'ball'){
+				if(stumi.direction == 'left' && stumi[COLORS[i]].flipx){
+					this[COLORS[i]].addClass('flipx');
+				}
+				if(stumi.direction == 'right' && !stumi[COLORS[i]].flipx){
+					this[COLORS[i]].addClass('flipx');
 				}
 			}
 		}
 	},
 
 	dispFish: function(stumi) {
-		this.red.css(stumi.direction, stumi.red.pos).animate(stumi.red.anima1, F_TIMER1, 'linear').animate(stumi.red.anima2, F_TIMER2, 'linear');
-		this.blue.css(stumi.direction, stumi.blue.pos).animate(stumi.blue.anima1, F_TIMER1, 'linear').animate(stumi.blue.anima2, F_TIMER2, 'linear');
-		this.green.css(stumi.direction, stumi.green.pos).animate(stumi.green.anima1, F_TIMER1, 'linear').animate(stumi.green.anima2, F_TIMER2, 'linear');
-		this.yellow.css(stumi.direction, stumi.yellow.pos).animate(stumi.yellow.anima1, F_TIMER1, 'linear').animate(stumi.yellow.anima2, F_TIMER2, 'linear');
-		this.white.css(stumi.direction, stumi.white.pos).animate(stumi.white.anima1, F_TIMER1, 'linear').animate(stumi.white.anima2, F_TIMER2, 'linear');
+		if(stumi.fb == 'fishs'){
+			var timer1 = F_TIMER3, timer2 = F_TIMER4;
+			var timer3 = F_TIMER1, timer4 = F_TIMER2;
+		}else if(stumi.fb == 'fishg'){
+			var timer1 = F_TIMER1, timer2 = F_TIMER2;
+			var timer3 = F_TIMER3, timer4 = F_TIMER4;
+		}else{
+			var timer1 = B_TIMER1, timer2 = B_TIMER2;
+			var timer3 = B_TIMER1, timer4 = B_TIMER2;
+		}
+
+		this.red.animate(stumi.red.anima1, timer1, 'linear').animate(stumi.red.anima2, timer2, 'linear');
+		this.green.animate(stumi.green.anima1, timer1, 'linear').animate(stumi.green.anima2, timer2, 'linear');
+		this.yellow.animate(stumi.yellow.anima1, timer1, 'linear').animate(stumi.yellow.anima2, timer2, 'linear');
+		this.white.animate(stumi.white.anima1, timer1, 'linear').animate(stumi.white.anima2, timer2, 'linear');
+		this.blue.animate(stumi.blue.anima1, timer3, 'linear').animate(stumi.blue.anima2, timer4, 'linear');
 	},
 
 	dispBall: function(stumi) {
-		for (var i = FISHBALLTYPES.length; i--;) {
-			this.playAnimate(this[FISHBALLTYPES[i]], stumi[FISHBALLTYPES[i]].anima1, B_TIMER1);
-			this.playAnimate(this[FISHBALLTYPES[i]], stumi[FISHBALLTYPES[i]].anima2, B_TIMER2);
+		for (var i = COLORS.length; i--;) {
+			this.playAnimate(this[COLORS[i]], stumi[COLORS[i]].anima1, B_TIMER1);
+			this.playAnimate(this[COLORS[i]], stumi[COLORS[i]].anima2, B_TIMER2);
 		}
 	},
 

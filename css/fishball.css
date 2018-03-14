@@ -107,23 +107,23 @@ body {
   background-image: url("../imgs/fishball/ball_white.png");
 }
 
-#exp-con #fishball .fish #red{
+#exp-con #fishball .fish #red, .fishs #red, .fishg #red{
   background-image: url("../imgs/fishball/fish_red.gif");
 }
 
-#exp-con #fishball .fish #yellow{
+#exp-con #fishball .fish #yellow, .fishs #yellow, .fishg #yellow{
   background-image: url("../imgs/fishball/fish_yellow.gif");
 }
 
-#exp-con #fishball .fish #blue{
+#exp-con #fishball .fish #blue, .fishs #blue, .fishg #blue{
   background-image: url("../imgs/fishball/fish_blue.gif");
 }
 
-#exp-con #fishball .fish #green{
+#exp-con #fishball .fish #green, .fishs #green, .fishg #green{
   background-image: url("../imgs/fishball/fish_green.gif");
 }
 
-#exp-con #fishball .fish #white{
+#exp-con #fishball .fish #white, .fishs #white, .fishg #white{
   background-image: url("../imgs/fishball/fish_white.gif");
 }
 

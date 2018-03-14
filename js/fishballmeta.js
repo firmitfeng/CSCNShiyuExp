@@ -14,20 +14,259 @@ const F_TIMER1 = 1500;
 const F_TIMER2 = 2500;
 const F_TIMER3 = 1000;
 const F_TIMER4 = 3000;
-const F_PATH1 = 0;
-const F_PATH2 = 220;
+const F_PATH1 = 150;
+const F_PATH2 = 250;
+const F_PATH3 = 0;
+const F_PATH4 = 270;
+const F_PATH5 = 135;
 
+//fishs -> 单独的鱼静止时间长
+//fishg -> 群体的鱼静止时间长
 const FishBallMeta = [
+	//GroupConvergences
+	{
+		direction: "left",
+		fb: "fishs",
+		green:{pos:40, path1:F_PATH3, path2:F_PATH4},
+		yellow:{pos:75, path1:F_PATH3, path2:F_PATH4},
+		white:{pos:5, path1:F_PATH3, path2:F_PATH4},
+		blue:{pos:525, path1:0, path2:-135, flipx:true},
+		red:{pos:30, path1:F_PATH3, path2:F_PATH4}
+	},
+	//GroupConvergences2
+	{
+		direction: "right",
+		fb: "fishs",
+		green:{pos:40, path1:F_PATH3, path2:F_PATH4},
+		yellow:{pos:75, path1:F_PATH3, path2:F_PATH4},
+		white:{pos:5, path1:F_PATH3, path2:F_PATH4},
+		blue:{pos:525, path1:0, path2:-135, flipx:true},
+		red:{pos:30, path1:F_PATH3, path2:F_PATH4}
+	},
+	//GroupDivergences
+	{
+		direction: "right",
+		fb: "fishs",
+		green:{pos:215, path1:F_PATH3, path2:F_PATH4},
+		yellow:{pos:180, path1:F_PATH3, path2:F_PATH4},
+		white:{pos:250, path1:F_PATH3, path2:F_PATH4},
+		blue:{pos:145, path1:0, path2:-135, flipx:true},
+		red:{pos:225, path1:F_PATH3, path2:F_PATH4}
+	},
+	//GroupDivergences2
+	{
+		direction: "left",
+		fb: "fishs",
+		green:{pos:215, path1:F_PATH3, path2:F_PATH4},
+		yellow:{pos:180, path1:F_PATH3, path2:F_PATH4},
+		white:{pos:250, path1:F_PATH3, path2:F_PATH4},
+		blue:{pos:145, path1:0, path2:-135, flipx:true},
+		red:{pos:225, path1:F_PATH3, path2:F_PATH4}
+	},
+	//IndividualConvergences
+	{
+		direction: "left",
+		fb: "fishg",
+		green:{pos:40, path1:F_PATH3, path2:F_PATH5},
+		yellow:{pos:75, path1:F_PATH3, path2:F_PATH5},
+		white:{pos:5, path1:F_PATH3, path2:F_PATH5},
+		blue:{pos:525, path1:0, path2:-270, flipx:true},
+		red:{pos:30, path1:F_PATH3, path2:F_PATH5}
+	},
+	//IndividualConvergences2
+	{
+		direction: "right",
+		fb: "fishg",
+		green:{pos:40, path1:F_PATH3, path2:F_PATH5},
+		yellow:{pos:75, path1:F_PATH3, path2:F_PATH5},
+		white:{pos:5, path1:F_PATH3, path2:F_PATH5},
+		blue:{pos:525, path1:0, path2:-270, flipx:true},
+		red:{pos:30, path1:F_PATH3, path2:F_PATH5}
+	},
+	//IndividualDivergences
+	{
+		direction: "right",
+		fb: "fishg",
+		green:{pos:350, path1:F_PATH3, path2:F_PATH5},
+		yellow:{pos:315, path1:F_PATH3, path2:F_PATH5},
+		white:{pos:385, path1:F_PATH3, path2:F_PATH5},
+		blue:{pos:270, path1:0, path2:-270, flipx:true},
+		red:{pos:360, path1:F_PATH3, path2:F_PATH5}
+	},
+	//IndividualDivergences2
+	{
+		direction: "left",
+		fb: "fishg",
+		green:{pos:350, path1:F_PATH3, path2:F_PATH5},
+		yellow:{pos:315, path1:F_PATH3, path2:F_PATH5},
+		white:{pos:385, path1:F_PATH3, path2:F_PATH5},
+		blue:{pos:270, path1:0, path2:-270, flipx:true},
+		red:{pos:360, path1:F_PATH3, path2:F_PATH5}
+	},
+	//GroupEntrains
 	{
 		direction: "left",
 		fb: "fish",
-		patch: true,
 		green:{pos:40, path1:B_PATH1, path2:B_PATH2},
-		yellow:{pos:5, path1:B_PATH1, path2:B_PATH2},
-		white:{pos:75, path1:B_PATH1, path2:-40},
-		blue:{pos:525, path1:-200, path2:B_PATH2, flipx:true},
+		yellow:{pos:75, path1:B_PATH1, path2:B_PATH2},
+		white:{pos:5, path1:B_PATH1, path2:B_PATH2},
+		blue:{pos:295, path1:0, path2:B_PATH2},
 		red:{pos:30, path1:B_PATH1, path2:B_PATH2}
 	},
+	//GroupEntrains2
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:40, path1:B_PATH1, path2:B_PATH2},
+		yellow:{pos:75, path1:B_PATH1, path2:B_PATH2},
+		white:{pos:5, path1:B_PATH1, path2:B_PATH2},
+		blue:{pos:295, path1:0, path2:B_PATH2},
+		red:{pos:30, path1:B_PATH1, path2:B_PATH2}
+	},
+	//IndividualEntrains
+	{
+		direction: "left",
+		fb: "fish",
+		green:{pos:190, path1:0, path2:B_PATH2},
+		yellow:{pos:225, path1:0, path2:B_PATH2},
+		white:{pos:295, path1:0, path2:B_PATH2},
+		blue:{pos:5, path1:B_PATH1, path2:B_PATH2},
+		red:{pos:180, path1:0, path2:B_PATH2}
+	},
+	//IndividualEntrains2
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:190, path1:0, path2:B_PATH2},
+		yellow:{pos:225, path1:0, path2:B_PATH2},
+		white:{pos:295, path1:0, path2:B_PATH2},
+		blue:{pos:5, path1:B_PATH1, path2:B_PATH2},
+		red:{pos:180, path1:0, path2:B_PATH2}
+	},
+	//GroupJoins
+	{
+		direction: "left",
+		fb: "fish",
+		green:{pos:40, path1:240, path2:150},
+		yellow:{pos:75, path1:240, path2:150},
+		white:{pos:5, path1:240, path2:150},
+		blue:{pos:270, path1:100, path2:150},
+		red:{pos:30, path1:240, path2:150}
+	},
+	//GroupJoins2
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:40, path1:240, path2:150},
+		yellow:{pos:75, path1:240, path2:150},
+		white:{pos:5, path1:240, path2:150},
+		blue:{pos:270, path1:100, path2:150},
+		red:{pos:30, path1:240, path2:150}
+	},
+	//IndividualJoins
+	{
+		direction: "left",
+		fb: "fish",
+		green:{pos:235, path1:100, path2:150},
+		yellow:{pos:200, path1:100, path2:150},
+		white:{pos:270, path1:100, path2:150},
+		blue:{pos:5, path1:240, path2:150},
+		red:{pos:225, path1:100, path2:150}
+	},
+	//IndividualJoins
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:235, path1:100, path2:150},
+		yellow:{pos:200, path1:100, path2:150},
+		white:{pos:270, path1:100, path2:150},
+		blue:{pos:5, path1:240, path2:150},
+		red:{pos:225, path1:100, path2:150}
+	},
+	//GroupLaunches
+	{
+		direction: "left",
+		fb: "fish",
+		green:{pos:40, path1:B_PATH1, path2:0},
+		yellow:{pos:75, path1:B_PATH1, path2:0},
+		white:{pos:5, path1:B_PATH1, path2:0},
+		blue:{pos:300, path1:0, path2:B_PATH2},
+		red:{pos:30, path1:B_PATH1, path2:0}
+	},
+	//GroupLaunches2
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:40, path1:B_PATH1, path2:0},
+		yellow:{pos:75, path1:B_PATH1, path2:0},
+		white:{pos:5, path1:B_PATH1, path2:0},
+		blue:{pos:300, path1:0, path2:B_PATH2},
+		red:{pos:30, path1:B_PATH1, path2:0}
+	},
+	//IndividualLaunches
+	{
+		direction: "left",
+		fb: "fish",
+		green:{pos:265, path1:0, path2:B_PATH2},
+		yellow:{pos:230, path1:0, path2:B_PATH2},
+		white:{pos:300, path1:0, path2:B_PATH2},
+		blue:{pos:5, path1:B_PATH1, path2:0},
+		red:{pos:255, path1:0, path2:B_PATH2}
+	},
+	//IndividualLaunches2
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:265, path1:0, path2:B_PATH2},
+		yellow:{pos:230, path1:0, path2:B_PATH2},
+		white:{pos:300, path1:0, path2:B_PATH2},
+		blue:{pos:5, path1:B_PATH1, path2:0},
+		red:{pos:255, path1:0, path2:B_PATH2}
+	},
+	//GroupLeaves
+	{
+		direction: "left",
+		fb: "fish",
+		green:{pos:125, path1:100, path2:270},
+		yellow:{pos:75, path1:100, path2:270},
+		white:{pos:150, path1:100, path2:270},
+		blue:{pos:5, path1:100, path2:150},
+		red:{pos:115, path1:100, path2:270}
+	},
+	//GroupLeaves2
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:125, path1:100, path2:270},
+		yellow:{pos:75, path1:100, path2:270},
+		white:{pos:150, path1:100, path2:270},
+		blue:{pos:5, path1:100, path2:150},
+		red:{pos:115, path1:100, path2:270}
+	},
+	//IndividualLeaves
+	{
+		direction: "left",
+		fb: "fish",
+		green:{pos:125, path1:100, path2:150},
+		yellow:{pos:75, path1:100, path2:150},
+		white:{pos:5, path1:100, path2:150},
+		blue:{pos:150, path1:100, path2:270},
+		red:{pos:115, path1:100, path2:150}
+	},
+	//IndividualLeaves2
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:125, path1:100, path2:150},
+		yellow:{pos:75, path1:100, path2:150},
+		white:{pos:5, path1:100, path2:150},
+		blue:{pos:150, path1:100, path2:270},
+		red:{pos:115, path1:100, path2:150}
+	},
+
+	/**********************************************************
+	 ball start
+	 **********************************************************/
 	//DVLCollisionDDDV
 	{
 		direction: "left",
