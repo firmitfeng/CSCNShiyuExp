@@ -25,7 +25,6 @@ const F_PATH5 = 135;
 const FishBallMeta = [
 	//GroupConvergences
 	{
-		topic: {inq: "蓝鱼在等其它鱼", exq: "其它鱼会先游到中间"},
 		direction: "left",
 		fb: "fishs",
 		green:{pos:40, path1:F_PATH3, path2:F_PATH4},
@@ -36,7 +35,6 @@ const FishBallMeta = [
 	},
 	//GroupConvergences2
 	{
-		topic: {inq: "蓝鱼在等其它鱼", exq: "其它鱼会先游到中间"},
 		direction: "right",
 		fb: "fishs",
 		green:{pos:40, path1:F_PATH3, path2:F_PATH4},
@@ -47,7 +45,6 @@ const FishBallMeta = [
 	},
 	//GroupDivergences
 	{
-		topic: {inq: "蓝鱼想独自活动", exq: "其它鱼想甩掉蓝鱼"},
 		direction: "right",
 		fb: "fishs",
 		green:{pos:215, path1:F_PATH3, path2:F_PATH4},
@@ -58,7 +55,6 @@ const FishBallMeta = [
 	},
 	//GroupDivergences2
 	{
-		topic: {inq: "蓝鱼想独自活动", exq: "其它鱼想甩掉蓝鱼"},
 		direction: "left",
 		fb: "fishs",
 		green:{pos:215, path1:F_PATH3, path2:F_PATH4},
@@ -69,7 +65,6 @@ const FishBallMeta = [
 	},
 	//IndividualConvergences
 	{
-		topic: {inq: "蓝鱼想先游到中间", exq: "其它鱼在等蓝鱼"},
 		direction: "left",
 		fb: "fishg",
 		green:{pos:40, path1:F_PATH3, path2:F_PATH5},
@@ -80,7 +75,6 @@ const FishBallMeta = [
 	},
 	//IndividualConvergences2
 	{
-		topic: {inq: "蓝鱼想先游到中间", exq: "其它鱼在等蓝鱼"},
 		direction: "right",
 		fb: "fishg",
 		green:{pos:40, path1:F_PATH3, path2:F_PATH5},
@@ -91,7 +85,6 @@ const FishBallMeta = [
 	},
 	//IndividualDivergences
 	{
-		topic: {inq: "蓝鱼想离开其它鱼", exq: "其它鱼不喜欢蓝鱼"},
 		direction: "right",
 		fb: "fishg",
 		green:{pos:350, path1:F_PATH3, path2:F_PATH5},
@@ -102,7 +95,6 @@ const FishBallMeta = [
 	},
 	//IndividualDivergences2
 	{
-		topic: {inq: "蓝鱼想离开其它鱼", exq: "其它鱼不喜欢蓝鱼"},
 		direction: "left",
 		fb: "fishg",
 		green:{pos:350, path1:F_PATH3, path2:F_PATH5},
@@ -113,7 +105,6 @@ const FishBallMeta = [
 	},
 	//GroupEntrains
 	{
-		topic: {inq: "蓝鱼在等其它鱼", exq: "其它鱼想和蓝鱼一起游"},
 		direction: "left",
 		fb: "fish",
 		green:{pos:40, path1:B_PATH1, path2:B_PATH2},
@@ -124,7 +115,6 @@ const FishBallMeta = [
 	},
 	//GroupEntrains2
 	{
-		topic: {inq: "蓝鱼在等其它鱼", exq: "其它鱼想和蓝鱼一起游"},
 		direction: "right",
 		fb: "fish",
 		green:{pos:40, path1:B_PATH1, path2:B_PATH2},
@@ -135,7 +125,6 @@ const FishBallMeta = [
 	},
 	//IndividualEntrains
 	{
-		topic: {inq: "蓝鱼驱赶其它鱼", exq: "其它鱼在等蓝鱼"},
 		direction: "left",
 		fb: "fish",
 		green:{pos:190, path1:0, path2:B_PATH2},
@@ -146,7 +135,6 @@ const FishBallMeta = [
 	},
 	//IndividualEntrains2
 	{
-		topic: {inq: "蓝鱼驱赶其它鱼", exq: "其它鱼在等蓝鱼"},
 		direction: "right",
 		fb: "fish",
 		green:{pos:190, path1:0, path2:B_PATH2},
@@ -157,7 +145,6 @@ const FishBallMeta = [
 	},
 	//GroupJoins
 	{
-		topic: {inq: "蓝鱼讨厌其它鱼", exq: "其它鱼赶走蓝鱼"},
 		direction: "left",
 		fb: "fish",
 		green:{pos:40, path1:240, path2:150},
@@ -168,7 +155,6 @@ const FishBallMeta = [
 	},
 	//GroupJoins2
 	{
-		topic: {inq: "蓝鱼讨厌其它鱼", exq: "其它鱼赶走蓝鱼"},
 		direction: "right",
 		fb: "fish",
 		green:{pos:40, path1:240, path2:150},
@@ -179,7 +165,6 @@ const FishBallMeta = [
 	},
 	//IndividualJoins
 	{
-		topic: {inq: "蓝鱼想占有空间", exq: "其它鱼想占有空间"},
 		direction: "left",
 		fb: "fish",
 		green:{pos:235, path1:100, path2:150},
@@ -190,7 +175,6 @@ const FishBallMeta = [
 	},
 	//IndividualJoins
 	{
-		topic: {inq: "蓝鱼想占有空间", exq: "其它鱼想占有空间"},
 		direction: "right",
 		fb: "fish",
 		green:{pos:235, path1:100, path2:150},
@@ -201,7 +185,6 @@ const FishBallMeta = [
 	},
 	//GroupLaunches
 	{
-		topic: {inq: "蓝鱼在等其它鱼", exq: "其它鱼想和蓝鱼一起游"},
 		direction: "left",
 		fb: "fish",
 		green:{pos:40, path1:B_PATH1, path2:0},
@@ -212,7 +195,6 @@ const FishBallMeta = [
 	},
 	//GroupLaunches2
 	{
-		topic: {inq: "蓝鱼在等其它鱼", exq: "其它鱼想和蓝鱼一起游"},
 		direction: "right",
 		fb: "fish",
 		green:{pos:40, path1:B_PATH1, path2:0},
@@ -223,7 +205,6 @@ const FishBallMeta = [
 	},
 	//IndividualLaunches
 	{
-		topic: {inq: "蓝鱼想加入其它鱼", exq: "其它鱼在等蓝鱼"},
 		direction: "left",
 		fb: "fish",
 		green:{pos:265, path1:0, path2:B_PATH2},
@@ -234,7 +215,6 @@ const FishBallMeta = [
 	},
 	//IndividualLaunches2
 	{
-		topic: {inq: "蓝鱼想加入其它鱼", exq: "其它鱼在等蓝鱼"},
 		direction: "right",
 		fb: "fish",
 		green:{pos:265, path1:0, path2:B_PATH2},
@@ -245,7 +225,6 @@ const FishBallMeta = [
 	},
 	//GroupLeaves
 	{
-		topic: {inq: "蓝鱼想独自活动", exq: "其它鱼想甩掉蓝鱼"},
 		direction: "left",
 		fb: "fish",
 		green:{pos:125, path1:100, path2:270},
@@ -256,7 +235,6 @@ const FishBallMeta = [
 	},
 	//GroupLeaves2
 	{
-		topic: {inq: "蓝鱼想独自活动", exq: "其它鱼想甩掉蓝鱼"},
 		direction: "right",
 		fb: "fish",
 		green:{pos:125, path1:100, path2:270},
@@ -268,7 +246,6 @@ const FishBallMeta = [
 	//IndividualLeaves
 	{
 		direction: "left",
-		topic: {inq: "蓝鱼想离开其它鱼", exq: "其它鱼游得比蓝鱼慢"},
 		fb: "fish",
 		green:{pos:125, path1:100, path2:150},
 		yellow:{pos:75, path1:100, path2:150},
@@ -278,7 +255,6 @@ const FishBallMeta = [
 	},
 	//IndividualLeaves2
 	{
-		topic: {inq: "蓝鱼想离开其它鱼", exq: "其它鱼游得比蓝鱼慢"},
 		direction: "right",
 		fb: "fish",
 		green:{pos:125, path1:100, path2:150},
@@ -544,6 +520,60 @@ const BallFeQue = [
 "蓝球最后向左"
 ];
 
+const BallInQue = [
+"蓝球质量较大",
+"蓝球自身无动力",
+"蓝球起始速度较小",
+"蓝球原来运动",
+"蓝球质量较大",
+"蓝球自身无动力",
+"蓝球起始速度较小",
+"蓝球原来运动",
+"蓝球质量较大",
+"蓝球原来静止",
+"蓝球质量较小",
+"蓝球自身有动力",
+"蓝球质量较大",
+"蓝球原来静止",
+"蓝球质量较小",
+"蓝球自身有动力",
+"蓝球起始速度较大",
+"蓝球质量较小",
+"蓝球原来运动",
+"蓝球自身无动力",
+"蓝球起始速度较大",
+"蓝球质量较小",
+"蓝球原来运动",
+"蓝球自身无动力"
+];
+
+const BallExQue = [
+"灰球质量较小",
+"灰球速度较小",
+"灰球速度较大",
+"空气阻力较小",
+"灰球质量较小",
+"灰球速度较小",
+"灰球速度较大",
+"空气阻力较小",
+"灰球质量较小",
+"空气阻力较大",
+"灰球速度较大",
+"摩擦阻力较小",
+"灰球质量较小",
+"空气阻力较大",
+"灰球速度较大",
+"摩擦阻力较小",
+"灰球速度较小",
+"灰球质量较大",
+"空气阻力较大",
+"摩擦阻力较小",
+"灰球速度较小",
+"灰球质量较大",
+"空气阻力较大",
+"摩擦阻力较小"
+];
+
 const FishFeQue = [
 "蓝鱼向左游",
 "蓝鱼向右游",
@@ -552,4 +582,58 @@ const FishFeQue = [
 "蓝鱼向左游",
 "蓝鱼向右游",
 "蓝鱼向左游"
+];
+
+const FishInQue = [
+"蓝鱼在等其它鱼",
+"蓝鱼在等其它鱼",
+"蓝鱼想独自活动",
+"蓝鱼想独自活动",
+"蓝鱼想先游到中间",
+"蓝鱼想先游到中间",
+"蓝鱼想离开其它鱼",
+"蓝鱼想离开其它鱼",
+"蓝鱼在等其它鱼",
+"蓝鱼在等其它鱼",
+"蓝鱼驱赶其它鱼",
+"蓝鱼驱赶其它鱼",
+"蓝鱼讨厌其它鱼",
+"蓝鱼讨厌其它鱼",
+"蓝鱼想占有空间",
+"蓝鱼想占有空间",
+"蓝鱼在等其它鱼",
+"蓝鱼在等其它鱼",
+"蓝鱼想加入其它鱼",
+"蓝鱼想加入其它鱼",
+"蓝鱼想独自活动",
+"蓝鱼想独自活动",
+"蓝鱼想离开其它鱼",
+"蓝鱼想离开其它鱼"
+];
+
+const FishExQue = [
+"其它鱼会先游到中间",
+"其它鱼会先游到中间",
+"其它鱼想甩掉蓝鱼",
+"其它鱼想甩掉蓝鱼",
+"其它鱼在等蓝鱼",
+"其它鱼在等蓝鱼",
+"其它鱼不喜欢蓝鱼",
+"其它鱼不喜欢蓝鱼",
+"其它鱼想和蓝鱼一起游",
+"其它鱼想和蓝鱼一起游",
+"其它鱼在等蓝鱼",
+"其它鱼在等蓝鱼",
+"其它鱼赶走蓝鱼",
+"其它鱼赶走蓝鱼",
+"其它鱼想占有空间",
+"其它鱼想占有空间",
+"其它鱼想和蓝鱼一起游",
+"其它鱼想和蓝鱼一起游",
+"其它鱼在等蓝鱼",
+"其它鱼在等蓝鱼",
+"其它鱼想甩掉蓝鱼",
+"其它鱼想甩掉蓝鱼",
+"其它鱼游得比蓝鱼慢",
+"其它鱼游得比蓝鱼慢"
 ];

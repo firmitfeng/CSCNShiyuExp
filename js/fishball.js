@@ -32,31 +32,76 @@ var module = {
 
 	init: function() {
 
-		this.data = [];
-		for (var i = 0; i < FishBallMeta.length; i++) {
-			var direct = FishBallMeta[i].direction;
-			this.data[i] = {};
-			for (var c_idx = COLORS.length; c_idx--;) {
-				var color = COLORS[c_idx];
-				this.data[i][color] = {
-					pos: 0,
-					anima1: {},
-					anima2: {},
-					respo: ''
-				};
-				this.data[i][color]['pos'] = FishBallMeta[i][color]['pos'];
-				this.data[i][color]['anima1'][direct] = '+=' + FishBallMeta[i][color]['path1'];
-				this.data[i][color]['anima2'][direct] = '+=' + FishBallMeta[i][color]['path2'];
-				if ('flipx' in FishBallMeta[i][color]) {
-					this.data[i][color]['flipx'] = true;
-				} else {
-					this.data[i][color]['flipx'] = false;
-				}
+		var fishs=[], balls=[];
+		var temp = Array.from(new Array(24),(val,index)=>(index));
+
+		temp.shuffle();
+
+		for(var i=0; i<21; i++){
+			fishs[i] = {idx: temp[i], fb:'fish', mode: '', resp: ''}
+			if(i < 7){
+				fishs[i].mode = 'in';
+			}else if(i < 14){
+				fishs[i].mode = 'ex';
+			}else{
+				fishs[i].mode = 'fe';
 			}
-			this.data[i]['direction'] = FishBallMeta[i]['direction'];
-			this.data[i]['fb'] = FishBallMeta[i]['fb'];
 		}
-		// console.log(this.data);
+
+		temp = Array.from(new Array(24),(val,index)=>(index+24));
+		temp.shuffle();
+
+		for(var i=0; i<21; i++){
+			balls[i] = {idx: temp[i], fb:'ball', mode: '', resp: ''}
+			if(i < 7){
+				balls[i].mode = 'in';
+			}else if(i < 14){
+				balls[i].mode = 'ex';
+			}else{
+				balls[i].mode = 'fe';
+			}
+		}
+
+		this.data = Array();
+
+		for(var i=0; i<6; i++){
+			var start = parseInt(i/2)*7;
+			if(i%2 == 0){
+				this.data = this.data.concat(fishs.slice(start, start+7));
+			}else{
+				this.data = this.data.concat(balls.slice(start, start+7));
+			}
+		}
+		console.log(this.data);
+	},
+
+
+	getFishBall: function(idx){
+		var fishball = {};
+		var direct = FishBallMeta[idx].direction;
+		for (var c_idx = COLORS.length; c_idx--;) {
+			var color = COLORS[c_idx];
+			fishball[color] = {
+				pos: 0,
+				anima1: {},
+				anima2: {},
+				respo: ''
+			};
+			fishball[color]['pos'] = FishBallMeta[idx][color]['pos'];
+			fishball[color]['anima1'][direct] = '+=' + FishBallMeta[idx][color]['path1'];
+			fishball[color]['anima2'][direct] = '+=' + FishBallMeta[idx][color]['path2'];
+			if ('flipx' in FishBallMeta[idx][color]) {
+				fishball[color]['flipx'] = true;
+			} else {
+				fishball[color]['flipx'] = false;
+			}
+		}
+		fishball['topic'] = FishBallMeta[idx]['topic'];
+		fishball['direction'] = FishBallMeta[idx]['direction'];
+		fishball['fb'] = FishBallMeta[idx]['fb'];
+		fishball['respo'] = '';
+
+		return fishball;
 	},
 
 	getStumi: function(idx) {
@@ -90,6 +135,7 @@ var octopus = {
 		}
 
 		this.currStumiIdx = -1;
+		this.currFishBall = {};
 
 		module.init();
 		stumiView.init();
@@ -108,7 +154,8 @@ var octopus = {
 	getStumi: function() {
 		this.currStumiIdx++;
 		if (this.currStumiIdx < module.getStumiCount()) {
-			return module.getStumi(this.currStumiIdx);
+			this.currFishBall = module.getStumi(this.currStumiIdx);
+			return module.getFishBall(this.currFishBall.idx);
 		} else {
 			this.saveData();
 			completeView.init();
@@ -149,6 +196,8 @@ var stumiView = {
 			self.clearFrameCon();
 		}).hide();
 
+		self.currStumiIdx = 0;
+
 		self.selButtons.hide();
 
 		self.initRender();
@@ -176,11 +225,7 @@ var stumiView = {
 	clickButton: function(btIdx) {},
 
 	initRender: function() {
-		if (octopus.getMode() == mode.intu) {
-			this.dispTips('请你按照你的直觉来完成这个任务。');
-		} else {
-			this.dispTips('请按要求完成');
-		}
+
 		this.clearFrameCon();
 		this.nButton.show();
 	},
@@ -243,6 +288,7 @@ var stumiView = {
 		self.tipsCon.empty();
 
 		var exper = octopus.getStumi();
+		self.currStumiIdx ++;
 		if (!exper) {
 			return;
 		}
