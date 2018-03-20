@@ -21,7 +21,8 @@ const mode = {
 
 const DEBUG = 1;
 
-const STUMITIME = 5;
+const QUESTIME = 3;
+const STUMITIME = 4.2;
 const MASKTIME = 0.2;
 const RESPTIME = 3;
 const BLANKTIME = 7;
@@ -72,7 +73,7 @@ var module = {
 				this.data = this.data.concat(balls.slice(start, start+7));
 			}
 		}
-		console.log(this.data);
+		//console.log(this.data);
 	},
 
 
@@ -96,10 +97,8 @@ var module = {
 				fishball[color]['flipx'] = false;
 			}
 		}
-		fishball['topic'] = FishBallMeta[idx]['topic'];
 		fishball['direction'] = FishBallMeta[idx]['direction'];
 		fishball['fb'] = FishBallMeta[idx]['fb'];
-		fishball['respo'] = '';
 
 		return fishball;
 	},
@@ -113,7 +112,7 @@ var module = {
 	},
 
 	setStumiResult: function(idx, result) {
-		this.data[idx].respo.length = result;
+		this.data[idx].resp = result;
 	},
 
 	getStumiCount: function() {
@@ -135,7 +134,6 @@ var octopus = {
 		}
 
 		this.currStumiIdx = -1;
-		this.currFishBall = {};
 
 		module.init();
 		stumiView.init();
@@ -145,17 +143,38 @@ var octopus = {
 		return this.mode;
 	},
 
-	setStumiResult: function(length) {
+	setResult: function(opt) {
 		if (this.currStumiIdx != -1 && this.currStumiIdx < module.getStumiCount()) {
-			module.setStumiResult(this.currStumiIdx, length);
+			module.setStumiResult(this.currStumiIdx, opt);
 		}
 	},
 
 	getStumi: function() {
 		this.currStumiIdx++;
 		if (this.currStumiIdx < module.getStumiCount()) {
-			this.currFishBall = module.getStumi(this.currStumiIdx);
-			return module.getFishBall(this.currFishBall.idx);
+			var currFishBall = module.getStumi(this.currStumiIdx);
+			var currStumi = module.getFishBall(currFishBall.idx);
+			if (currFishBall.mode == 'in'){
+				if(currFishBall.fb == 'fish'){
+					currStumi.topic = FishInQue[currFishBall.idx];
+				}else{
+					currStumi.topic = BallInQue[currFishBall.idx-24];
+				}
+			}else if (currFishBall.mode == 'ex'){
+				if(currFishBall.fb == 'fish'){
+					currStumi.topic = FishExQue[currFishBall.idx];
+				}else{
+					currStumi.topic = BallExQue[currFishBall.idx-24];
+				}
+			}else{
+				if(currFishBall.fb == 'fish'){
+					currStumi.topic = FishFeQue[currFishBall.idx%7];
+				}else{
+					currStumi.topic = BallFeQue[currFishBall.idx%7];
+				}
+			}
+			console.log(currFishBall);
+			return currStumi;
 		} else {
 			this.saveData();
 			completeView.init();
@@ -166,7 +185,6 @@ var octopus = {
 	saveData: function() {
 		var result = module.getAllData();
 		completeView.init();
-		console.log(result);
 		console.log('Done!!');
 	}
 };
@@ -196,9 +214,13 @@ var stumiView = {
 			self.clearFrameCon();
 		}).hide();
 
-		self.currStumiIdx = 0;
-
-		self.selButtons.hide();
+		self.selButtons.click(function(){
+			var opt = $(this).text();
+			octopus.setResult(opt);
+			clearTimeout(self.tid);
+			self.render();
+			self.clearFrameCon();
+		}).hide();
 
 		self.initRender();
 	},
@@ -225,9 +247,88 @@ var stumiView = {
 	clickButton: function(btIdx) {},
 
 	initRender: function() {
-
+		this.dispTips('点击Next开始实验');
 		this.clearFrameCon();
 		this.nButton.show();
+	},
+
+	render: function() {
+
+		var self = this;
+
+		self.nButton.hide();
+		self.tipsCon.empty();
+		self.selButtons.hide();
+
+		var exper = octopus.getStumi();
+
+		if (!exper) {
+			return;
+		}
+
+		console.log(exper);
+
+		if (octopus.getMode() == mode.intu) {
+			self.delay(0).then(function(args) {
+				self.dispTips(exper.topic);
+				return self.delay(QUESTIME * 1000);
+			}).then(function(args) {
+				self.clearTips();
+				self.dispStumi(exper);
+				return self.delay(STUMITIME * 1000);
+			}).then(function(args) {
+				self.clearFrameCon();
+				self.selButtons.show();
+				return self.delay(RESPTIME * 1000);
+			}).then(function(args) {
+				self.selButtons.hide();
+				self.nButton.show();
+			});
+
+		} else {
+			self.delay(0).then(function(args) {
+				self.dispTips(exper.topic);
+				return self.delay(QUESTIME * 1000);
+			}).then(function(args) {
+				self.clearTips();
+				self.dispStumi(exper);
+				return self.delay(STUMITIME * 1000);
+			}).then(function(args) {
+				self.clearFrameCon();
+				self.dispTips('请思考'+BLANKTIME+'s');
+				return self.delay(BLANKTIME*1000);
+			}).then(function(args){
+				self.dispTips('开始请单击屏幕');
+				return self.clickDelay($(document));
+			}).then(function(args){
+				self.clearTips();
+				self.selButtons.show();
+				return self.delay(RESPTIME * 1000);
+			}).then(function(args) {
+				self.selButtons.hide();
+				self.nButton.show();
+			});
+
+		}
+
+	},
+
+	dispTips: function(tips) {
+		this.tipsCon.empty().html(tips);
+	},
+
+	clearTips: function() {
+		this.tipsCon.empty();
+	},
+
+	dispStumi: function(stumi) {
+		this.resetFishBall(stumi);
+		if (stumi.fb == 'ball') {
+			this.dispBall(stumi);
+		} else {
+			this.dispFish(stumi);
+		}
+		this.fishballCon.show();
 	},
 
 	resetFishBall: function(stumi) {
@@ -278,86 +379,6 @@ var stumiView = {
 
 	playAnimate: function(obj, describe, timer) {
 		obj.animate(describe, timer, 'linear');
-	},
-
-	render: function() {
-
-		var self = this;
-
-		self.nButton.hide();
-		self.tipsCon.empty();
-
-		var exper = octopus.getStumi();
-		self.currStumiIdx ++;
-		if (!exper) {
-			return;
-		}
-
-
-		if (octopus.getMode() == mode.intu) {
-			self.delay(0).then(function(args) {
-				self.dispTips("请认真观看下面的图形，您有共计10s的时间");
-				self.dispStumi(exper);
-				return self.delay(STUMITIME * 1000);
-			}).then(function(args) {
-				self.clearFrameCon();
-				self.nButton.show();
-			});
-
-		} else {
-			self.delay(0).then(function(args) {
-				self.dispTips("请认真观看下面的图形，您有共计10s的时间");
-				self.dispStumi(exper.stumi);
-				return self.delay(STUMITIME * 1000);
-			}).then(function(args) {
-				self.clearFrameCon();
-				self.maskCon.show();
-				return self.delay(MASKTIME * 1000);
-			}).then(function(args) {
-				var randIdx = Math.floor(Math.random() * 4 + 1);
-				self.maskCon.hide();
-				self.selButtons.show();
-				self.dispTips("请点击" + randIdx + "号按钮");
-				return self.clickDelay($(self.selButtons[randIdx - 1]));
-			}).then(function() {
-				self.dispTips('请思考' + BLANKTIME + 's');
-				self.selButtons.hide();
-				return self.delay(BLANKTIME * 1000);
-			}).then(function(args) {
-				self.dispTips('开始请单击屏幕');
-				return self.clickDelay($(document));
-			}).then(function(args) {
-				if (exper.mode == 'abs') {
-					self.dispTips('请在' + RESPTIME + 's内，在下面的方框中画出一条绝对长度与您刚才见到的线段相等的线段');
-				} else {
-					self.dispTips('请在' + RESPTIME + 's内，在下面的方框中画出一条相对长度与您刚才见到的线段相等的线段');
-				}
-				self.selButtons.hide();
-				self.dispFrameCon(exper.respo);
-				self.drawLine(exper.respo);
-				return self.delay(RESPTIME * 1000);
-			}).then(function(args) {
-				self.clearDrawing();
-				self.saveLine(exper);
-				self.nButton.show();
-			});
-
-		}
-
-	},
-
-	dispTips: function(tips) {
-		this.tipsCon.empty().html(tips);
-	},
-
-	dispStumi: function(stumi) {
-		this.resetFishBall(stumi);
-		if (stumi.fb == 'ball') {
-			this.dispBall(stumi);
-		} else {
-			this.dispFish(stumi);
-		}
-		this.fishballCon.show();
 	},
 
 	clearFrameCon: function() {

@@ -125,7 +125,6 @@ var octopus = {
 	saveData: function() {
 		var result = module.getAllData();
 		completeView.init();
-		console.log(result);
 		console.log('Done!!');
 	}
 };

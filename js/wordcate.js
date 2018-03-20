@@ -46,7 +46,7 @@ var module = {
 				url = '0'+url;
 			}
 			this.picIdxArr[this.currIdx].img = url;
-			console.log(url);
+			//console.log(url);
 			return url;
 		}else{
 			return -1;
@@ -60,7 +60,7 @@ var module = {
 
 	clickPic: function(click){
 		this.picIdxArr[this.currIdx].click = click;
-		console.log(this.picIdxArr[this.currIdx].click);
+		//console.log(this.picIdxArr[this.currIdx].click);
 	},
 
 	getAllData: function(){
@@ -158,14 +158,24 @@ var stumiView = {
 		this.render();
 	},
 
-	delay: function(timer){
-		var self= this;
-		return new Promise(function(resolve, reject){
-			self.tid = setTimeout(function(){
+	delay: function(timer) {
+		var self = this;
+		return new Promise(function(resolve, reject) {
+			self.tid = setTimeout(function() {
 				resolve();
 			}, timer);
 		});
 	},
+
+	clickDelay: function(clickedObj) {
+		var self = this;
+		return new Promise(function(resolve, reject) {
+			clickedObj.on('click', function(e) {
+				resolve();
+			});
+		});
+	},
+
 
 	render: function(){
 
@@ -199,9 +209,8 @@ var stumiView = {
 				self.dispTips('thinking...');
 				return self.delay(octopus.getBlankTimer());
 			}).then(function(args){
-				self.tipsCon.empty();
-				alert('click to continue...');
-				return self.delay(0);
+				self.dispTips('开始请单击屏幕');
+				return self.clickDelay($(document));
 			}).then(function(args){
 				self.dispButtons();
 				return self.delay(octopus.getRespTimer());
@@ -246,5 +255,5 @@ var completeView = {
 }
 
 $(document).ready(function(){
-	octopus.init(mode.intu);
+	octopus.init(mode.ret);
 });

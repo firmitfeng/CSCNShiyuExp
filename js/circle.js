@@ -130,7 +130,7 @@ var octopus = {
 	},
 
 	saveCircle: function(circle){
-		console.log(module.getCircle(this.currCircleIdx));
+		//console.log(module.getCircle(this.currCircleIdx));
 	},
 
 	saveData: function() {
