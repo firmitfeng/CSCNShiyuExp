@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% import "form_macro.html" as form_macro %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{%- block styles %}
+{{super()}}
+<link href="{{ url_for('static', filename='css/global.css') }}" rel="stylesheet" type="text/css">
+{% endblock -%}
+
+{% block exp_con_attribs %} class="content col-xs-12 col-sm-12 col-md-12" {% endblock %}
+
+{% block exp_con %}
+<form action="" method="post" class="form form-horizontal" role="form">
+  {{ form.hidden_tag() }}
+
+  {%- if form.errors %}
+    {%- for fieldname, errors in form.errors.items() %}
+      {%- if bootstrap_is_hidden_field(form[fieldname]) %}
+        {%- for error in errors %}
+          <p class="error">{{error}}</p>
+        {%- endfor %}
+      {%- endif %}
+    {%- endfor %}
+  {%- endif %}
+
+  {{ form_macro.form_field(form.name, form_type="horizontal", horizontal_columns=('lg', 1, 10)) }}
+  {{ form_macro.form_field(form.workerid, form_type="horizontal", horizontal_columns=('lg', 1, 10)) }}
+
+  <hr>
+  <div class="form-group"><p>请点击下面的进度条，使下方的绿色条的长度尽量接近3英寸（约7.62cm)</p>
+  <div class="progress">
+    <div id="progress-bar" class="progress-bar" role="progressbar" aria-valuenow="23" aria-valuemin="10" aria-valuemax="32" style="width: 60%;">23 in.</div>
+  </div>
+  <div class="sqr_block" style="width:278px; height:10px; border:2px solid #0F0; background-color: #0F0;"></div>
+  </div>
+
+  {{ form_macro.form_field(form.submit, form_type="horizontal", horizontal_columns=('lg', 1, 2), button_map={'submit':'primary btn-block'}) }}
+</form>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+	$(document).ready(function(){
+    	//$("div.sqr_block").html(window.screen.height + "  " + window.screen.width + "<br>" + $(window).width() + "<br>" + $(document).width());
+    	//以16：10的22寸显示器（viewsonic vx2269wm 1680 × 1050）为标准 22 => 1981px 所以，1英寸对应90.05px
+    	//标准显示器上的3英寸对应 1981×3/22 约270px
+    	//不同尺寸的显示器3英寸对应的像素数为 window.screen.width * sqrt（356）*3 / (16 * M) 其中 M 为显示器尺寸
+    	function getBlockWidth(screen_m){
+    		return Math.round(window.screen.width * 3.5377 / screen_m);
+    	}
+    	 
+    	function changeSqrSize(){
+            var centerX = event.pageX - $progress.offset().left;
+
+            var min = 10, max = 32;
+    		var widthPerInch = progWidth / (max-min+1);
+
+    		var persent = centerX / progWidth * 100;
+
+    		var currSize = Math.floor(centerX * (max-min+1) / progWidth  + min);
+
+            $("input#screen_size").val(currSize);
+            $('#progress-bar').css({'width':persent+'%'}).html(currSize + " in.");
+            //var screen_m = $("input#screen_size").val();
+    		var x = getBlockWidth(currSize);
+    		$("div.sqr_block").css({"width":Math.round(x)});
+
+    	}
+
+    	var $progress = $('.progress');
+    	var progWidth = $progress.width();
+    	var mouseKeyDown = false;
+
+    	
+    	$('#screen_resolution_w').val(window.screen.width);
+    	$('#screen_resolution_h').val(window.screen.height);
+
+
+		$progress.mousedown(function(event) {
+			mouseKeyDown = true;
+			event.preventDefault();
+			changeSqrSize();
+        });
+
+		$(document).mousemove(function(event) {
+			if(mouseKeyDown){
+				changeSqrSize();
+            }
+        });
+                // 鼠标松开停止画圆  
+        $(document).mouseup(function() {  
+            mouseKeyDown = false;  
+        });
+
+    });
+</script>
+{% endblock %}

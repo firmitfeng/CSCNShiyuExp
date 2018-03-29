@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% import "form_macro.html" as form_macro %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{%- block styles %}
+{{super()}}
+<link href="{{ url_for('static', filename='css/wordcate.css') }}" rel="stylesheet" type="text/css">
+{% endblock -%}
+
+{% block exp_con_attribs %} class="content col-xs-10 col-sm-8 col-md-6 col-xs-offset-1 col-sm-offset-2 col-md-offset-3" {% endblock %}
+
+{% block exp_con %}
+<form id="exp_form" action="" method="post" class="form form-horizontal" role="form">
+  {{ form.hidden_tag() }}
+
+  {%- if form.errors %}
+    {%- for fieldname, errors in form.errors.items() %}
+      {%- if bootstrap_is_hidden_field(form[fieldname]) %}
+        {%- for error in errors %}
+          <p class="error">{{error}}</p>
+        {%- endfor %}
+      {%- endif %}
+    {%- endfor %}
+  {%- endif %}
+
+  <div id="stimuli-con"><img class="img-responsive" id="stimuli-pic"></div>
+  <div id="button-con" class="center-block">
+    <button class="btn btn-default" type="button" id="left-button">Left</button>
+    <button class="btn btn-default" type="button" id="right-button">Right</button>
+    <button class="btn btn-default" type="button" id="next-button">next</button>
+  </div>
+  <div class="hidden">{{form.result()}}</div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/wordcate.js') }}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    octopus.init({{mode}});
+});
+</script>
+{% endblock %}

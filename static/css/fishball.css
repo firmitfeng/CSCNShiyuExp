@@ -1,0 +1,154 @@
+html {
+  height: 100%;
+}
+body {
+  margin:0;
+  height: 100%;
+}
+.main{
+  height: 100%;
+  margin-bottom: -80px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+.footer .text-muted {
+  margin: 20px 0;
+}
+.head {
+  padding-top: 1em;
+}
+.head h2{
+  margin-top: 0;
+}
+#tips-con{
+  min-height: 25px;
+}
+#exp-con{
+  text-align: -webkit-center; 
+  text-align: -moz-center; 
+  padding: 0;
+  display: flex;
+  display: -webkit-flex;
+  width: 100%;
+  height: 80%;
+  min-height: 600px;
+  flex-direction: column;
+  align-items: center;
+}
+#exp-con .row{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+#exp-con .frame-container{
+  text-align: -webkit-center; 
+  text-align: -moz-center; 
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#exp-con #fishball{
+  width: 600px;  
+  height: 450px;  
+  border:1px solid;  
+  position: relative;  
+  overflow: hidden;
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+}
+
+#exp-con #fishball .track{
+  width: 100%;
+  height: 25%;
+  position: relative;
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+}
+
+#exp-con #fishball .track>div{
+  width: 75px;
+  height: 75px;
+  position: absolute;
+  background-size: 70px 70px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#exp-con #fishball .ball #red{
+  background-image: url("../imgs/fishball/ball_red.png");
+}
+
+#exp-con #fishball .ball #yellow{
+  background-image: url("../imgs/fishball/ball_yellow.png");
+}
+
+#exp-con #fishball .ball #blue{
+  background-image: url("../imgs/fishball/ball_blue.png");
+}
+
+#exp-con #fishball .ball #green{
+  background-image: url("../imgs/fishball/ball_green.png");
+}
+
+#exp-con #fishball .ball #white{
+  background-image: url("../imgs/fishball/ball_white.png");
+}
+
+#exp-con #fishball .fish #red, .fishs #red, .fishg #red{
+  background-image: url("../imgs/fishball/fish_red.gif");
+}
+
+#exp-con #fishball .fish #yellow, .fishs #yellow, .fishg #yellow{
+  background-image: url("../imgs/fishball/fish_yellow.gif");
+}
+
+#exp-con #fishball .fish #blue, .fishs #blue, .fishg #blue{
+  background-image: url("../imgs/fishball/fish_blue.gif");
+}
+
+#exp-con #fishball .fish #green, .fishs #green, .fishg #green{
+  background-image: url("../imgs/fishball/fish_green.gif");
+}
+
+#exp-con #fishball .fish #white, .fishs #white, .fishg #white{
+  background-image: url("../imgs/fishball/fish_white.gif");
+}
+
+#buttom-con{
+  min-height: 25px;
+}
+
+#mask{
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background: url("../imgs/line/mask.jpg") repeat;
+  z-index: 9999;
+  display: none;
+}
+
+.flipx {
+    -moz-transform:scaleX(-1);
+    -webkit-transform:scaleX(-1);
+    -o-transform:scaleX(-1);
+    transform:scaleX(-1);
+    /*IE*/
+    filter:FlipH;
+}
