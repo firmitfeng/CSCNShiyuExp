@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% import "form_macro.html" as form_macro %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{%- block styles %}
+{{super()}}
+<link href="{{ url_for('static', filename='css/line.css') }}" rel="stylesheet" type="text/css">
+{% endblock -%}
+
+{% block exp_con %}
+  <div id="top-con" class="row">
+    <button class="btn btn-default sbt col-md-1" type="button">1</button>
+    <button class="btn btn-default sbt col-md-1 col-md-offset-10" type="button">2</button>
+  </div>
+  <div class="frame-container">
+    <div id="frame-con"></div>
+  </div>
+  <div id="buttom-con" class="row">
+    <button class="btn btn-default sbt col-md-1" type="button">3</button>
+    <button class="btn btn-default sbt col-md-1 col-md-offset-10" type="button">4</button>
+  </div>
+  <div id="next-con" class="row">
+    <button class="btn btn-default btn-lg" type="button" id="next-button">next</button>
+  </div>
+
+<form id="exp_form" action="" method="post" class="form form-horizontal" role="form">
+  {{ form.hidden_tag() }}
+
+  {%- if form.errors %}
+    {%- for fieldname, errors in form.errors.items() %}
+      {%- if bootstrap_is_hidden_field(form[fieldname]) %}
+        {%- for error in errors %}
+          <p class="error">{{error}}</p>
+        {%- endfor %}
+      {%- endif %}
+    {%- endfor %}
+  {%- endif %}
+  <div class="hidden">{{form.result()}}</div>
+</form>
+{% endblock %}
+
+{% block mask %}<div id="mask" class="mask"></div>{% endblock mask %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/line.js') }}"></script>
+<script type="text/javascript">
+//正方形外框的边长
+const FRAMESIZE = {{sqr_size}};
+$(document).ready(function(){
+    octopus.init({{mode}});
+});
+</script>
+{% endblock %}

@@ -63,24 +63,28 @@ def start_page():
     form = WorkerInfoForm()
     if form.validate_on_submit():
         test_name, mode = nextpage.split('_')
-        exp_result = ExpResult.query.filter_by(worker_id=form.workerid.data)\
-                        .filter_by(test_name = test_name)\
-                        .filter_by(test_mode = mode)\
-                        .first()
-        if exp_result is not None:
-            return redirect(url_for('end_page'))
+        if mode <> 't':
+            exp_result = ExpResult.query.filter_by(worker_id=form.workerid.data)\
+                            .filter_by(test_name = test_name)\
+                            .filter_by(test_mode = mode)\
+                            .first()
+            if exp_result is not None:
+                return redirect(url_for('end_page'))
 
-        exp_result = ExpResult(name = form.name.data,
-                               worker_id = form.workerid.data,
-                               screen_size = form.screen_size.data,
-                               screen_resolution_h = form.screen_resolution_h.data,
-                               screen_resolution_w = form.screen_resolution_w.data
-                            )
-        db.session.add(exp_result)
-        db.session.commit()
 
-        session['workerid'] = form.workerid.data
-        session['expid'] = exp_result.id
+            exp_result = ExpResult(name = form.name.data,
+                                   worker_id = form.workerid.data,
+                                   screen_size = form.screen_size.data,
+                                   screen_resolution_h = form.screen_resolution_h.data,
+                                   screen_resolution_w = form.screen_resolution_w.data
+                                )
+            db.session.add(exp_result)
+            db.session.commit()
+
+            session['workerid'] = form.workerid.data
+            session['expid'] = exp_result.id
+        else:
+            session['expid'] = -1
 
         return redirect(url_for(test_name, m=mode))
     else:
@@ -93,10 +97,39 @@ def words():
     #  i 直觉  r 理智
     mode = request.args.get('m','i')
     test_name = 'words'
+    return exp(test_name, pagetitle=u'word cate')
+
+
+@app.route('/exp/c', methods=["GET", "POST"])
+def circle():
+    mode = request.args.get('m','i')
+    test_name = 'circle'
+    return exp(test_name, pagetitle=u'circle')
+
+
+@app.route('/exp/l', methods=["GET", "POST"])
+def line():
+    mode = request.args.get('m','i')
+    test_name = 'line'
+    return exp(test_name, pagetitle=u'line')
+
+
+def exp(test_name, pagetitle, template_name=None):
+    #  mode 对应两种模式
+    #  i 直觉  r 理性  t 测试
+    mode = request.args.get('m','i')
+    if template_name is None:
+        template_name = test_name+'.html'
     if 'expid' not in session:
         return redirect(url_for('start_page', next=test_name+'_'+mode))
     else:
         expid = session['expid']
+
+        sqr_size = 300
+
+        if mode == 't':
+            return pro_exp(pagetitle, template_name, 300)
+
         exp_result = ExpResult.query.filter_by(id=expid).first()
 
         if exp_result is None:
@@ -121,13 +154,18 @@ def words():
             elif mode == 'r':
                 mode = u'mode.ret'
 
-            return render_template('words.html', form=form, mode=mode, pagetitle=u'word cate')
+            if test_name == 'line':
+                #window.screen.width * 3.5377 / screen_m
+                sqr_size = round(exp_result.screen_resolution_w * 3.5377 / exp_result.screen_size)
 
+            return render_template(template_name, form=form, mode=mode, pagetitle=pagetitle, sqr_size=sqr_size)
 
-@app.route('/d', methods=["GET", "POST"])
-def d():
-    return make_response('<h1>hello world!</h1>')
-
+def pro_exp(pagetitle, template_name, sqr_size):
+    form = TestForm()
+    if form.validate_on_submit():
+        return redirect(url_for('end_page'))
+    else:
+        return render_template(template_name, form=form, mode=u'mode.intu', pagetitle=pagetitle, sqr_size=sqr_size)
 
 
 @app.route('/manage', methods=["GET", "POST"])

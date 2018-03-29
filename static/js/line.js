@@ -26,9 +26,6 @@ const MASKTIME = 0.2;
 const RESPTIME = 3;
 const BLANKTIME = 7;
 
-//正方形外框的边长
-const FRAMESIZE = 300;
-
 var module = {
 
 	init: function() {
@@ -119,7 +116,7 @@ var octopus = {
 
 	saveLine: function(exper){
 		//this.setStumiResult();
-		console.log(module.getStumi(this.currStumiIdx));
+		//console.log(module.getStumi(this.currStumiIdx));
 	},
 
 	saveData: function() {
@@ -362,6 +359,3 @@ var completeView = {
 	}
 }
 
-$(document).ready(function() {
-	octopus.init(mode.rel);
-});

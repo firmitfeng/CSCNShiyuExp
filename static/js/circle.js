@@ -134,10 +134,9 @@ var octopus = {
 
 	saveData: function() {
 		var circleArr = module.getAllData();
-		$('#data').val(JSON.stringify(circleArr));
+		$('#result').val(JSON.stringify(circleArr));
 		$('#exp_form').submit();
 		//completeView.init();
-		console.log('Done!!');
 		console.log('Done!!');
 	}
 };
@@ -357,6 +356,3 @@ var completeView = {
 	}
 }
 
-$(document).ready(function() {
-	octopus.init(mode.ret);
-});

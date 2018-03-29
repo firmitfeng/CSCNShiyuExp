@@ -22,7 +22,7 @@ const mode = {
 const DEBUG = 1;
 
 const STUMITIME = 10;
-const MASKTIME = 0.2;
+const MASKTIME = 0.5;
 const RESPTIME = 3;
 const BLANKTIME = 7;
 
