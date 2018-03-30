@@ -86,15 +86,18 @@ def start_page():
         else:
             session['expid'] = -1
 
+        print form.screen_resolution_w.data, form.screen_size.data
+
+        session['sqr_size'] = round(float(form.screen_resolution_w.data) * 3.5377 / float(form.screen_size.data))
+
         return redirect(url_for(test_name, m=mode))
     else:
+        form.screen_size.data = 23
         return render_template('info.html', form=form, pagetitle='Info')
 
 
 @app.route('/exp/w', methods=["GET", "POST"])
 def words():
-    #  mode 对应两种模式
-    #  i 直觉  r 理智
     mode = request.args.get('m','i')
     test_name = 'words'
     return exp(test_name, pagetitle=u'word cate')
@@ -114,6 +117,65 @@ def line():
     return exp(test_name, pagetitle=u'line')
 
 
+@app.route('/exp/fb', methods=["GET", "POST"])
+def fishball():
+    mode = request.args.get('m','i')
+
+    test_name = 'fishball'
+    pagetitle = u"Fish and Ball"
+
+    if 'expid' not in session:
+        return redirect(url_for('start_page', next=test_name+'_'+mode))
+    else:
+        expid = session['expid']
+ 
+        if 'fb_c' not in session:
+            session['fb_c'] = 0
+
+        print session['fb_c']
+
+        if mode == 't':
+            return pro_exp(pagetitle, 'fishball.html')
+
+        form = TestForm()
+        if form.validate_on_submit():
+
+            if session['fb_c'] <> 0:
+                temp_result = ExpResult.query.filter_by(id=expid).first()
+
+                exp_result = ExpResult(name = temp_result.name,
+                                       worker_id = temp_result.worker_id,
+                                       screen_size = temp_result.screen_size,
+                                       screen_resolution_h = temp_result.screen_resolution_h,
+                                       screen_resolution_w = temp_result.screen_resolution_w
+                                    )
+            else:
+                exp_result = ExpResult.query.filter_by(id=expid).first()
+                
+            exp_result.test_name = '{}_{}'.format(test_name, session['fb_c'])
+            exp_result.test_mode = mode
+            exp_result.test_data = form.result.data
+
+            db.session.add(exp_result)
+            db.session.commit()
+
+            session['fb_c'] += 1
+
+            if session['fb_c'] < 3:
+                return render_template('pause.html', next=url_for('fishball', m=mode), pagetitle=u'休息一下')
+            else:
+                return redirect(url_for('end_page'))
+
+        else:
+            if mode == 'i':
+                mode = u'mode.intu'
+            elif mode == 'r':
+                mode = u'mode.ret'
+
+            return render_template('fishball.html', form=form, mode=mode, pagetitle=pagetitle)
+
+
+
 def exp(test_name, pagetitle, template_name=None):
     #  mode 对应两种模式
     #  i 直觉  r 理性  t 测试
@@ -125,10 +187,8 @@ def exp(test_name, pagetitle, template_name=None):
     else:
         expid = session['expid']
 
-        sqr_size = 300
-
         if mode == 't':
-            return pro_exp(pagetitle, template_name, 300)
+            return pro_exp(pagetitle, template_name)
 
         exp_result = ExpResult.query.filter_by(id=expid).first()
 
@@ -155,17 +215,17 @@ def exp(test_name, pagetitle, template_name=None):
                 mode = u'mode.ret'
 
             if test_name == 'line':
-                #window.screen.width * 3.5377 / screen_m
-                sqr_size = round(exp_result.screen_resolution_w * 3.5377 / exp_result.screen_size)
+                return render_template(template_name, form=form, mode=mode, pagetitle=pagetitle, sqr_size=session['sqr_size'])
 
-            return render_template(template_name, form=form, mode=mode, pagetitle=pagetitle, sqr_size=sqr_size)
+            return render_template(template_name, form=form, mode=mode, pagetitle=pagetitle)
 
-def pro_exp(pagetitle, template_name, sqr_size):
+
+def pro_exp(pagetitle, template_name):
     form = TestForm()
     if form.validate_on_submit():
         return redirect(url_for('end_page'))
     else:
-        return render_template(template_name, form=form, mode=u'mode.intu', pagetitle=pagetitle, sqr_size=sqr_size)
+        return render_template(template_name, form=form, mode=u'mode.intu', pagetitle=pagetitle, sqr_size=session['sqr_size'])
 
 
 @app.route('/manage', methods=["GET", "POST"])

@@ -173,7 +173,7 @@ var octopus = {
 					currStumi.topic = BallFeQue[currFishBall.idx%7];
 				}
 			}
-			console.log(currFishBall);
+			//console.log(currFishBall);
 			return currStumi;
 		} else {
 			this.saveData();
@@ -184,7 +184,9 @@ var octopus = {
 
 	saveData: function() {
 		var result = module.getAllData();
-		completeView.init();
+		$('#result').val(JSON.stringify(result));
+		$('#exp_form').submit();
+		//completeView.init();
 		console.log('Done!!');
 	}
 };
@@ -266,7 +268,7 @@ var stumiView = {
 			return;
 		}
 
-		console.log(exper);
+		//console.log(exper);
 
 		if (octopus.getMode() == mode.intu) {
 			self.delay(0).then(function(args) {
@@ -400,7 +402,3 @@ var completeView = {
 		this.headDiv.empty().html('<h2>Complete! Thank you!</h2>');
 	}
 }
-
-$(document).ready(function() {
-	octopus.init(mode.intu);
-});

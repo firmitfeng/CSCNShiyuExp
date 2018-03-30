@@ -121,7 +121,9 @@ var octopus = {
 
 	saveData: function() {
 		var result = module.getAllData();
-		completeView.init();
+		$('#result').val(JSON.stringify(result));
+		$('#exp_form').submit();
+		//completeView.init();
 		console.log('Done!!');
 	}
 };

@@ -41,51 +41,51 @@
 {% block scripts %}
 {{ super() }}
 <script type="text/javascript">
-	$(document).ready(function(){
-    	//$("div.sqr_block").html(window.screen.height + "  " + window.screen.width + "<br>" + $(window).width() + "<br>" + $(document).width());
-    	//以16：10的22寸显示器（viewsonic vx2269wm 1680 × 1050）为标准 22 => 1981px 所以，1英寸对应90.05px
-    	//标准显示器上的3英寸对应 1981×3/22 约270px
-    	//不同尺寸的显示器3英寸对应的像素数为 window.screen.width * sqrt（356）*3 / (16 * M) 其中 M 为显示器尺寸
-    	function getBlockWidth(screen_m){
-    		return Math.round(window.screen.width * 3.5377 / screen_m);
-    	}
-    	 
-    	function changeSqrSize(){
+    $(document).ready(function(){
+        //$("div.sqr_block").html(window.screen.height + "  " + window.screen.width + "<br>" + $(window).width() + "<br>" + $(document).width());
+        //以16：10的22寸显示器（viewsonic vx2269wm 1680 × 1050）为标准 22 => 1981px 所以，1英寸对应90.05px
+        //标准显示器上的3英寸对应 1981×3/22 约270px
+        //不同尺寸的显示器3英寸对应的像素数为 window.screen.width * sqrt（356）*3 / (16 * M) 其中 M 为显示器尺寸
+        function getBlockWidth(screen_m){
+            return Math.round(window.screen.width * 3.5377 / screen_m);
+        }
+         
+        function changeSqrSize(){
             var centerX = event.pageX - $progress.offset().left;
 
             var min = 10, max = 32;
-    		var widthPerInch = progWidth / (max-min+1);
+            var widthPerInch = progWidth / (max-min+1);
 
-    		var persent = centerX / progWidth * 100;
+            var persent = centerX / progWidth * 100;
 
-    		var currSize = Math.floor(centerX * (max-min+1) / progWidth  + min);
+            var currSize = Math.floor(centerX * (max-min+1) / progWidth  + min);
 
             $("input#screen_size").val(currSize);
             $('#progress-bar').css({'width':persent+'%'}).html(currSize + " in.");
             //var screen_m = $("input#screen_size").val();
-    		var x = getBlockWidth(currSize);
-    		$("div.sqr_block").css({"width":Math.round(x)});
+            var x = getBlockWidth(currSize);
+            $("div.sqr_block").css({"width":Math.round(x)});
 
-    	}
+        }
 
-    	var $progress = $('.progress');
-    	var progWidth = $progress.width();
-    	var mouseKeyDown = false;
+        var $progress = $('.progress');
+        var progWidth = $progress.width();
+        var mouseKeyDown = false;
 
-    	
-    	$('#screen_resolution_w').val(window.screen.width);
-    	$('#screen_resolution_h').val(window.screen.height);
+        
+        $('#screen_resolution_w').val(window.screen.width);
+        $('#screen_resolution_h').val(window.screen.height);
 
 
-		$progress.mousedown(function(event) {
-			mouseKeyDown = true;
-			event.preventDefault();
-			changeSqrSize();
+        $progress.mousedown(function(event) {
+            mouseKeyDown = true;
+            event.preventDefault();
+            changeSqrSize();
         });
 
-		$(document).mousemove(function(event) {
-			if(mouseKeyDown){
-				changeSqrSize();
+        $(document).mousemove(function(event) {
+            if(mouseKeyDown){
+                changeSqrSize();
             }
         });
                 // 鼠标松开停止画圆  

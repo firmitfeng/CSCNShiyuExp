@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% import "form_macro.html" as form_macro %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{%- block styles %}
+{{super()}}
+<link href="{{ url_for('static', filename='css/global.css') }}" rel="stylesheet" type="text/css">
+{% endblock -%}
+
+{% block exp_con_attribs %} class="content" {% endblock %}
+
+{% block exp_con %}
+<div><p><a href="{{next}}">Click this to continue....</p></div>
+{% endblock %}
