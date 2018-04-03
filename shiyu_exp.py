@@ -151,10 +151,11 @@ def fishball():
                                     )
             else:
                 exp_result = ExpResult.query.filter_by(id=expid).first()
-                
+
             exp_result.test_name = '{}_{}'.format(test_name, session['fb_c'])
             exp_result.test_mode = mode
             exp_result.test_data = form.result.data
+            exp_result.submit_time = datetime.utcnow()
 
             db.session.add(exp_result)
             db.session.commit()
@@ -203,6 +204,7 @@ def exp(test_name, pagetitle, template_name=None):
             exp_result.test_name = test_name
             exp_result.test_mode = mode
             exp_result.test_data = form.result.data
+            exp_result.submit_time = datetime.utcnow()
 
             db.session.add(exp_result)
             db.session.commit()
@@ -240,9 +242,23 @@ def manage_download_result():
 
     form = LoginForm()
     if form.validate_on_submit():
-        if(form.name.data == 'admin' and form.passwd.data == 'cscn@psy2015'):
+        if(form.name.data == 'admin' and form.passwd.data == 'cscn@psy2018'):
             session['login_count'] = 0
-            result_content = u'"ID","TYPE","NAME","WORKERID","self_dist","family_dist","friend_dist","zuma_dist","stone_dist","like_dist","dislike_dist","circle_center","self_point","family_point","friend_point","zuma_point","stone_point","like_point","dislike_point","start_time","submit_time"\n';
+            result_content = u'"ID","NAME","WORKERID","screen_size", "screen_resolution_w", "screen_resolution_h", \
+                                "test_name", "test_mode", "submit_time", "test_data"\n';
+            results = ExpResult.query.all()
+
+            fields = ['id', 'name', 'worker_id', \
+                      'screen_size', 'screen_resolution_w', 'screen_resolution_h',\
+                      'test_name', 'test_mode', 'submit_time', \
+                      'test_data']
+
+            for result in results:
+                temp_list = []
+                for field in fields:
+                    temp_list.append(str(getattr(result, field)))
+                result_content += u','.join(temp_list)
+                result_content += u'\n'
 
             response = make_response(result_content)
             response.headers["Content-Disposition"] = "attachment; filename=result.csv"
