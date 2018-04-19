@@ -198,6 +198,7 @@ var stumiView = {
 				return self.delay(octopus.getRespTimer());
 			}).then(function(args){
 				self.clearScreen();
+				self.dispTips('missing, click next button to continue...');
 				self.nButton.show();
 			});
 			
@@ -210,7 +211,7 @@ var stumiView = {
 				self.dispTips('thinking...');
 				return self.delay(octopus.getBlankTimer());
 			}).then(function(args){
-				self.dispTips('开始请单击屏幕');
+				self.dispTips('if you finish thinking, please click the screen');
 				return self.clickDelay($(document));
 			}).then(function(args){
 				self.dispButtons();
