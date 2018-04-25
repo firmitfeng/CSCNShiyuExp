@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+div { position: absolute; width: 60px; height: 60px; float: left; }
+.first { background-color: #3f3; left: 0;}
+.second { background-color: #33f; left: 80px; display: none;}
+</style>
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+ 
+<p><button id="run">Run</button><button type="button" id="bt">click me</button></p>
+<div class="first"></div>
+<div class="second"></div>
+
+<script>
+    $("#run").click(function() {
+      $("div.first").slideUp(0).delay(3000).slideDown(0);
+      //$("div.second").slideUp(300).fadeIn(400);
+      $("div.second").show().delay(3000).slideUp(0);
+    });
+    $("#bt").click(function(){
+    	$("div.first").finish();
+    });
+</script>
+ 
+</body>
+</html>
