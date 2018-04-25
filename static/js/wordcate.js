@@ -22,9 +22,23 @@ var module = {
 
 	initPic: function(){
 		this.picCount = 10;
-		//localStorage.wordspic = JSON.stringify({currIdx:0, picIdx:this.picIdxArr});
-		this.picIdxArr = Array.from(new Array(this.picCount),(val,index)=>({idx: index, img: '', click: ''}));
-		this.picIdxArr.shuffle();
+
+		if (!localStorage.wordspic){
+			localStorage.wordspic = JSON.stringify({currIdx:0, picIdx:this.picIdxArr});
+			var tempIdxArr = Array.from(new Array(this.picCount), (val,index)=>index).shuffle();
+			this.picIdxArr = Array.from(tempIdxArr,(val,index)=>({idx: index, img: this.getPicUrl(val), click: ''}));
+			this.currIdx = 0;
+		}else{
+			var wordspic = JSON.parse(localStorage.wordspic);
+			this.picIdxArr = wordspic.picIdx;
+			this.currIdx = wordspic.currIdx;
+		}
+
+
+	},
+
+	getPicUrl: function(val){
+		return (val+1 < 10 ? '00' : '0') + (val+1) + (Math.floor(Math.random() * 2)? 'L' : 'R') + '.jpg'; 
 	},
 
 	getPicCount: function(){
@@ -33,15 +47,7 @@ var module = {
 
 	getPic: function(idx){
 		if (idx < this.picCount){
-			var picIdx = this.picIdxArr[idx].idx;
-			var url = '0' + (Math.floor(picIdx/2)+1) + (picIdx%2? 'L' : 'R') + '.jpg';
-
-			if ((picIdx/2) < 10){
-				url = '0'+url;
-			}
-			this.picIdxArr[idx].img = url;
-			//console.log(url);
-			return url;
+			return this.picIdxArr[idx].img;
 		}else{
 			return -1;
 		}

@@ -7,7 +7,7 @@ from wtforms.validators import Required
 
 class WorkerInfoForm(Form):
 	name = StringField(u'name', validators=[Required()])
-	workerid = StringField(u'workerid', validators=[Required()])
+	workerid = StringField(u'worker id', validators=[Required()])
 	screen_size = HiddenField(u'screen_size')
 	screen_resolution_h = HiddenField(u'screen_resolution_h')
 	screen_resolution_w = HiddenField(u'screen_resolution_w')

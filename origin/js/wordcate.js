@@ -25,8 +25,8 @@ var module = {
 
 		if (!localStorage.wordspic){
 			localStorage.wordspic = JSON.stringify({currIdx:0, picIdx:this.picIdxArr});
-			this.picIdxArr = Array.from(new Array(this.picCount),(val,index)=>({idx: index, img: '', click: ''}));
-			this.picIdxArr.shuffle();
+			var tempIdxArr = Array.from(new Array(this.picCount), (val,index)=>index).shuffle();
+			this.picIdxArr = Array.from(tempIdxArr,(val,index)=>({idx: index, img: this.getPicUrl(val), click: ''}));
 			this.currIdx = 0;
 		}else{
 			var wordspic = JSON.parse(localStorage.wordspic);
@@ -37,17 +37,13 @@ var module = {
 
 	},
 
+	getPicUrl: function(val){
+		return (val+1 < 10 ? '00' : '0') + (val+1) + (Math.floor(Math.random() * 2)? 'L' : 'R') + '.jpg'; 
+	},
+
 	getCurrPic: function(){
 		if (this.picIdxArr.length > this.currIdx){
-			var idx = this.picIdxArr[this.currIdx].idx;
-			var url = '0' + (Math.floor(idx/2)+1) + (idx%2? 'L' : 'R') + '.jpg';
-
-			if ((idx/2) < 10){
-				url = '0'+url;
-			}
-			this.picIdxArr[this.currIdx].img = url;
-			//console.log(url);
-			return url;
+			return this.picIdxArr[this.currIdx].img;
 		}else{
 			return -1;
 		}
