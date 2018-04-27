@@ -145,84 +145,51 @@ def practice(test_name, mode):
     return render_template(practice_page, test_name=test_name, mode=mode)
 
 
-@app.route('/exp/w', methods=["GET", "POST"])
-def words():
-    mode = request.args.get('m','i')
-    test_name = 'words'
-    return exp(test_name, pagetitle=u'word cate')
-
-
-@app.route('/exp/c', methods=["GET", "POST"])
-def circle():
-    mode = request.args.get('m','i')
-    test_name = 'circle'
-    return exp(test_name, pagetitle=u'circle')
-
-
-@app.route('/exp/l', methods=["GET", "POST"])
-def line():
-    mode = request.args.get('m','i')
-    test_name = 'line'
-    return exp(test_name, pagetitle=u'line')
-
-
-@app.route('/exp/fb', methods=["GET", "POST"])
-def fishball():
-    mode = request.args.get('m','i')
-
+def fishball(mode):
     test_name = 'fishball'
-    pagetitle = u"Fish and Ball"
 
-    if 'expid' not in session:
-        return redirect(url_for('start_page', next=test_name+'_'+mode))
-    else:
-        expid = session['expid']
- 
-        if 'fb_c' not in session:
-            session['fb_c'] = 0
+    expid = session['expid']
 
-        print session['fb_c']
+    if 'fishball_count' not in session:
+        session['fishball_count'] = 0
 
-        if mode == 't':
-            return pro_exp(pagetitle, 'fishball.html')
+    form = TestForm()
+    if form.validate_on_submit():
 
-        form = TestForm()
-        if form.validate_on_submit():
+        if session['fishball_count'] != 0:
+            temp_result = ExpResult.query.filter_by(id=expid).first()
 
-            if session['fb_c'] <> 0:
-                temp_result = ExpResult.query.filter_by(id=expid).first()
-
-                exp_result = ExpResult(name = temp_result.name,
-                                       worker_id = temp_result.worker_id,
-                                       screen_size = temp_result.screen_size,
-                                       screen_resolution_h = temp_result.screen_resolution_h,
-                                       screen_resolution_w = temp_result.screen_resolution_w
-                                    )
-            else:
-                exp_result = ExpResult.query.filter_by(id=expid).first()
-
-            exp_result.test_name = '{}_{}'.format(test_name, session['fb_c'])
-            exp_result.test_mode = mode
-            exp_result.test_data = form.result.data
-            exp_result.submit_time = datetime.utcnow()
-
-            db.session.add(exp_result)
-            db.session.commit()
-
-            session['fb_c'] += 1
-
-            if session['fb_c'] < 3:
-                return render_template('pause.html', next=url_for('fishball', m=mode), pagetitle=u'休息一下')
-            else:
-                return redirect(url_for('end_page'))
-
+            exp_result = ExpResult(name = temp_result.name,
+                                   worker_id = temp_result.worker_id,
+                                   screen_size = temp_result.screen_size,
+                                   screen_resolution_h = temp_result.screen_resolution_h,
+                                   screen_resolution_w = temp_result.screen_resolution_w
+                                )
         else:
-            if mode == 'i':
-                mode = u'mode.intu'
-            elif mode == 'r':
-                mode = u'mode.ret'
+            exp_result = ExpResult.query.filter_by(id=expid).first()
 
-            return render_template('fishball.html', form=form, mode=mode, pagetitle=pagetitle)
+        exp_result.test_name = '{}_{}'.format(test_name, session['fishball_count'])
+        exp_result.test_mode = mode
+        exp_result.test_data = form.result.data
+        exp_result.submit_time = datetime.utcnow()
+
+        db.session.add(exp_result)
+        db.session.commit()
+
+        session['fishball_count'] += 1
+
+        if session['fishball_count'] < 3:
+            return render_template('pause.html', next=url_for('exp_index_page', test_name=test_name, mode=mode), pagetitle=u'休息一下')
+        else:
+            return redirect(url_for('end_page'))
+
+    else:
+        if mode == 'i':
+            mode = u'mode.intu'
+        elif mode == 'r':
+            mode = u'mode.ret'
+
+        return render_template('fishball.html', form=form, mode=mode)
 
 
 

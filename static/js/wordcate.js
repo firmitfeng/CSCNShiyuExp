@@ -194,7 +194,7 @@ var stumiView = {
 
 		self.picurl = octopus.getPic();
 
-		if (self.picurl === false){
+		if (!self.picurl){
 			self.saveData();
 			return ;
 		}

@@ -176,8 +176,8 @@ var octopus = {
 			//console.log(currFishBall);
 			return currStumi;
 		} else {
-			this.saveData();
-			completeView.init();
+			//this.saveData();
+			//completeView.init();
 			return false;
 		}
 	},
@@ -249,9 +249,13 @@ var stumiView = {
 	clickButton: function(btIdx) {},
 
 	initRender: function() {
-		this.dispTips('点击Next开始实验');
+		this.dispTips('Click "next" button to continue');
 		this.clearFrameCon();
 		this.nButton.show();
+	},
+
+	saveData: function () {
+		octopus.saveData();
 	},
 
 	render: function() {
@@ -265,7 +269,8 @@ var stumiView = {
 		var exper = octopus.getStumi();
 
 		if (!exper) {
-			return;
+			self.saveData();
+			return ;
 		}
 
 		//console.log(exper);
@@ -297,10 +302,10 @@ var stumiView = {
 				return self.delay(STUMITIME * 1000);
 			}).then(function(args) {
 				self.clearFrameCon();
-				self.dispTips('请思考'+BLANKTIME+'s');
+				self.dispTips('Thinking...');
 				return self.delay(BLANKTIME*1000);
 			}).then(function(args){
-				self.dispTips('开始请单击屏幕');
+				self.dispTips('Click the screen to continue.');
 				return self.clickDelay($(document));
 			}).then(function(args){
 				self.clearTips();

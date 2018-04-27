@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% import "form_macro.html" as form_macro %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{%- block styles %}
+{{super()}}
+<link href="{{ url_for('static', filename='css/fishball.css') }}" rel="stylesheet" type="text/css">
+{% endblock -%}
+
+{% block pagetitle %}Fish&amp;Ball Causal{% endblock pagetitle %}
+
+{% block tips %}
+{% if mode == 'i' %}
+<p>In each trial, you’ll see a description sentence about balls or fish, then the screen will show a video clip. After watching this video clip, you need to use your intuition to decide whether the description is true or false <strong>within 3 seconds</strong>. If you think the description is <strong>true</strong>, please <strong>click the “true” button below</strong>. If you think the description is <strong>false</strong>, please <strong>click the “false” button below</strong>. If you understand the instruction please <strong>click "next"</strong> button to start practicing.</p>
+{% else %}
+<p>In each trial, you’ll see a description sentence about balls or fish, then the screen will show a video clip. After watching this video clip, first you need to <strong>think at least 7 seconds</strong>, then when you finish thinking, you need to decide whether the description is true or false <strong>within 3 seconds</strong>. If you think the description is <strong>true</strong>, please <strong>click the “true” button below</strong>. If you think the description is <strong>false</strong>, please <strong>click the “false” button below</strong>. If you understand the instruction please <strong>click "next"</strong> button to start practicing.</p>
+{% endif %}
+{% endblock tips %}
+
+{% block exp_con %}
+<div class="frame-container">
+  <div id="fishball">
+    <div class="track"><div id="green"></div></div>
+    <div class="track"><div id="yellow"></div></div>
+    <div class="track"><div id="white"></div><div id="blue"></div></div>
+    <div class="track"><div id="red"></div></div>
+  </div>
+</div>
+<div id="buttom-con" class="row">
+  <button class="btn btn-default btn-lg sbt" type="button">True</button>
+  <button class="btn btn-default btn-lg sbt" type="button">False</button>
+</div>
+<div id="next-con" class="row">
+  <button class="btn btn-default btn-lg" type="button" id="next-button">next</button>
+</div>
+
+{% endblock %}
+
+{% block mask %}<div id="mask" class="mask"></div>{% endblock mask %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/fishball.js') }}"></script>
+<script src="{{ url_for('static', filename='js/fishballmeta.js') }}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  stumiView.initRender = function() {
+    this.clearFrameCon();
+    this.nButton.show();
+  };
+
+  stumiView.saveData = function(){
+    this.dispTips('Practice is over. If you are ready, please click "next" button.');
+    this.nButton.show().click(function(){
+      window.location.href="{{url_for('exp_index_page', test_name=test_name, mode=mode)}}" ;
+    });
+  };
+
+  octopus.getStumi = function() {
+    this.currStumiIdx += 7 ;
+    if (this.currStumiIdx < module.getStumiCount()) {
+      var currFishBall = module.getStumi(this.currStumiIdx);
+      var currStumi = module.getFishBall(currFishBall.idx);
+      if (currFishBall.mode == 'in'){
+        if(currFishBall.fb == 'fish'){
+          currStumi.topic = FishInQue[currFishBall.idx];
+        }else{
+          currStumi.topic = BallInQue[currFishBall.idx-24];
+        }
+      }else if (currFishBall.mode == 'ex'){
+        if(currFishBall.fb == 'fish'){
+          currStumi.topic = FishExQue[currFishBall.idx];
+        }else{
+          currStumi.topic = BallExQue[currFishBall.idx-24];
+        }
+      }else{
+        if(currFishBall.fb == 'fish'){
+          currStumi.topic = FishFeQue[currFishBall.idx%7];
+        }else{
+          currStumi.topic = BallFeQue[currFishBall.idx%7];
+        }
+      }
+      //console.log(currFishBall);
+      return currStumi;
+    } else {
+      //this.saveData();
+      //completeView.init();
+      return false;
+    }
+  }
+
+  if ('{{mode}}' == 'r'){
+    octopus.init(mode.ret);
+  }else if ('{{mode}}' == 'i'){
+    octopus.init(mode.intu);
+  }
+});
+</script>
+{% endblock %}
