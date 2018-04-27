@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{%- block styles %}
+{{super()}}
+<link href="{{ url_for('static', filename='css/circle.css') }}" rel="stylesheet" type="text/css">
+{% endblock -%}
+
+{% block pagetitle %}Circle Test{% endblock pagetitle %}
+
+{% block tips %}
+{% if mode == i %}
+<p>In the next task, you need to draw 5 circles to represent five different people. <strong>You need to drag and drop the circle representing the target within 3 seconds according to your intuition.</strong> You can now practice drawing circles in the blank space below, and then click the next button to enter the formal experiment after you are familiar with the operation.</p>
+{% else %}
+<p>In the next task, you need to draw 5 circles to represent five different people. You need to <strong>think at least 7 seconds</strong> at first then <strong>drag and drop the circle representing the target within 3 seconds</strong>. You can now practice drawing circles in the blank space below, and then click the next button to enter the formal experiment after you are familiar with the operation.</p>
+{% endif %}
+{% endblock tips %}
+
+{% block exp_con_attribs %} class="content col-xs-12 col-sm-12 col-md-12" {% endblock exp_con_attribs %}
+
+{% block exp_con %}
+  <div id="drawing-con"></div>
+  <div id="button-con" class="center-block">
+    <a class="btn btn-default" href="{{url_for('exp_index_page', test_name=test_name, mode=mode)}}" role="button" id="next-button">next</a>
+  </div>
+{% endblock exp_con %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+$(document).ready(function(){
+  // 圆的左上角位置  
+    var circleX, circleY;
+    // 鼠标单击时候的相对于画布的位置
+    var topX, topY;
+    // 圆所在的div的宽高
+    var width, height;
+
+    // 是否正在画圆  
+    var isDrawing = false;
+
+    var $circle = {};
+
+
+    var $drawCon = $('#drawing-con');
+    var $expCon = $('#exp-con');
+
+    // 按下鼠标开始画圆  
+    $drawCon.on("mousedown", function(event) {
+      $circle = $('<div class="circle" style="width:0; height:0;">Practice</div>');
+      topX = event.pageX - $drawCon.offset().left;
+      topY = event.pageY - $drawCon.offset().top;
+      $(this).append($circle);
+      isDrawing = true;
+      event.preventDefault();
+    });
+
+    // 鼠标拖动  
+    $expCon.on('mousemove', function(event) {
+      if (isDrawing) {
+
+        var newX = event.pageX - $drawCon.offset().left;
+        var newY = event.pageY - $drawCon.offset().top;
+        var circleX = 0;
+        var circleY = 0;
+
+        if (newX < 0) {
+          newX = 0;
+        } else if (newX > $drawCon.width()) {
+          newX = $drawCon.width();
+        }
+        if (newY < 0) {
+          newY = 0;
+        } else if (newY > $drawCon.height()) {
+          newY = $drawCon.height();
+        }
+
+        width = Math.abs(newX - topX);
+        height = Math.abs(newY - topY);
+
+        if (width > height) {
+          width = height;
+        } else {
+          height = width;
+        }
+
+        if (newX < topX) {
+          circleX = topX - width;
+        } else {
+          circleX = topX;
+        }
+
+        if (newY < topY) {
+          circleY = topY - height;
+        } else {
+          circleY = topY;
+        }
+
+        var radius = Math.sqrt(width * width + height * height) / 2; // 半径，勾股定理  
+
+        // 设置圆的大小和位置  
+        $circle.css("left", circleX + "px");
+        $circle.css("top", circleY + "px");
+        $circle.css("width", width + "px");
+        $circle.css("height", height + "px");
+        $circle.css("border-radius", radius + "px");
+        $circle.css("line-height", height + "px");
+      }
+    });
+
+    // 鼠标松开停止画圆  
+    $(document).on('mouseup', function() {
+      isDrawing = false;
+    });
+});
+</script>
+{% endblock %}

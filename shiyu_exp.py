@@ -7,6 +7,7 @@ import os
 import random
 from datetime import datetime
 import json
+from functools import wraps
 
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
@@ -46,54 +47,101 @@ manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'expid' in session:
+            return f(*args, **kwargs)
+        else:
+            return redirect(url_for('info_page', test_name=kwargs['test_name'], mode=kwargs['mode']))
+    return decorated_function 
+
+
 @app.route('/exp/end')
 def end_page():
     session.clear()
     return make_response('<h1>Complete! Thank you!</h1>')
 
 
-@app.route('/exp/start', methods=["GET", "POST"])
-def start_page():
-    #nextpage的格式是 实验名称_mode
-    nextpage = request.args.get('next', None)
+#mode 取值 i, r
+@app.route('/exp/<string:test_name>/<string:mode>/', methods=["GET", "POST"])
+@login_required
+def exp_index_page(test_name, mode):
+    template_name = test_name+'.html'
+    
+    expid = session['expid']
 
-    if nextpage is None:
+    exp_result = ExpResult.query.filter_by(id=expid).first()
+
+    if exp_result is None:
+        return redirect(url_for('info_page', test_name=test_name, mode=mode))
+    
+    if exp_result.test_data is not None:
+        return make_response('<h1>You have finished this test! Thank you!</h1>')
+
+    form = TestForm()
+    if form.validate_on_submit():
+        exp_result.test_name = test_name
+        exp_result.test_mode = mode
+        exp_result.test_data = form.result.data
+        exp_result.submit_time = datetime.utcnow()
+
+        db.session.add(exp_result)
+        db.session.commit()
+
         return redirect(url_for('end_page'))
+    else:
+        if mode == 'i':
+            mode = u'mode.intu'
+        elif mode == 'r':
+            mode = u'mode.ret'
+
+        return render_template(template_name, form=form, mode=mode, sqr_size=session['sqr_size'])
+
+
+@app.route('/exp/<string:test_name>/<string:mode>/info.html', methods=["GET", "POST"])
+def info_page(test_name, mode):
+    # #nextpage的格式是 实验名称_mode
+    # nextpage = request.args.get('next', None)
+
+    # if nextpage is None:
+    #     return redirect(url_for('end_page'))
     
     form = WorkerInfoForm()
     if form.validate_on_submit():
-        test_name, mode = nextpage.split('_')
-        if mode <> 't':
-            exp_result = ExpResult.query.filter_by(worker_id=form.workerid.data)\
-                            .filter_by(test_name = test_name)\
-                            .filter_by(test_mode = mode)\
-                            .first()
-            if exp_result is not None:
-                return redirect(url_for('end_page'))
+        
+        exp_result = ExpResult.query.filter_by(worker_id=form.workerid.data)\
+                        .filter_by(test_name = test_name)\
+                        .filter_by(test_mode = mode)\
+                        .first()
+        if exp_result is not None:
+            return redirect(url_for('end_page'))
 
 
-            exp_result = ExpResult(name = form.name.data,
-                                   worker_id = form.workerid.data,
-                                   screen_size = form.screen_size.data,
-                                   screen_resolution_h = form.screen_resolution_h.data,
-                                   screen_resolution_w = form.screen_resolution_w.data
-                                )
-            db.session.add(exp_result)
-            db.session.commit()
+        exp_result = ExpResult(name = form.name.data,
+                               worker_id = form.workerid.data,
+                               screen_size = form.screen_size.data,
+                               screen_resolution_h = form.screen_resolution_h.data,
+                               screen_resolution_w = form.screen_resolution_w.data
+                            )
+        db.session.add(exp_result)
+        db.session.commit()
 
-            session['workerid'] = form.workerid.data
-            session['expid'] = exp_result.id
-        else:
-            session['expid'] = -1
-
-        print form.screen_resolution_w.data, form.screen_size.data
-
+        session['workerid'] = form.workerid.data
+        session['expid'] = exp_result.id
+        
         session['sqr_size'] = round(float(form.screen_resolution_w.data) * 3.5377 / float(form.screen_size.data))
 
-        return redirect(url_for(test_name, m=mode))
+        return redirect(url_for('exp_index_page', test_name=test_name, mode=mode))
     else:
         form.screen_size.data = 23
         return render_template('info.html', form=form, pagetitle='Info')
+
+
+@app.route('/exp/<string:test_name>/<string:mode>/practice.html', methods=["GET", "POST"])
+def practice(test_name, mode):
+    practice_page = test_name+'_practice.html'
+    return render_template(practice_page, test_name=test_name, mode=mode)
 
 
 @app.route('/exp/w', methods=["GET", "POST"])
@@ -175,59 +223,6 @@ def fishball():
 
             return render_template('fishball.html', form=form, mode=mode, pagetitle=pagetitle)
 
-
-
-def exp(test_name, pagetitle, template_name=None):
-    #  mode 对应两种模式
-    #  i 直觉  r 理性  t 测试
-    mode = request.args.get('m','i')
-    if template_name is None:
-        template_name = test_name+'.html'
-    if 'expid' not in session:
-        return redirect(url_for('start_page', next=test_name+'_'+mode))
-    else:
-        expid = session['expid']
-
-        if mode == 't':
-            return pro_exp(pagetitle, template_name)
-
-        exp_result = ExpResult.query.filter_by(id=expid).first()
-
-        if exp_result is None:
-            return redirect(url_for('start_page', next=test_name+'_'+mode))
-        
-        if exp_result.test_data is not None:
-            return make_response('<h1>You have finished this test! Thank you!</h1>')
-
-        form = TestForm()
-        if form.validate_on_submit():
-            exp_result.test_name = test_name
-            exp_result.test_mode = mode
-            exp_result.test_data = form.result.data
-            exp_result.submit_time = datetime.utcnow()
-
-            db.session.add(exp_result)
-            db.session.commit()
-
-            return redirect(url_for('end_page'))
-        else:
-            if mode == 'i':
-                mode = u'mode.intu'
-            elif mode == 'r':
-                mode = u'mode.ret'
-
-            if test_name == 'line':
-                return render_template(template_name, form=form, mode=mode, pagetitle=pagetitle, sqr_size=session['sqr_size'])
-
-            return render_template(template_name, form=form, mode=mode, pagetitle=pagetitle)
-
-
-def pro_exp(pagetitle, template_name):
-    form = TestForm()
-    if form.validate_on_submit():
-        return redirect(url_for('end_page'))
-    else:
-        return render_template(template_name, form=form, mode=u'mode.intu', pagetitle=pagetitle, sqr_size=session['sqr_size'])
 
 
 @app.route('/manage', methods=["GET", "POST"])

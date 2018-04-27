@@ -148,9 +148,9 @@ var stumiView = {
 
 	initRender: function() {
 		if (octopus.getMode() == mode.intu) {
-			this.dispTips('请你按照你的直觉来完成这个任务。');
+			this.dispTips('Next you’ll see 3 words in each trial. Please use your intuition to decide whether the word on the left or the right is more suitable to be classified together with the word below. If you think <strong>the left one</strong> is more appropriate, please <strong>click the “left” button</strong> below. If you think <strong>the right one</strong> is more appropriate, please <strong>click the “right” button</strong> below. <strong>You only have 3 second for each trial</strong>. If you understand the instruction please click “practice” button to start practicing.');
 		} else {
-			this.dispTips('请按要求完成');
+			this.dispTips('Next you’ll see 3 words in each trial. Please think at least 7 seconds at first, then you need to decide whether the word on the left or the right is more suitable to be classified together with the word below within 3 seconds. If you think the left one is more appropriate, please click the “left” button below. If you think the right one is more appropriate, please click the “right” button below. You only have 3 second for each trial. If you understand the instruction please click “practice” button to start practicing.');
 		}
 		this.clearScreen();
 		this.nButton.show();

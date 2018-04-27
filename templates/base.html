@@ -27,9 +27,9 @@
 
 {% block content %}
   <main class="main container">
-    <div class="head"><h2>{{pagetitle}}</h2></div>
-    <div id="tips-con"></div>
-    <div id="exp-con" {% block exp_con_attribs %} class="content" {% endblock %}>
+    <div class="head"><h2>{% block pagetitle %}{{pagetitle}}{% endblock pagetitle %}</h2></div>
+    <div id="tips-con">{% block tips %}{% endblock tips %}</div>
+    <div id="exp-con" {% block exp_con_attribs %} class="content" {% endblock exp_con_attribs %}>
       {% block exp_con %}
       {% endblock exp_con %}
     </div>
@@ -42,7 +42,7 @@
   </footer>
   {% block mask %}
   {% endblock mask %}
-{% endblock %}
+{% endblock content %}
 
 {% block scripts %}
 {{ super() }}

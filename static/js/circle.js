@@ -182,9 +182,9 @@ var stumiView = {
 
 	initRender: function() {
 		if (octopus.getMode() == mode.intu) {
-			this.dispTips('下面请你在屏幕下方的区域内画圆来代表一些人物，每个目标（人物）会依次呈现，对于每个圆你需要在3秒内画完，请你按照你的直觉来完成这个任务。');
+			this.dispTips('Click next button to start');
 		} else {
-			this.dispTips('下面请你在屏幕下方的区域内画圆来代表一些人物，每个目标（人物）会依次呈现，对于每个目标你有至少7秒的思考时间，请你在充分思考后在3秒之内画完目标所代表的圆。');
+			this.dispTips('Click next button to start');
 		}
 		this.nButton.show();
 	},
@@ -203,11 +203,11 @@ var stumiView = {
 
 		if (octopus.getMode() == mode.intu) {
 			self.delay(0).then(function(args) {
-				self.dispTips('请在'+octopus.getRespTimer()/1000+'秒内画出表示'+circle.chName+'的圆');
+				self.dispTips('Draw the circle of '+circle.chName+ ' in ' +octopus.getRespTimer()/1000+' seconds.');
 				self.drawCircle(circle);
 				return self.delay(octopus.getRespTimer());
 			}).then(function(args){
-				self.dispTips('点击Next继续');
+				self.dispTips('CLick the next button to continue...');
 				self.clearDrawing();
 				self.saveCircle(circle);
 				self.nButton.show();
@@ -215,17 +215,17 @@ var stumiView = {
 
 		} else {
 			self.delay(0).then(function(args) {
-				self.dispTips('请思考'+circle.chName);
+				self.dispTips('Thinking '+circle.chName);
 				return self.delay(octopus.getBlankTimer());
 			}).then(function(args){
-				self.dispTips('开始请单击画布');
+				self.dispTips('Click the screen to start.');
 				return self.clickDelay(self.drawCon);
 			}).then(function(args){
-				self.dispTips('请在'+octopus.getRespTimer()/1000+'秒内画出表示'+circle.chName+'的圆');
+				self.dispTips('Draw the circle of '+circle.chName+ ' in ' +octopus.getRespTimer()/1000+' seconds.');
 				self.drawCircle(circle);
 				return self.delay(octopus.getRespTimer());
 			}).then(function(args){
-				self.dispTips('点击Next继续');
+				self.dispTips('CLick the next button to continue...');
 				self.clearDrawing();
 				self.saveCircle(circle);
 				self.nButton.show();
