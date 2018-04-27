@@ -132,7 +132,7 @@ def info_page(test_name, mode):
         
         session['sqr_size'] = round(float(form.screen_resolution_w.data) * 3.5377 / float(form.screen_size.data))
 
-        return redirect(url_for('exp_index_page', test_name=test_name, mode=mode))
+        return redirect(url_for('practice', test_name=test_name, mode=mode))
     else:
         form.screen_size.data = 23
         return render_template('info.html', form=form, pagetitle='Info')
@@ -141,6 +141,7 @@ def info_page(test_name, mode):
 @app.route('/exp/<string:test_name>/<string:mode>/practice.html', methods=["GET", "POST"])
 def practice(test_name, mode):
     practice_page = test_name+'_practice.html'
+
     return render_template(practice_page, test_name=test_name, mode=mode)
 
 

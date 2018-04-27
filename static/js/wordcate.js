@@ -20,9 +20,9 @@ function destoryLocalStorage(){
 
 var module = {
 
-	initPic: function(){
-		this.picCount = 10;
+	picCount: 50,
 
+	initPic: function(){
 		if (!localStorage.wordspic){
 			localStorage.wordspic = JSON.stringify({currIdx:0, picIdx:this.picIdxArr});
 			var tempIdxArr = Array.from(new Array(this.picCount), (val,index)=>index).shuffle();
@@ -95,7 +95,6 @@ var octopus = {
 		if (this.currPicIdx < module.getPicCount()) {
 			return module.getPic(this.currPicIdx);
 		} else {
-			this.saveData();
 			return false;
 		}
 	},
@@ -148,9 +147,9 @@ var stumiView = {
 
 	initRender: function() {
 		if (octopus.getMode() == mode.intu) {
-			this.dispTips('Next you’ll see 3 words in each trial. Please use your intuition to decide whether the word on the left or the right is more suitable to be classified together with the word below. If you think <strong>the left one</strong> is more appropriate, please <strong>click the “left” button</strong> below. If you think <strong>the right one</strong> is more appropriate, please <strong>click the “right” button</strong> below. <strong>You only have 3 second for each trial</strong>. If you understand the instruction please click “practice” button to start practicing.');
+			this.dispTips('Click next button to continue.');
 		} else {
-			this.dispTips('Next you’ll see 3 words in each trial. Please think at least 7 seconds at first, then you need to decide whether the word on the left or the right is more suitable to be classified together with the word below within 3 seconds. If you think the left one is more appropriate, please click the “left” button below. If you think the right one is more appropriate, please click the “right” button below. You only have 3 second for each trial. If you understand the instruction please click “practice” button to start practicing.');
+			this.dispTips('Click next button to continue.');
 		}
 		this.clearScreen();
 		this.nButton.show();
@@ -181,6 +180,9 @@ var stumiView = {
 		});
 	},
 
+	saveData: function () {
+		octopus.saveData();
+	},
 
 	render: function(){
 
@@ -192,8 +194,9 @@ var stumiView = {
 
 		self.picurl = octopus.getPic();
 
-		if (self.picurl == -1){
-			return;
+		if (self.picurl === false){
+			self.saveData();
+			return ;
 		}
 
 		//console.log(picUrl);

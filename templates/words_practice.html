@@ -9,30 +9,23 @@
 
 {% block pagetitle %}Word category{% endblock pagetitle %}
 
+{% block tips %}
+{% if mode == 'i' %}
+<p>Next you’ll see 3 words in each trial. Please use your intuition to decide whether the word on the left or the right is more suitable to be classified together with the word below. If you think <strong>the left one</strong> is more appropriate, please <strong>click the “left” button</strong> below. If you think <strong>the right one</strong> is more appropriate, please <strong>click the “right” button</strong> below. <strong>You only have 3 second for each trial</strong>. If you understand the instruction please click “Next” button to start practicing.</p>
+{% else %}
+<p>Next you’ll see 3 words in each trial. Please think at least 7 seconds at first, then you need to decide whether the word on the left or the right is more suitable to be classified together with the word below within 3 seconds. If you think the left one is more appropriate, please click the “left” button below. If you think the right one is more appropriate, please click the “right” button below. You only have 3 second for each trial. If you understand the instruction please click “Next” button to start practicing.</p>
+{% endif %}
+{% endblock tips %}
+
 {% block exp_con_attribs %} class="content col-xs-10 col-sm-8 col-md-6 col-xs-offset-1 col-sm-offset-2 col-md-offset-3" {% endblock %}
 
 {% block exp_con %}
-<form id="exp_form" action="" method="post" class="form form-horizontal" role="form">
-  {{ form.hidden_tag() }}
-
-  {%- if form.errors %}
-    {%- for fieldname, errors in form.errors.items() %}
-      {%- if bootstrap_is_hidden_field(form[fieldname]) %}
-        {%- for error in errors %}
-          <p class="error">{{error}}</p>
-        {%- endfor %}
-      {%- endif %}
-    {%- endfor %}
-  {%- endif %}
-
   <div id="stimuli-con"><img class="img-responsive" id="stimuli-pic"></div>
   <div id="button-con" class="center-block">
     <button class="btn btn-default" type="button" id="left-button">Left</button>
     <button class="btn btn-default" type="button" id="right-button">Right</button>
     <button class="btn btn-default" type="button" id="next-button">next</button>
   </div>
-  <div class="hidden">{{form.result()}}</div>
-</form>
 {% endblock %}
 
 {% block scripts %}
@@ -40,7 +33,25 @@
 <script src="{{ url_for('static', filename='js/wordcate.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-    octopus.init({{mode}});
+  module.picCount = 10;
+  stumiView.initRender = function() {
+    this.clearScreen();
+    this.nButton.show();
+  };
+
+  stumiView.saveData = function(){
+    this.dispTips('Practice is over. If you are ready, please click "next" button.');
+    this.nButton.show().click(function(){
+      window.location.href="{{url_for('exp_index_page', test_name=test_name, mode=mode)}}" ;
+    });
+  };
+  
+  if ('{{mode}}' == 'r'){
+    octopus.init(mode.ret);
+  }else if ('{{mode}}' == 'i'){
+    octopus.init(mode.intu);
+  }
+  
 });
 </script>
 {% endblock %}
