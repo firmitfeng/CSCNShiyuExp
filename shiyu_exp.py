@@ -123,6 +123,9 @@ def info_page(test_name, mode):
 
         exp_result = ExpResult(name = form.name.data,
                                worker_id = form.workerid.data,
+                               gender = form.gender.data,
+                               race = form.race.data,
+                               religion = form.religion.data,
                                screen_size = form.screen_size.data,
                                screen_resolution_h = form.screen_resolution_h.data,
                                screen_resolution_w = form.screen_resolution_w.data
@@ -164,6 +167,9 @@ def fishball(mode):
 
             exp_result = ExpResult(name = temp_result.name,
                                    worker_id = temp_result.worker_id,
+                                   gender = temp_result.gender,
+                                   race = temp_result.race,
+                                   religion = temp_result.religion,
                                    screen_size = temp_result.screen_size,
                                    screen_resolution_h = temp_result.screen_resolution_h,
                                    screen_resolution_w = temp_result.screen_resolution_w
