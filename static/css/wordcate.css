@@ -23,3 +23,8 @@ body {
 #button-con{
 	text-align: center;
 }
+#tips-con{
+  min-height: 25px;
+  font-size: 2em;
+  text-align: center;
+}

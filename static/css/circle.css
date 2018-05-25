@@ -19,6 +19,8 @@ body {
 }
 #tips-con{
   min-height: 25px;
+  font-size: 2em;
+  text-align: center;
 }
 #drawing-con{
 	min-height:360px;

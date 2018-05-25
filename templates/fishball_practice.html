@@ -7,8 +7,6 @@
 <link href="{{ url_for('static', filename='css/fishball.css') }}" rel="stylesheet" type="text/css">
 {% endblock -%}
 
-{% block pagetitle %}Fish&amp;Ball Causal{% endblock pagetitle %}
-
 {% block tips %}
 {% if mode == 'i' %}
 <p>In each trial, you’ll see a description sentence about balls or fish, then the screen will show a video clip. After watching this video clip, you need to use your intuition to decide whether the description is true or false <strong>within 3 seconds</strong>. If you think the description is <strong>true</strong>, please <strong>click the “true” button below</strong>. If you think the description is <strong>false</strong>, please <strong>click the “false” button below</strong>. If you understand the instruction please <strong>click "next"</strong> button to start practicing.</p>
@@ -45,8 +43,10 @@
 <script type="text/javascript">
 $(document).ready(function(){
   stumiView.initRender = function() {
+    this.is_practice = true;
     this.clearFrameCon();
     this.nButton.show();
+    this.frameCon.hide();
   };
 
   stumiView.saveData = function(){
@@ -80,14 +80,18 @@ $(document).ready(function(){
           currStumi.topic = BallFeQue[currFishBall.idx%7];
         }
       }
-      //console.log(currFishBall);
+
+      if(this.currStumiIdx %7 == 6){
+        currStumi.title = FishBallTitle[this.titleIdx];
+        this.titleIdx ++;
+      }
       return currStumi;
     } else {
       //this.saveData();
       //completeView.init();
       return false;
     }
-  }
+  };
 
   if ('{{mode}}' == 'r'){
     octopus.init(mode.ret);

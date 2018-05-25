@@ -23,18 +23,22 @@
     {%- endfor %}
   {%- endif %}
 
-  {{ form_macro.form_field(form.name, form_type="horizontal", horizontal_columns=('lg', 1, 10)) }}
-  {{ form_macro.form_field(form.workerid, form_type="horizontal", horizontal_columns=('lg', 1, 10)) }}
+  {{ form_macro.form_field(form.name, form_type="horizontal", horizontal_columns=('lg', 2, 10)) }}
+  {{ form_macro.form_field(form.workerid, form_type="horizontal", horizontal_columns=('lg', 2, 10)) }}
+  {{ form_macro.form_field(form.gender, form_type="horizontal", horizontal_columns=('lg', 2, 10)) }}
+  {{ form_macro.form_field(form.race, form_type="horizontal", horizontal_columns=('lg', 2, 10)) }}
+  {{ form_macro.form_field(form.religion, form_type="horizontal", horizontal_columns=('lg', 2, 10)) }}
 
   <hr>
-  <div class="form-group"><p>Please click the blue bar below to make the length of the green bar 3 inches（7.62cm)</p>
+  <div class="form-group"><p>Please input the size of your screen or click the blue bar below to make the length of the green bar 3 inches（7.62cm)</p>
+  {{ form_macro.form_field(form.screen_size, form_type="horizontal", horizontal_columns=('lg', 2, 10)) }}
   <div class="progress">
     <div id="progress-bar" class="progress-bar" role="progressbar" aria-valuenow="23" aria-valuemin="10" aria-valuemax="32" style="width: 60%;">23 in.</div>
   </div>
   <div class="sqr_block" style="width:278px; height:10px; border:2px solid #0F0; background-color: #0F0;"></div>
   </div>
 
-  {{ form_macro.form_field(form.submit, form_type="horizontal", horizontal_columns=('lg', 1, 2), button_map={'submit':'primary btn-block'}) }}
+  {{ form_macro.form_field(form.submit, form_type="horizontal", horizontal_columns=('lg', 2, 2), button_map={'submit':'primary btn-block'}) }}
 </form>
 {% endblock %}
 
@@ -58,7 +62,7 @@
 
             var persent = centerX / progWidth * 100;
 
-            var currSize = Math.floor(centerX * (max-min+1) / progWidth  + min);
+            var currSize =  Math.floor(centerX * (max-min+1) / progWidth  + min);
 
             $("input#screen_size").val(currSize);
             $('#progress-bar').css({'width':persent+'%'}).html(currSize + " in.");
@@ -76,6 +80,16 @@
         $('#screen_resolution_w').val(window.screen.width);
         $('#screen_resolution_h').val(window.screen.height);
 
+        $("input#screen_size").on("input", function(){
+          var min = 10, max = 32;
+          var currSize = $(this).val();
+          currSize = currSize >= min && currSize <= max ? currSize : 23;
+          var persent = (currSize - min) * 100 / max;
+          $('#progress-bar').css({'width':persent+'%'}).html(currSize + " in.");
+          var x = getBlockWidth(currSize);
+          $("div.sqr_block").css({"width":Math.round(x)});
+          //console.log($(this).val()); 
+        });
 
         $progress.mousedown(function(event) {
             mouseKeyDown = true;

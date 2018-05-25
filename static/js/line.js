@@ -198,7 +198,7 @@ var stumiView = {
 
 		if (octopus.getMode() == mode.intu) {
 			self.delay(0).then(function(args) {
-				self.dispTips("请认真观看下面的图形，您有共计10s的时间");
+				self.dispTips("Please watching the graphic below for 10 seconds.");
 				self.dispStumi(exper.stumi);
 				return self.delay(STUMITIME*1000);
 			}).then(function(args){
@@ -209,13 +209,13 @@ var stumiView = {
 				var randIdx = Math.floor(Math.random()*4+1);
 				self.maskCon.hide();
 				self.selButtons.show();
-				self.dispTips("请点击"+randIdx+"号按钮");
+				self.dispTips("Please click the number "+randIdx);
 				return self.clickDelay($(self.selButtons[randIdx-1]));
 			}).then(function(){
 				if(exper.mode == 'abs'){
-					self.dispTips('请在'+RESPTIME+'s内，在下面的方框中画出一条绝对长度与您刚才见到的线段相等的线段');
+					self.dispTips('Please draw a vertical line. <strong>The length of the vertical line</strong> you draw should be equal to the length of the line in the first graphic.');
 				}else{
-					self.dispTips('请在'+RESPTIME+'s内，在下面的方框中画出一条相对长度与您刚才见到的线段相等的线段');
+					self.dispTips('Please draw a vertical line. <strong>The ratio of the vertical line</strong> you draw should be equal to the length of the line in the first graphic.');
 				}
 				self.selButtons.hide();
 				self.dispFrameCon(exper.respo);
@@ -229,7 +229,7 @@ var stumiView = {
 
 		} else {
 			self.delay(0).then(function(args) {
-				self.dispTips("请认真观看下面的图形，您有共计10s的时间");
+				self.dispTips("Please watching the graphic below for 10 seconds.");
 				self.dispStumi(exper.stumi);
 				return self.delay(STUMITIME*1000);
 			}).then(function(args){
@@ -240,20 +240,20 @@ var stumiView = {
 				var randIdx = Math.floor(Math.random()*4+1);
 				self.maskCon.hide();
 				self.selButtons.show();
-				self.dispTips("请点击"+randIdx+"号按钮");
+				self.dispTips("Please click the number "+randIdx);
 				return self.clickDelay($(self.selButtons[randIdx-1]));
 			}).then(function(){
-				self.dispTips('请思考'+BLANKTIME+'s');
+				self.dispTips('Please think at least '+BLANKTIME+' seconds.');
 				self.selButtons.hide();
 				return self.delay(BLANKTIME*1000);
 			}).then(function(args){
-				self.dispTips('开始请单击屏幕');
+				self.dispTips('If you are ready, please click the screen.');
 				return self.clickDelay($(document));
 			}).then(function(args){
 				if(exper.mode == 'abs'){
-					self.dispTips('请在'+RESPTIME+'s内，在下面的方框中画出一条绝对长度与您刚才见到的线段相等的线段');
+					self.dispTips('Please draw a vertical line. <strong>The length of the vertical line</strong> you draw should be equal to the length of the line in the first graphic.');
 				}else{
-					self.dispTips('请在'+RESPTIME+'s内，在下面的方框中画出一条相对长度与您刚才见到的线段相等的线段');
+					self.dispTips('Please draw a vertical line. <strong>The ratio of the vertical line</strong> you draw should be equal to the length of the line in the first graphic.');
 				}
 				self.selButtons.hide();
 				self.dispFrameCon(exper.respo);

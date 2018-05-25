@@ -153,6 +153,7 @@ var stumiView = {
 		}
 		this.clearScreen();
 		this.nButton.show();
+
 	},
 
 	clickButton: function(btIdx){
@@ -160,6 +161,19 @@ var stumiView = {
 		clearTimeout(self.tid);
 		octopus.setPicClick(btIdx);
 		this.render();
+	},
+
+	keyPress: function(event){
+		//console.log(event.keyCode);
+		var f_codes = [70, 102];
+		var j_codes = [74, 106];
+		var self=event.data.parent;
+		if(f_codes.includes(event.keyCode)){
+			self.clickButton('l');
+		}else if(j_codes.includes(event.keyCode)){
+			self.clickButton('r');
+		}
+		$(document).off("keypress");
 	},
 
 	delay: function(timer) {
@@ -241,6 +255,7 @@ var stumiView = {
 	dispButtons: function(){
 		this.rButton.show();
 		this.lButton.show();
+		$(document).on("keypress", {'parent':this}, this.keyPress);
 	},
 
 	dispTips: function(tips){
@@ -251,6 +266,7 @@ var stumiView = {
 		this.pic.hide();
 		this.rButton.hide();
 		this.lButton.hide();
+		$(document).off("keypress");
 	}
 }
 

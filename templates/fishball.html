@@ -7,8 +7,6 @@
 <link href="{{ url_for('static', filename='css/fishball.css') }}" rel="stylesheet" type="text/css">
 {% endblock -%}
 
-{% block pagetitle %}Fish&amp;Ball Causal{% endblock pagetitle %}
-
 {% block exp_con %}
 <div class="frame-container">
   <div id="fishball">
@@ -50,7 +48,7 @@
 <script src="{{ url_for('static', filename='js/fishballmeta.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-    octopus.init({{mode}});
+  octopus.init({{mode}});
 });
 </script>
 {% endblock %}

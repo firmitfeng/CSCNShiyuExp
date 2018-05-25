@@ -21,7 +21,7 @@ const mode = {
 
 const DEBUG = 1;
 
-const CHARAS = ['self', 'Your', 'Zhang', 'Wang', 'Li', 'Lala'];
+const CHARAS = ['self', 'mother', 'father', 'best friend', 'Kobe Bryant', 'Serena Williams'];
 
 const MAX_INTEGER = Math.pow(2, 50);
 
@@ -203,7 +203,7 @@ var stumiView = {
 
 		if (octopus.getMode() == mode.intu) {
 			self.delay(0).then(function(args) {
-				self.dispTips('Draw the circle of '+circle.chName+ ' in ' +octopus.getRespTimer()/1000+' seconds.');
+				self.dispTips('Please draw a circle representing '+circle.chName+ ' in ' +octopus.getRespTimer()/1000+' seconds.');
 				self.drawCircle(circle);
 				return self.delay(octopus.getRespTimer());
 			}).then(function(args){
@@ -215,13 +215,13 @@ var stumiView = {
 
 		} else {
 			self.delay(0).then(function(args) {
-				self.dispTips('Thinking '+circle.chName);
+				self.dispTips('Please think '+circle.chName);
 				return self.delay(octopus.getBlankTimer());
 			}).then(function(args){
 				self.dispTips('Click the screen to start.');
 				return self.clickDelay(self.drawCon);
 			}).then(function(args){
-				self.dispTips('Draw the circle of '+circle.chName+ ' in ' +octopus.getRespTimer()/1000+' seconds.');
+				self.dispTips('Please draw a circle representing'+circle.chName+ ' in ' +octopus.getRespTimer()/1000+' seconds.');
 				self.drawCircle(circle);
 				return self.delay(octopus.getRespTimer());
 			}).then(function(args){

@@ -134,6 +134,7 @@ var octopus = {
 		}
 
 		this.currStumiIdx = -1;
+		this.titleIdx = 0;
 
 		module.init();
 		stumiView.init();
@@ -174,6 +175,10 @@ var octopus = {
 				}
 			}
 			//console.log(currFishBall);
+			if(this.currStumiIdx %7 == 0){
+				currStumi.title = FishBallTitle[this.titleIdx];
+				this.titleIdx ++;
+			}
 			return currStumi;
 		} else {
 			//this.saveData();
@@ -195,7 +200,10 @@ var stumiView = {
 
 	init: function() {
 		var self = this;
+
+		self.is_practice = false;
 		self.expCon = $('#exp-con');
+		self.frameCon = $(".frame-container");
 		self.fishballCon = $('#fishball');
 		self.trackCon = $('.track');
 		self.tipsCon = $('#tips-con');
@@ -222,6 +230,7 @@ var stumiView = {
 			clearTimeout(self.tid);
 			self.render();
 			self.clearFrameCon();
+			$(document).off("keypress");
 		}).hide();
 
 		self.initRender();
@@ -258,6 +267,19 @@ var stumiView = {
 		octopus.saveData();
 	},
 
+	keyPress: function(event){
+		//console.log(event.keyCode);
+		var f_codes = [70, 102];
+		var j_codes = [74, 106];
+		var self=event.data.parent;
+		if(f_codes.includes(event.keyCode)){
+			self.selButtons[0].click();
+		}else if(j_codes.includes(event.keyCode)){
+			self.selButtons[1].click();
+		}
+		$(document).off("keypress");
+	},
+
 	render: function() {
 
 		var self = this;
@@ -266,6 +288,10 @@ var stumiView = {
 		self.tipsCon.empty();
 		self.selButtons.hide();
 
+		if(self.is_practice){
+			self.frameCon.show();
+		}
+
 		var exper = octopus.getStumi();
 
 		if (!exper) {
@@ -273,8 +299,20 @@ var stumiView = {
 			return ;
 		}
 
-		//console.log(exper);
+		if('title' in exper){
+			self.delay(0).then(function(args) {
+				self.dispTips(exper.title);
+				return self.delay(QUESTIME * 1000);
+			}).then(function(args){
+				self.runExp(exper);
+			});
+		}else{
+			self.runExp(exper);
+		}
+	},
 
+	runExp: function(exper){
+		var self = this;
 		if (octopus.getMode() == mode.intu) {
 			self.delay(0).then(function(args) {
 				self.dispTips(exper.topic);
@@ -286,6 +324,7 @@ var stumiView = {
 			}).then(function(args) {
 				self.clearFrameCon();
 				self.selButtons.show();
+				$(document).on("keypress", {'parent':self}, self.keyPress);
 				return self.delay(RESPTIME * 1000);
 			}).then(function(args) {
 				self.selButtons.hide();
@@ -310,14 +349,13 @@ var stumiView = {
 			}).then(function(args){
 				self.clearTips();
 				self.selButtons.show();
+				$(document).on("keypress", {'parent':self}, self.keyPress);
 				return self.delay(RESPTIME * 1000);
 			}).then(function(args) {
 				self.selButtons.hide();
 				self.nButton.show();
 			});
-
 		}
-
 	},
 
 	dispTips: function(tips) {

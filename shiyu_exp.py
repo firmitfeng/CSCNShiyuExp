@@ -79,6 +79,9 @@ def exp_index_page(test_name, mode):
     if exp_result.test_data is not None:
         return make_response('<h1>You have finished this test! Thank you!</h1>')
 
+    if test_name == u'fishball':
+        return fishball(mode)
+
     form = TestForm()
     if form.validate_on_submit():
         exp_result.test_name = test_name
@@ -179,7 +182,7 @@ def fishball(mode):
         session['fishball_count'] += 1
 
         if session['fishball_count'] < 3:
-            return render_template('pause.html', next=url_for('exp_index_page', test_name=test_name, mode=mode), pagetitle=u'休息一下')
+            return render_template('pause.html', next=url_for('exp_index_page', test_name=test_name, mode=mode), pagetitle=u'Rest awhile. Press the next key to continue')
         else:
             return redirect(url_for('end_page'))
 

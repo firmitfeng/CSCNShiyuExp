@@ -67,6 +67,8 @@ body {
 }
 #tips-con{
   min-height: 25px;
+  font-size: 2em;
+  text-align: center;
 }
 #frame-con{
   text-align: -webkit-center; 
