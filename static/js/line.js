@@ -25,21 +25,21 @@ const STUMITIME = 10;
 const MASKTIME = 0.2;
 const RESPTIME = 3;
 const BLANKTIME = 7;
-
+//这里的stumi是原始刺激数据，其中hw是边框的长度，height是线的长度，都是使用比例
+//respo是反映的结果，格式同上
+var data = [
+				{stumi: {hw:3.0, height:2.5185}, respo: {hw:6.0, height:-1}},
+				{stumi: {hw:4.0, height:0.8148}, respo: {hw:6.0, height:-1}},
+				{stumi: {hw:3.7407, height:1.0370}, respo: {hw:3.7407, height:-1}},
+				{stumi: {hw:5.2222, height:3.7778}, respo: {hw:5.2222, height:-1}},
+				{stumi: {hw:4.0, height:2.7037}, respo: {hw:3.0, height:-1}},
+				{stumi: {hw:6.0, height:1.1111}, respo: {hw:3.0, height:-1}}
+			];
+			
 var module = {
 
-	init: function() {
-		//这里的stumi是原始刺激数据，其中hw是边框的长度，height是线的长度，都是使用比例
-		//respo是反映的结果，格式同上
-		var data = [
-						{stumi: {hw:1.0, height:0.5}, respo: {hw:1.0, height:-1}, mode: 'abs'},
-						{stumi: {hw:1.0, height:0.2}, respo: {hw:1.0, height:-1}, mode: 'abs'},
-						{stumi: {hw:1.0, height:0.7}, respo: {hw:1.0, height:-1}, mode: 'rel'},
-						{stumi: {hw:1.2, height:0.3}, respo: {hw:1.0, height:-1}, mode: 'abs'},
-						{stumi: {hw:0.8, height:0.2}, respo: {hw:1.0, height:-1}, mode: 'rel'},
-						{stumi: {hw:1.4, height:0.5}, respo: {hw:1.0, height:-1}, mode: 'abs'},
-						{stumi: {hw:0.6, height:0.4}, respo: {hw:1.0, height:-1}, mode: 'rel'}
-					];
+	init: function(line_mode) {
+
 		this.data = [];
 		for(var i=0; i<data.length; i++){
 			this.data[i] = {
@@ -51,7 +51,7 @@ var module = {
 							  		hw: data[i].respo.hw*FRAMESIZE, 
 							  		height: -1
 							 	},
-							 	mode: data[i].mode
+							 	mode: line_mode
 							 };
 		}
 		//是否需要随机，需要的话取消以下注释
@@ -81,7 +81,7 @@ var module = {
 
 var octopus = {
 
-	init: function(m) {
+	init: function(m, line_mode) {
 		this.mode = m;
 		if (DEBUG) {
 			destoryLocalStorage();
@@ -89,7 +89,7 @@ var octopus = {
 
 		this.currStumiIdx = -1;
 
-		module.init();
+		module.init(line_mode);
 		stumiView.init();
 	},
 
@@ -108,8 +108,6 @@ var octopus = {
 		if (this.currStumiIdx < module.getStumiCount()) {
 			return module.getStumi(this.currStumiIdx);
 		} else {
-			this.saveData();
-			completeView.init();
 			return false;
 		}
 	},
@@ -132,6 +130,9 @@ var stumiView = {
 
 	init: function() {
 		var self = this;
+		self.is_practice = false;
+		self.clsFrame = $(".frame-container");
+
 		self.expCon = $('#exp-con');
 		self.frameCon = $('#frame-con');
 		self.tipsCon = $('#tips-con');
@@ -174,12 +175,12 @@ var stumiView = {
 
 	clickButton: function(btIdx) {},
 
+	saveData: function () {
+		octopus.saveData();
+	},
+
 	initRender: function() {
-		if (octopus.getMode() == mode.intu) {
-			this.dispTips('请你按照你的直觉来完成这个任务。');
-		} else {
-			this.dispTips('请按要求完成');
-		}
+		this.dispTips('Click next button to start.');
 		this.clearFrameCon();
 		this.nButton.show();
 	},
@@ -191,8 +192,13 @@ var stumiView = {
 		self.nButton.hide();
 		self.tipsCon.empty();
 
+		if(self.is_practice){
+			self.clsFrame.show();
+		}
+
 		var exper = octopus.getStumi();
 		if(!exper){
+			self.saveData();
 			return ;
 		}
 

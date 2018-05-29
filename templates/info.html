@@ -46,10 +46,9 @@
 {{ super() }}
 <script type="text/javascript">
     $(document).ready(function(){
-        //$("div.sqr_block").html(window.screen.height + "  " + window.screen.width + "<br>" + $(window).width() + "<br>" + $(document).width());
         //以16：10的22寸显示器（viewsonic vx2269wm 1680 × 1050）为标准 22 => 1981px 所以，1英寸对应90.05px
         //标准显示器上的3英寸对应 1981×3/22 约270px
-        //不同尺寸的显示器3英寸对应的像素数为 window.screen.width * sqrt（356）*3 / (16 * M) 其中 M 为显示器尺寸
+        //不同尺寸的显示器3英寸对应的像素数为 window.screen.width * sqrt（356) * 3 / (16 * M) 其中 M 为显示器尺寸
         function getBlockWidth(screen_m){
             return Math.round(window.screen.width * 3.5377 / screen_m);
         }

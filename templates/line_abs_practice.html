@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% import "form_macro.html" as form_macro %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{%- block styles %}
+{{super()}}
+<link href="{{ url_for('static', filename='css/line.css') }}" rel="stylesheet" type="text/css">
+{% endblock -%}
+
+{% block tips %}
+{% if mode == 'i' %}
+<p>In the next task, you will finish 6 trials. In each of them, we will first display the first graphic 10s; then a mask appears. Then 4 numbers will appear at four corners of the screen, and you need to click the smallest one among them. Finally the screen will show a square, your task is: use your mouse to drag out a vertical line <strong>within 3 seconds</strong> in this square. <strong>The length of the vertical line</strong> you draw should be equal to the length of the line in the first graphic.</p>
+<p>For example:<br><img src="{{ url_for('static', filename='imgs/line/abs.png') }}"></p>
+<p>If you understand the instruction, please <strong>click “Next” button</strong> to start practicing.</p>
+{% else %}
+<p>In the next task, you will finish 6 trials. In each of them, we will first display the first graphic 10s; then a mask appears. Then 4 numbers will appear at four corners of the screen, and you need to click the smallest one among them. Then the screen will show a square, your task is: <strong>think at least 7 seconds</strong>, then use your mouse to drag out a vertical line <strong>within 3 seconds</strong> in this square. <strong>The length of the vertical line</strong> you draw should be equal to the length of the line in the first graphic.</p>
+<p>For example:<br><img src="{{ url_for('static', filename='imgs/line/abs.png') }}"></p>
+<p>If you understand the instruction, please <strong>click “Next” button</strong> to start practicing.</p>
+{% endif %}
+{% endblock tips %}
+
+
+{% block exp_con %}
+  <div id="top-con" class="row">
+    <button class="btn btn-default sbt col-md-1" type="button">1</button>
+    <button class="btn btn-default sbt col-md-1 col-md-offset-10" type="button">2</button>
+  </div>
+  <div class="frame-container">
+    <div id="frame-con"></div>
+  </div>
+  <div id="buttom-con" class="row">
+    <button class="btn btn-default sbt col-md-1" type="button">3</button>
+    <button class="btn btn-default sbt col-md-1 col-md-offset-10" type="button">4</button>
+  </div>
+  <div id="next-con" class="row">
+    <button class="btn btn-default btn-lg" type="button" id="next-button">next</button>
+  </div>
+{% endblock %}
+
+{% block mask %}<div id="mask" class="mask"></div>{% endblock mask %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/line.js') }}"></script>
+<script type="text/javascript">
+//正方形外框的边长
+const FRAMESIZE = {{sqr_size}};
+var data = [
+        {stumi: {hw:3.0, height:2.5185}, respo: {hw:6.0, height:-1}},
+        {stumi: {hw:4.0, height:0.8148}, respo: {hw:6.0, height:-1}},
+        {stumi: {hw:6.0, height:1.1111}, respo: {hw:3.0, height:-1}}
+      ];
+$(document).ready(function(){
+  stumiView.initRender = function() {
+    this.is_practice = true;
+    this.clearFrameCon();
+    this.clsFrame.hide();
+    this.nButton.show();
+  };
+
+  stumiView.saveData = function(){
+    this.dispTips('Practice is over. If you are ready, please click "next" button.');
+    this.nButton.show().click(function(){
+      window.location.href="{{url_for('exp_index_page', test_name=test_name, mode=mode)}}" ;
+    });
+  };
+
+  if ('{{mode}}' == 'r'){
+    octopus.init(mode.ret, 'abs');
+  }else if ('{{mode}}' == 'i'){
+    octopus.init(mode.intu, 'abs');
+  }
+});
+</script>
+{% endblock %}

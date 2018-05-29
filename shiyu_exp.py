@@ -75,12 +75,15 @@ def exp_index_page(test_name, mode):
 
     if exp_result is None:
         return redirect(url_for('info_page', test_name=test_name, mode=mode))
-    
-    if exp_result.test_data is not None:
-        return make_response('<h1>You have finished this test! Thank you!</h1>')
 
     if test_name == u'fishball':
         return fishball(mode)
+
+    if test_name == u'line':
+        return line(mode)
+
+    if exp_result.test_data is not None:
+        return make_response('<h1>You have finished this test! Thank you!</h1>')
 
     form = TestForm()
     if form.validate_on_submit():
@@ -99,7 +102,7 @@ def exp_index_page(test_name, mode):
         elif mode == 'r':
             mode = u'mode.ret'
 
-        return render_template(template_name, form=form, mode=mode, sqr_size=session['sqr_size'])
+        return render_template(template_name, form=form, mode=mode)
 
 
 @app.route('/exp/<string:test_name>/<string:mode>/info.html', methods=["GET", "POST"])
@@ -136,7 +139,15 @@ def info_page(test_name, mode):
         session['workerid'] = form.workerid.data
         session['expid'] = exp_result.id
         
-        session['sqr_size'] = round(float(form.screen_resolution_w.data) * 3.5377 / float(form.screen_size.data))
+        #session['sqr_size'] = round(float(form.screen_resolution_w.data) * 3.5377 / float(form.screen_size.data))
+        session['sqr_size'] = round(float(form.screen_resolution_w.data) * 1.17925 / float(form.screen_size.data))
+
+        if test_name == u'line':
+            if random.randint(0,1):
+                session['line_mode'] = 'abs'
+            else:
+                session['line_mode'] = 'rel'
+
 
         return redirect(url_for('practice', test_name=test_name, mode=mode))
     else:
@@ -148,7 +159,73 @@ def info_page(test_name, mode):
 def practice(test_name, mode):
     practice_page = test_name+'_practice.html'
 
+    if test_name == 'line':
+        return redirect(url_for('line_practice', mode=mode))
+
     return render_template(practice_page, test_name=test_name, mode=mode)
+
+
+@app.route('/exp/line/<string:mode>/practice.html', methods=["GET", "POST"])
+def line_practice(mode):
+    practice_page = "{}_{}_practice.html".format('line', session['line_mode'])
+
+    return render_template(practice_page, test_name='line', mode=mode, sqr_size=session['sqr_size'])
+
+
+def line(mode):
+    test_name = 'line'
+
+    expid = session['expid']
+
+    if 'line_count' not in session:
+        session['line_count'] = 0
+
+    form = TestForm()
+    if form.validate_on_submit():
+
+        if session['line_count'] != 0:
+            temp_result = ExpResult.query.filter_by(id=expid).first()
+
+            exp_result = ExpResult(name = temp_result.name,
+                                   worker_id = temp_result.worker_id,
+                                   gender = temp_result.gender,
+                                   race = temp_result.race,
+                                   religion = temp_result.religion,
+                                   screen_size = temp_result.screen_size,
+                                   screen_resolution_h = temp_result.screen_resolution_h,
+                                   screen_resolution_w = temp_result.screen_resolution_w
+                                )
+        else:
+            exp_result = ExpResult.query.filter_by(id=expid).first()
+
+        exp_result.test_name = '{}_{}'.format(test_name, session['line_mode'])
+        exp_result.test_mode = mode
+        exp_result.test_data = form.result.data
+        exp_result.submit_time = datetime.utcnow()
+
+        db.session.add(exp_result)
+        db.session.commit()
+
+        session['line_count'] += 1
+        if session['line_mode'] == 'abs':
+            session['line_mode'] = 'rel'
+        else:
+            session['line_mode'] = 'abs'
+
+        if session['line_count'] < 2:
+            return render_template('pause.html', next=url_for('line_practice', mode=mode), pagetitle=u'Rest a while.')
+        else:
+            return redirect(url_for('end_page'))
+
+    else:
+        if mode == 'i':
+            mode = u'mode.intu'
+        elif mode == 'r':
+            mode = u'mode.ret'
+
+        page = 'line_{}.html'.format(session['line_mode'])
+
+        return render_template(page, form=form, mode=mode, sqr_size=session['sqr_size'])
 
 
 def fishball(mode):
@@ -188,7 +265,7 @@ def fishball(mode):
         session['fishball_count'] += 1
 
         if session['fishball_count'] < 3:
-            return render_template('pause.html', next=url_for('exp_index_page', test_name=test_name, mode=mode), pagetitle=u'Rest awhile. Press the next key to continue')
+            return render_template('pause.html', next=url_for('exp_index_page', test_name=test_name, mode=mode), pagetitle=u'Rest a while.')
         else:
             return redirect(url_for('end_page'))
 
