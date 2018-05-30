@@ -38,6 +38,9 @@ body {
     text-align: center;
     overflow: hidden;
 } 
+span.red{
+  color:red;
+}
 @media (min-width: 768px){
 #drawing-con {
     width: 750px;

@@ -34,16 +34,6 @@ const FishBallMeta = [
 		blue:{pos:525, path1:0, path2:-135, flipx:true},
 		red:{pos:30, path1:F_PATH3, path2:F_PATH4}
 	},
-	//GroupConvergences2
-	{
-		direction: "right",
-		fb: "fishs",
-		green:{pos:40, path1:F_PATH3, path2:F_PATH4},
-		yellow:{pos:75, path1:F_PATH3, path2:F_PATH4},
-		white:{pos:5, path1:F_PATH3, path2:F_PATH4},
-		blue:{pos:525, path1:0, path2:-135, flipx:true},
-		red:{pos:30, path1:F_PATH3, path2:F_PATH4}
-	},
 	//GroupDivergences
 	{
 		direction: "right",
@@ -53,30 +43,10 @@ const FishBallMeta = [
 		white:{pos:250, path1:F_PATH3, path2:F_PATH4},
 		blue:{pos:145, path1:0, path2:-135, flipx:true},
 		red:{pos:225, path1:F_PATH3, path2:F_PATH4}
-	},
-	//GroupDivergences2
-	{
-		direction: "left",
-		fb: "fishs",
-		green:{pos:215, path1:F_PATH3, path2:F_PATH4},
-		yellow:{pos:180, path1:F_PATH3, path2:F_PATH4},
-		white:{pos:250, path1:F_PATH3, path2:F_PATH4},
-		blue:{pos:145, path1:0, path2:-135, flipx:true},
-		red:{pos:225, path1:F_PATH3, path2:F_PATH4}
-	},
+	},	
 	//IndividualConvergences
 	{
 		direction: "left",
-		fb: "fishg",
-		green:{pos:40, path1:F_PATH3, path2:F_PATH5},
-		yellow:{pos:75, path1:F_PATH3, path2:F_PATH5},
-		white:{pos:5, path1:F_PATH3, path2:F_PATH5},
-		blue:{pos:525, path1:0, path2:-270, flipx:true},
-		red:{pos:30, path1:F_PATH3, path2:F_PATH5}
-	},
-	//IndividualConvergences2
-	{
-		direction: "right",
 		fb: "fishg",
 		green:{pos:40, path1:F_PATH3, path2:F_PATH5},
 		yellow:{pos:75, path1:F_PATH3, path2:F_PATH5},
@@ -94,6 +64,37 @@ const FishBallMeta = [
 		blue:{pos:270, path1:0, path2:-270, flipx:true},
 		red:{pos:360, path1:F_PATH3, path2:F_PATH5}
 	},
+
+	//GroupConvergences2
+	{
+		direction: "right",
+		fb: "fishs",
+		green:{pos:40, path1:F_PATH3, path2:F_PATH4},
+		yellow:{pos:75, path1:F_PATH3, path2:F_PATH4},
+		white:{pos:5, path1:F_PATH3, path2:F_PATH4},
+		blue:{pos:525, path1:0, path2:-135, flipx:true},
+		red:{pos:30, path1:F_PATH3, path2:F_PATH4}
+	},
+	//GroupDivergences2
+	{
+		direction: "left",
+		fb: "fishs",
+		green:{pos:215, path1:F_PATH3, path2:F_PATH4},
+		yellow:{pos:180, path1:F_PATH3, path2:F_PATH4},
+		white:{pos:250, path1:F_PATH3, path2:F_PATH4},
+		blue:{pos:145, path1:0, path2:-135, flipx:true},
+		red:{pos:225, path1:F_PATH3, path2:F_PATH4}
+	},
+	//IndividualConvergences2
+	{
+		direction: "right",
+		fb: "fishg",
+		green:{pos:40, path1:F_PATH3, path2:F_PATH5},
+		yellow:{pos:75, path1:F_PATH3, path2:F_PATH5},
+		white:{pos:5, path1:F_PATH3, path2:F_PATH5},
+		blue:{pos:525, path1:0, path2:-270, flipx:true},
+		red:{pos:30, path1:F_PATH3, path2:F_PATH5}
+	},
 	//IndividualDivergences2
 	{
 		direction: "left",
@@ -104,6 +105,7 @@ const FishBallMeta = [
 		blue:{pos:270, path1:0, path2:-270, flipx:true},
 		red:{pos:360, path1:F_PATH3, path2:F_PATH5}
 	},
+
 	//GroupEntrains
 	{
 		direction: "left",
@@ -113,36 +115,6 @@ const FishBallMeta = [
 		white:{pos:5, path1:B_PATH1, path2:B_PATH2},
 		blue:{pos:295, path1:0, path2:B_PATH2},
 		red:{pos:30, path1:B_PATH1, path2:B_PATH2}
-	},
-	//GroupEntrains2
-	{
-		direction: "right",
-		fb: "fish",
-		green:{pos:40, path1:B_PATH1, path2:B_PATH2},
-		yellow:{pos:75, path1:B_PATH1, path2:B_PATH2},
-		white:{pos:5, path1:B_PATH1, path2:B_PATH2},
-		blue:{pos:295, path1:0, path2:B_PATH2},
-		red:{pos:30, path1:B_PATH1, path2:B_PATH2}
-	},
-	//IndividualEntrains
-	{
-		direction: "left",
-		fb: "fish",
-		green:{pos:190, path1:0, path2:B_PATH2},
-		yellow:{pos:225, path1:0, path2:B_PATH2},
-		white:{pos:295, path1:0, path2:B_PATH2},
-		blue:{pos:5, path1:B_PATH1, path2:B_PATH2},
-		red:{pos:180, path1:0, path2:B_PATH2}
-	},
-	//IndividualEntrains2
-	{
-		direction: "right",
-		fb: "fish",
-		green:{pos:190, path1:0, path2:B_PATH2},
-		yellow:{pos:225, path1:0, path2:B_PATH2},
-		white:{pos:295, path1:0, path2:B_PATH2},
-		blue:{pos:5, path1:B_PATH1, path2:B_PATH2},
-		red:{pos:180, path1:0, path2:B_PATH2}
 	},
 	//GroupJoins
 	{
@@ -154,36 +126,6 @@ const FishBallMeta = [
 		blue:{pos:270, path1:100, path2:150},
 		red:{pos:30, path1:240, path2:150}
 	},
-	//GroupJoins2
-	{
-		direction: "right",
-		fb: "fish",
-		green:{pos:40, path1:240, path2:150},
-		yellow:{pos:75, path1:240, path2:150},
-		white:{pos:5, path1:240, path2:150},
-		blue:{pos:270, path1:100, path2:150},
-		red:{pos:30, path1:240, path2:150}
-	},
-	//IndividualJoins
-	{
-		direction: "left",
-		fb: "fish",
-		green:{pos:235, path1:100, path2:150},
-		yellow:{pos:200, path1:100, path2:150},
-		white:{pos:270, path1:100, path2:150},
-		blue:{pos:5, path1:240, path2:150},
-		red:{pos:225, path1:100, path2:150}
-	},
-	//IndividualJoins
-	{
-		direction: "right",
-		fb: "fish",
-		green:{pos:235, path1:100, path2:150},
-		yellow:{pos:200, path1:100, path2:150},
-		white:{pos:270, path1:100, path2:150},
-		blue:{pos:5, path1:240, path2:150},
-		red:{pos:225, path1:100, path2:150}
-	},
 	//GroupLaunches
 	{
 		direction: "left",
@@ -193,36 +135,6 @@ const FishBallMeta = [
 		white:{pos:5, path1:B_PATH1, path2:0},
 		blue:{pos:300, path1:0, path2:B_PATH2},
 		red:{pos:30, path1:B_PATH1, path2:0}
-	},
-	//GroupLaunches2
-	{
-		direction: "right",
-		fb: "fish",
-		green:{pos:40, path1:B_PATH1, path2:0},
-		yellow:{pos:75, path1:B_PATH1, path2:0},
-		white:{pos:5, path1:B_PATH1, path2:0},
-		blue:{pos:300, path1:0, path2:B_PATH2},
-		red:{pos:30, path1:B_PATH1, path2:0}
-	},
-	//IndividualLaunches
-	{
-		direction: "left",
-		fb: "fish",
-		green:{pos:265, path1:0, path2:B_PATH2},
-		yellow:{pos:230, path1:0, path2:B_PATH2},
-		white:{pos:300, path1:0, path2:B_PATH2},
-		blue:{pos:5, path1:B_PATH1, path2:0},
-		red:{pos:255, path1:0, path2:B_PATH2}
-	},
-	//IndividualLaunches2
-	{
-		direction: "right",
-		fb: "fish",
-		green:{pos:265, path1:0, path2:B_PATH2},
-		yellow:{pos:230, path1:0, path2:B_PATH2},
-		white:{pos:300, path1:0, path2:B_PATH2},
-		blue:{pos:5, path1:B_PATH1, path2:0},
-		red:{pos:255, path1:0, path2:B_PATH2}
 	},
 	//GroupLeaves
 	{
@@ -234,15 +146,36 @@ const FishBallMeta = [
 		blue:{pos:5, path1:100, path2:150},
 		red:{pos:115, path1:100, path2:270}
 	},
-	//GroupLeaves2
+
+	//IndividualEntrains
 	{
-		direction: "right",
+		direction: "left",
 		fb: "fish",
-		green:{pos:125, path1:100, path2:270},
-		yellow:{pos:75, path1:100, path2:270},
-		white:{pos:150, path1:100, path2:270},
-		blue:{pos:5, path1:100, path2:150},
-		red:{pos:115, path1:100, path2:270}
+		green:{pos:190, path1:0, path2:B_PATH2},
+		yellow:{pos:225, path1:0, path2:B_PATH2},
+		white:{pos:295, path1:0, path2:B_PATH2},
+		blue:{pos:5, path1:B_PATH1, path2:B_PATH2},
+		red:{pos:180, path1:0, path2:B_PATH2}
+	},
+	//IndividualJoins
+	{
+		direction: "left",
+		fb: "fish",
+		green:{pos:235, path1:100, path2:150},
+		yellow:{pos:200, path1:100, path2:150},
+		white:{pos:270, path1:100, path2:150},
+		blue:{pos:5, path1:240, path2:150},
+		red:{pos:225, path1:100, path2:150}
+	},
+	//IndividualLaunches
+	{
+		direction: "left",
+		fb: "fish",
+		green:{pos:265, path1:0, path2:B_PATH2},
+		yellow:{pos:230, path1:0, path2:B_PATH2},
+		white:{pos:300, path1:0, path2:B_PATH2},
+		blue:{pos:5, path1:B_PATH1, path2:0},
+		red:{pos:255, path1:0, path2:B_PATH2}
 	},
 	//IndividualLeaves
 	{
@@ -253,6 +186,78 @@ const FishBallMeta = [
 		white:{pos:5, path1:100, path2:150},
 		blue:{pos:150, path1:100, path2:270},
 		red:{pos:115, path1:100, path2:150}
+	},
+
+	//GroupEntrains2
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:40, path1:B_PATH1, path2:B_PATH2},
+		yellow:{pos:75, path1:B_PATH1, path2:B_PATH2},
+		white:{pos:5, path1:B_PATH1, path2:B_PATH2},
+		blue:{pos:295, path1:0, path2:B_PATH2},
+		red:{pos:30, path1:B_PATH1, path2:B_PATH2}
+	},
+	//GroupJoins2
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:40, path1:240, path2:150},
+		yellow:{pos:75, path1:240, path2:150},
+		white:{pos:5, path1:240, path2:150},
+		blue:{pos:270, path1:100, path2:150},
+		red:{pos:30, path1:240, path2:150}
+	},
+	//GroupLaunches2
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:40, path1:B_PATH1, path2:0},
+		yellow:{pos:75, path1:B_PATH1, path2:0},
+		white:{pos:5, path1:B_PATH1, path2:0},
+		blue:{pos:300, path1:0, path2:B_PATH2},
+		red:{pos:30, path1:B_PATH1, path2:0}
+	},
+	//GroupLeaves2
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:125, path1:100, path2:270},
+		yellow:{pos:75, path1:100, path2:270},
+		white:{pos:150, path1:100, path2:270},
+		blue:{pos:5, path1:100, path2:150},
+		red:{pos:115, path1:100, path2:270}
+	},
+
+	//IndividualEntrains2
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:190, path1:0, path2:B_PATH2},
+		yellow:{pos:225, path1:0, path2:B_PATH2},
+		white:{pos:295, path1:0, path2:B_PATH2},
+		blue:{pos:5, path1:B_PATH1, path2:B_PATH2},
+		red:{pos:180, path1:0, path2:B_PATH2}
+	},
+	//IndividualJoins2
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:235, path1:100, path2:150},
+		yellow:{pos:200, path1:100, path2:150},
+		white:{pos:270, path1:100, path2:150},
+		blue:{pos:5, path1:240, path2:150},
+		red:{pos:225, path1:100, path2:150}
+	},
+	//IndividualLaunches2
+	{
+		direction: "right",
+		fb: "fish",
+		green:{pos:265, path1:0, path2:B_PATH2},
+		yellow:{pos:230, path1:0, path2:B_PATH2},
+		white:{pos:300, path1:0, path2:B_PATH2},
+		blue:{pos:5, path1:B_PATH1, path2:0},
+		red:{pos:255, path1:0, path2:B_PATH2}
 	},
 	//IndividualLeaves2
 	{
@@ -309,6 +314,7 @@ const FishBallMeta = [
 		blue:{pos:200, path1:100, path2:B_PATH2},
 		red:{pos:30, path1:B_PATH1, path2:B_PATH2}
 	},
+
 	//DVRCollisionDDDV
 	{
 		direction: "right",
@@ -349,6 +355,7 @@ const FishBallMeta = [
 		blue:{pos:200, path1:100, path2:B_PATH2},
 		red:{pos:30, path1:B_PATH1, path2:B_PATH2}
 	},
+
 	//LauchingDDDV
 	{
 		direction: "left",
@@ -389,6 +396,7 @@ const FishBallMeta = [
 		blue:{pos:300, path1:0, path2:B_PATH2},
 		red:{pos:30, path1:B_PATH1, path2:B_PATH2}
 	},
+
 	//ReversLauchingDDDV
 	{
 		direction: "right",
@@ -429,6 +437,7 @@ const FishBallMeta = [
 		blue:{pos:300, path1:0, path2:B_PATH2},
 		red:{pos:30, path1:B_PATH1, path2:B_PATH2}
 	},
+
 	//SVLCollisionDDDV
 	{
 		direction: "right",
@@ -469,6 +478,7 @@ const FishBallMeta = [
 		blue:{pos:520, path1:-B_PATH2, path2:120},
 		red:{pos:30, path1:B_PATH1, path2:B_PATH2}
 	},
+
 	//SVRCollisionDDDV
 	{
 		direction: "left",
