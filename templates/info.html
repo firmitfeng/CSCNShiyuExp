@@ -81,12 +81,26 @@
 
         $("input#screen_size").on("input", function(){
           var min = 10, max = 32;
-          var currSize = $(this).val();
-          currSize = currSize >= min && currSize <= max ? currSize : 23;
-          var persent = (currSize - min) * 100 / max;
-          $('#progress-bar').css({'width':persent+'%'}).html(currSize + " in.");
-          var x = getBlockWidth(currSize);
-          $("div.sqr_block").css({"width":Math.round(x)});
+          var timeout = null;
+          var currInput = $(this);
+        
+          clearTimeout(timeout);
+
+          // Make a new timeout set to go off in 800ms
+          timeout = setTimeout(function () {
+            var currSize = currInput.val();
+            if(currSize < min || currSize > max){
+              alert("The screen size must be between 10 and 32.");
+              currInput.val(23);
+              currSize = 23;
+            }
+            var persent = (currSize - min) * 100 / (max-min);
+            $('#progress-bar').css({'width':persent+'%'}).html(currSize + " in.");
+            var x = getBlockWidth(currSize);
+            $("div.sqr_block").css({"width":Math.round(x)});
+          }, 350);
+
+
           //console.log($(this).val()); 
         });
 
