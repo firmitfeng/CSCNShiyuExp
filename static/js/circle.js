@@ -21,9 +21,7 @@ const mode = {
 
 const DEBUG = 1;
 
-const CHARAS = ['self', 'mother', 'father', 'best friend', 'Kobe Bryant', 'Serena Williams'];
-
-const MAX_INTEGER = Math.pow(2, 50);
+var CHARAS = ['self', 'mother', 'father', 'best friend']; 	//'Kobe Bryant', 'Serena Williams'
 
 var Circle = function(chName) {
 	this.chName = chName;
@@ -207,7 +205,7 @@ var stumiView = {
 				self.drawCircle(circle);
 				return self.delay(octopus.getRespTimer());
 			}).then(function(args){
-				self.dispTips('CLick the next button to continue...');
+				self.dispTips('Click the next button to continue...');
 				self.clearDrawing();
 				self.saveCircle(circle);
 				self.nButton.show();
@@ -225,7 +223,7 @@ var stumiView = {
 				self.drawCircle(circle);
 				return self.delay(octopus.getRespTimer());
 			}).then(function(args){
-				self.dispTips('CLick the next button to continue...');
+				self.dispTips('Click the next button to continue...');
 				self.clearDrawing();
 				self.saveCircle(circle);
 				self.nButton.show();

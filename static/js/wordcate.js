@@ -176,6 +176,17 @@ var stumiView = {
 		$(document).off("keypress");
 	},
 
+	mouseDown: function(event){
+		var self=event.data.parent;
+
+		if(event.which == 1){
+			self.clickButton('l');
+		}else if(event.which == 3){
+			self.clickButton('r');
+		}
+		$(document).off("mousedown");
+	},
+
 	delay: function(timer) {
 		var self = this;
 		return new Promise(function(resolve, reject) {
@@ -231,12 +242,13 @@ var stumiView = {
 				return self.delay(octopus.getRespTimer());
 			}).then(function(args){
 				self.clearScreen();
-				self.dispTips('thinking...');
+				self.dispTips('Thinking...');
 				return self.delay(octopus.getBlankTimer());
 			}).then(function(args){
 				self.dispTips('if you finish thinking, please click the screen');
 				return self.clickDelay($(document));
 			}).then(function(args){
+				self.dispTips('Click the left or right button');
 				self.dispButtons();
 				return self.delay(octopus.getRespTimer());
 			}).then(function(args){
@@ -253,20 +265,24 @@ var stumiView = {
 	},
 
 	dispButtons: function(){
-		this.rButton.show();
-		this.lButton.show();
-		$(document).on("keypress", {'parent':this}, this.keyPress);
+		//this.rButton.show();
+		//this.lButton.show();
+		$(document).on("mousedown", {'parent':this}, this.mouseDown);
 	},
 
 	dispTips: function(tips){
 		this.tipsCon.empty().html(tips);
 	},
 
+	clearTips: function() {
+		this.tipsCon.empty();
+	},
+
 	clearScreen: function(){
 		this.pic.hide();
 		this.rButton.hide();
 		this.lButton.hide();
-		$(document).off("keypress");
+		$(document).off("mousedown");
 	}
 }
 

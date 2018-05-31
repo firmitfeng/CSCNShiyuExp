@@ -67,6 +67,7 @@ def end_page():
 @app.route('/exp/<string:test_name>/<string:mode>/', methods=["GET", "POST"])
 @login_required
 def exp_index_page(test_name, mode):
+
     template_name = test_name+'.html'
     
     expid = session['expid']
@@ -112,7 +113,11 @@ def info_page(test_name, mode):
 
     # if nextpage is None:
     #     return redirect(url_for('end_page'))
-    
+    if test_name not in ['words', 'line', 'fishball', 'circle'] or \
+       mode not in ['i', 'r']:
+        session.clear()
+        return make_response('<h1>The test is not found. Thank you.</h1>')
+
     form = WorkerInfoForm()
     if form.validate_on_submit():
         
@@ -138,6 +143,7 @@ def info_page(test_name, mode):
 
         session['workerid'] = form.workerid.data
         session['expid'] = exp_result.id
+        session['gender'] = form.gender.data
         
         #session['sqr_size'] = round(float(form.screen_resolution_w.data) * 3.5377 / float(form.screen_size.data))
         session['sqr_size'] = round(float(form.screen_resolution_w.data) * 1.17925 / float(form.screen_size.data))

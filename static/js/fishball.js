@@ -207,7 +207,6 @@ var stumiView = {
 		self.fishballCon = $('#fishball');
 		self.trackCon = $('.track');
 		self.tipsCon = $('#tips-con');
-		self.buttonCon = $('#button-con');
 
 		self.red = $('#red');
 		self.white = $('#white');
@@ -215,8 +214,10 @@ var stumiView = {
 		self.blue = $('#blue');
 		self.green = $('#green');
 
-		self.selButtons = $('button.sbt');
 		self.maskCon = $("#mask");
+
+		self.lButton = $('#left-button');
+		self.rButton = $('#right-button');
 		self.nButton = $('#next-button');
 
 		self.nButton.click(function() {
@@ -224,14 +225,8 @@ var stumiView = {
 			self.clearFrameCon();
 		}).hide();
 
-		self.selButtons.click(function(){
-			var opt = $(this).text();
-			octopus.setResult(opt);
-			clearTimeout(self.tid);
-			self.render();
-			self.clearFrameCon();
-			$(document).off("keypress");
-		}).hide();
+		self.lButton.click({idx: 'true'}, function(e){ self.clickButton(e.data.idx); });
+		self.rButton.click({idx: 'false'}, function(e){ self.clickButton(e.data.idx); });		
 
 		self.initRender();
 	},
@@ -255,11 +250,17 @@ var stumiView = {
 		});
 	},
 
-	clickButton: function(btIdx) {},
+	clickButton: function(btIdx){
+		var self=this;
+		clearTimeout(self.tid);
+		octopus.setResult(btIdx);
+		this.render();
+	},
 
 	initRender: function() {
 		this.dispTips('Click "next" button to continue');
 		this.clearFrameCon();
+		this.hideButtons();
 		this.nButton.show();
 	},
 
@@ -273,11 +274,22 @@ var stumiView = {
 		var j_codes = [74, 106];
 		var self=event.data.parent;
 		if(f_codes.includes(event.keyCode)){
-			self.selButtons[0].click();
+			self.clickButton('true');
 		}else if(j_codes.includes(event.keyCode)){
-			self.selButtons[1].click();
+			self.clickButton('false');
 		}
 		$(document).off("keypress");
+	},
+
+	mouseDown: function(event){
+		var self=event.data.parent;
+
+		if(event.which == 1){
+			self.clickButton('true');
+		}else if(event.which == 3){
+			self.clickButton('false');
+		}
+		$(document).off("mousedown");
 	},
 
 	render: function() {
@@ -286,7 +298,8 @@ var stumiView = {
 
 		self.nButton.hide();
 		self.tipsCon.empty();
-		self.selButtons.hide();
+		self.clearFrameCon();
+		self.hideButtons();
 
 		if(self.is_practice){
 			self.frameCon.show();
@@ -323,11 +336,11 @@ var stumiView = {
 				return self.delay(STUMITIME * 1000);
 			}).then(function(args) {
 				self.clearFrameCon();
-				self.selButtons.show();
-				$(document).on("keypress", {'parent':self}, self.keyPress);
+				self.dispTips('Click the left or right button');
+				self.dispButtons();
 				return self.delay(RESPTIME * 1000);
 			}).then(function(args) {
-				self.selButtons.hide();
+				self.hideButtons();
 				self.nButton.show();
 			});
 
@@ -347,12 +360,11 @@ var stumiView = {
 				self.dispTips('Click the screen to continue.');
 				return self.clickDelay($(document));
 			}).then(function(args){
-				self.clearTips();
-				self.selButtons.show();
-				$(document).on("keypress", {'parent':self}, self.keyPress);
+				self.dispTips('Click the left or right button');
+				self.dispButtons();
 				return self.delay(RESPTIME * 1000);
 			}).then(function(args) {
-				self.selButtons.hide();
+				self.hideButtons();
 				self.nButton.show();
 			});
 		}
@@ -374,6 +386,22 @@ var stumiView = {
 			this.dispFish(stumi);
 		}
 		this.fishballCon.show();
+	},
+
+	dispButtons: function(){
+		//this.rButton.show();
+		//this.lButton.show();
+		$(document).on("mousedown", {'parent':this}, this.mouseDown);
+	},
+
+	hideButtons: function(){
+		this.rButton.hide();
+		this.lButton.hide();
+		$(document).off("mousedown");
+	},
+
+	clearFrameCon: function() {
+		this.fishballCon.hide();
 	},
 
 	resetFishBall: function(stumi) {
@@ -424,14 +452,6 @@ var stumiView = {
 
 	playAnimate: function(obj, describe, timer) {
 		obj.animate(describe, timer, 'linear');
-	},
-
-	clearFrameCon: function() {
-		this.fishballCon.hide();
-	},
-
-	dispFrameCon: function(respo) {
-
 	}
 }
 

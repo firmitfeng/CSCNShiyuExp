@@ -9,9 +9,10 @@
 
 {% block tips %}
 {% if mode == 'i' %}
-<p>In each trial, you’ll see a description sentence about balls or fish, then the screen will show a video clip. After watching this video clip, you need to use your intuition to decide whether the description is true or false <strong>within 3 seconds</strong>. If you think the description is <strong>true</strong>, please <strong>click the “true” button below</strong>. If you think the description is <strong>false</strong>, please <strong>click the “false” button below</strong>. If you understand the instruction please <strong>click "next"</strong> button to start practicing.</p>
+<p>In each trial of the next task, a description sentence about reasons why balls or fishes move in a specific way will be displayed first, and then a video clip will be displayed. After watching this video clip, you need to judge whether the description is true or false <strong>within 3 seconds(Otherwise you’ll fail the task)</strong>. If you think the description is <strong>true</strong>, please <strong>click the left mouse button</strong>. If you think the description is <strong>false</strong>, please <strong>click the right mouse button</strong>. If you fully understand the instruction please <strong>click “next”</strong> button to proceed to practices.
+</p>
 {% else %}
-<p>In each trial, you’ll see a description sentence about balls or fish, then the screen will show a video clip. After watching this video clip, first you need to <strong>think at least 7 seconds</strong>, then when you finish thinking, you need to decide whether the description is true or false <strong>within 3 seconds</strong>. If you think the description is <strong>true</strong>, please <strong>click the “true” button below</strong>. If you think the description is <strong>false</strong>, please <strong>click the “false” button below</strong>. If you understand the instruction please <strong>click "next"</strong> button to start practicing.</p>
+<p>In each trial of the next task, a description sentence about reasons why balls or fishes move in a specific way will be displayed first, and then a video clip will be displayed. After watching this video clip, first you need to <strong>think at least 7 seconds</strong>. When you finish thinking, you need to judge whether the description is true or false <strong>within 3 seconds(Otherwise you’ll fail the task)</strong>. If you think the description is <strong>true</strong>, please <strong>click the left mouse button</strong>. If you think the description is <strong>false</strong>, please <strong>click the right mouse button</strong>. If you fully understand the instruction please <strong>click “next”</strong> button to proceed to practices.</p>
 {% endif %}
 {% endblock tips %}
 
@@ -24,9 +25,9 @@
     <div class="track"><div id="red"></div></div>
   </div>
 </div>
-<div id="buttom-con" class="row">
-  <button class="btn btn-default btn-lg sbt" type="button">True</button>
-  <button class="btn btn-default btn-lg sbt" type="button">False</button>
+<div id="bottom-con" class="row">
+  <button class="btn btn-default btn-lg" id="left-button" type="button">True</button>
+  <button class="btn btn-default btn-lg" id="right-button" type="button">False</button>
 </div>
 <div id="next-con" class="row">
   <button class="btn btn-default btn-lg" type="button" id="next-button">next</button>
@@ -45,6 +46,7 @@ $(document).ready(function(){
   stumiView.initRender = function() {
     this.is_practice = true;
     this.clearFrameCon();
+    this.hideButtons();
     this.nButton.show();
     this.frameCon.hide();
   };
@@ -92,7 +94,9 @@ $(document).ready(function(){
       return false;
     }
   };
-
+  $(document).contextmenu(function(){
+    return false;
+  }); 
   if ('{{mode}}' == 'r'){
     octopus.init(mode.ret);
   }else if ('{{mode}}' == 'i'){

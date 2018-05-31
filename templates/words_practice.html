@@ -9,9 +9,10 @@
 
 {% block tips %}
 {% if mode == 'i' %}
-<p>Next you’ll see 3 words in each trial. Please use your intuition to decide whether the word on the left or the right is more suitable to be classified together with the word below. If you think <strong>the left one</strong> is more appropriate, please <strong>click the “left” button</strong> below. If you think <strong>the right one</strong> is more appropriate, please <strong>click the “right” button</strong> below. <strong>You only have 3 second for each trial</strong>. If you understand the instruction please click “Next” button to start practicing.</p>
+<p>Next you’ll see 3 words or images in each trial. Please decide whether the upper left or upper right word(or image) is more suitable to be classified together with the word below. If you choose <strong>the left word(or image)</strong>, please <strong>click the left mouse button</strong>. If you choose <strong>the right word(or image)</strong>, please <strong>click the right mouse button</strong>. <strong>You must make a choice within 3 seconds(Otherwise you’ll fail the task)</strong>. If you fully understand the instruction please <strong>click “next”</strong> button to proceed to practices.</p>
 {% else %}
-<p>Next you’ll see 3 words in each trial. Please <strong>think at least 7 seconds at first</strong>, then you need to decide whether the word on the left or the right is more suitable to be classified together with the word below <strong>within 3 seconds</strong>. If you think <strong>the left one</strong> is more appropriate, please <strong>click the “left” button below</strong>. If you think <strong>the right one</strong> is more appropriate, please <strong>click the “right” button below</strong>. <strong>You only have 3 second for each trial</strong>. If you understand the instruction please <strong>click “Next” button</strong> to start practicing.</p>
+<p>Next you’ll see 3 words or images in each trial. Please <strong>think at least 7 seconds at first</strong>, then decide whether the upper left or upper right word(or image) is more suitable to be classified together with the word below. If you choose <strong>the left word(or image)</strong>, please <strong>click the left mouse button</strong>. If you choose <strong>the right word(or image)</strong>, please <strong>click the right mouse button</strong>. <strong>You must make a choice within 3 seconds(Otherwise you’ll fail the task)</strong>. If you understand the instruction please <strong>click “next”</strong> button to proceed to practices.
+</p>
 {% endif %}
 {% endblock tips %}
 
@@ -43,7 +44,9 @@ $(document).ready(function(){
       window.location.href="{{url_for('exp_index_page', test_name=test_name, mode=mode)}}" ;
     });
   };
-  
+  $(document).contextmenu(function(){
+    return false;
+  });  
   if ('{{mode}}' == 'r'){
     octopus.init(mode.ret);
   }else if ('{{mode}}' == 'i'){

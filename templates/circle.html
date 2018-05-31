@@ -35,6 +35,11 @@
 {{ super() }}
 <script src="{{ url_for('static', filename='js/circle.js') }}"></script>
 <script type="text/javascript">
+if({{session['gender']}}){
+  CHARAS.push('Kobe Bryant');  
+}else{
+  CHARAS.push('Serena Williams');  
+}
 $(document).ready(function(){
     octopus.init({{mode}});
 });

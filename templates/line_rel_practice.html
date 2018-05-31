@@ -9,14 +9,12 @@
 
 {% block tips %}
 {% if mode == 'i' %}
-<p>In the next task, you will finish 6 trials. In each of them, we will first display the first graphic 10s; then a mask appears. Then 4 numbers will appear at four corners of the screen, and you need to click the smallest one among them. Finally the screen will show a square, your task is: use your mouse to drag out a vertical line <strong>within 3 seconds</strong> in this square. <strong>The ratio of the vertical line</strong> you draw to the side length of the second square should be equal to the ration of the line to the side length of the square in the first graphic.</p>
-<p>For example:<br><img src="{{ url_for('static', filename='imgs/line/rel.png') }}"></p>
-<p>If you understand the instruction, please <strong>click “Next” button</strong> to start practicing.</p>
+<p>In the next task, you will be asked to finish 6 trials. In each of them, the first graphic will be displayed for 10s. After that, a blurred screen will be displayed. Then 4 numbers will appear at the four corners of the screen, please click the number as instructed. The screen will then display a square. Please use the mouse to drag a vertical line <strong>within 3 seconds</strong> inside this square <strong>(Otherwise you’ll fail the task)</strong>. <strong>The proportion of the line</strong> you draw to the side length of this square should be equal to that in the first graphic.</p>
 {% else %}
-<p>In the next task, you will finish 6 trials. In each of them, we will first display the first graphic 10s; then a mask appears. Then 4 numbers will appear at four corners of the screen, and you need to click the smallest one among them. Then the screen will show a square, your task is: <strong>think at least 7 seconds</strong>, then use your mouse to drag out a vertical line <strong>within 3 seconds</strong> in this square. <strong>The ratio of the vertical line</strong> you draw to the side length of the second square should be equal to the ration of the line to the side length of the square in the first graphic.</p>
-<p>For example:<br><img src="{{ url_for('static', filename='imgs/line/rel.png') }}"></p>
-<p>If you understand the instruction, please <strong>click “Next” button</strong> to start practicing.</p>
+<p>In the next task, you will be asked to finish 6 trials. In each of them, the first graphic will be displayed for 10s. After that, a blurred screen will be displayed. Then 4 numbers will appear at the four corners of the screen, please click the number as instructed. The screen will then display a square. Please <strong>think at least 7 seconds</strong>. After finish thinking, use your mouse to drag a vertical line <strong>within 3 seconds</strong> inside this square <strong>(Otherwise you’ll fail the task)</strong>. <strong>The proportion of the line</strong> you draw to the side length of this square should be equal to that in the first graphic.</p>
 {% endif %}
+<p>For example:<br><img src="{{ url_for('static', filename='imgs/line/rel.png') }}"></p>
+<p>After reading and fully understanding the instruction above, please click <strong>“next” button</strong> to proceed to 3 practices.</p>
 {% endblock tips %}
 
 
@@ -28,7 +26,7 @@
   <div class="frame-container">
     <div id="frame-con"></div>
   </div>
-  <div id="buttom-con" class="row">
+  <div id="bottom-con" class="row">
     <button class="btn btn-default sbt col-md-1" type="button">3</button>
     <button class="btn btn-default sbt col-md-1 col-md-offset-10" type="button">4</button>
   </div>

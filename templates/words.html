@@ -38,6 +38,9 @@
 <script src="{{ url_for('static', filename='js/wordcate.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+  $(document).contextmenu(function(){
+    return false;
+  }); 
   octopus.init({{mode}});
 });
 </script>
