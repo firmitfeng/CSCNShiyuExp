@@ -340,6 +340,7 @@ var stumiView = {
 				self.dispButtons();
 				return self.delay(RESPTIME * 1000);
 			}).then(function(args) {
+				self.dispTips('missing, click next button to continue...');
 				self.hideButtons();
 				self.nButton.show();
 			});
