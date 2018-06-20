@@ -36,9 +36,9 @@
 <script src="{{ url_for('static', filename='js/circle.js') }}"></script>
 <script type="text/javascript">
 if({{session['gender']}}){
-  CHARAS.push('Kobe Bryant');  
+  CHARAS.push('Kobe Bryant (a basketball player)');  
 }else{
-  CHARAS.push('Serena Williams');  
+  CHARAS.push('Serena Williams (a tennis player)');  
 }
 $(document).ready(function(){
     octopus.init({{mode}});

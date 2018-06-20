@@ -336,7 +336,7 @@ var stumiView = {
 				return self.delay(STUMITIME * 1000);
 			}).then(function(args) {
 				self.clearFrameCon();
-				self.dispTips('Click the left or right button');
+				self.dispTips('Ture (left button) or False (right button)');
 				self.dispButtons();
 				return self.delay(RESPTIME * 1000);
 			}).then(function(args) {
@@ -361,7 +361,7 @@ var stumiView = {
 				self.dispTips('Click the screen to continue.');
 				return self.clickDelay($(document));
 			}).then(function(args){
-				self.dispTips('Click the left or right button');
+				self.dispTips('Ture (left button) or False (right button)');
 				self.dispButtons();
 				return self.delay(RESPTIME * 1000);
 			}).then(function(args) {

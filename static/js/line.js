@@ -204,7 +204,7 @@ var stumiView = {
 
 		if (octopus.getMode() == mode.intu) {
 			self.delay(0).then(function(args) {
-				self.dispTips("Please watching the graphic below for 10 seconds.");
+				self.dispTips("Please watch the graphic below for 10 seconds.");
 				self.dispStumi(exper.stumi);
 				return self.delay(STUMITIME*1000);
 			}).then(function(args){
@@ -235,7 +235,7 @@ var stumiView = {
 
 		} else {
 			self.delay(0).then(function(args) {
-				self.dispTips("Please watching the graphic below for 10 seconds.");
+				self.dispTips("Please watch the graphic below for 10 seconds.");
 				self.dispStumi(exper.stumi);
 				return self.delay(STUMITIME*1000);
 			}).then(function(args){

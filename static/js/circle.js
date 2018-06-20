@@ -21,7 +21,7 @@ const mode = {
 
 const DEBUG = 1;
 
-var CHARAS = ['self', 'mother', 'father', 'best friend']; 	//'Kobe Bryant', 'Serena Williams'
+var CHARAS = ['self', 'mother', 'father', 'your best friend']; 	//'Kobe Bryant', 'Serena Williams'
 
 var Circle = function(chName) {
 	this.chName = chName;
