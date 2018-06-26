@@ -29,6 +29,10 @@ from config import config
 CONFIG_NAME = 'production'
 CONFIG_NAME = 'development'
 
+COMPLETE = 0xFF
+UNTEST = 0
+TESTING = 1
+
 app = Flask(__name__)
 
 app.config.from_object(config[CONFIG_NAME])
@@ -68,14 +72,26 @@ def end_page():
 @login_required
 def exp_index_page(test_name, mode):
 
+    # test_name = None
+
+    # for exp in session['exps']:
+    #     if exp[1] == UNTEST:
+    #         
+    #     elif exp[1] == TESTING:
+    #         test_name = exp[0]
+    #         break
+
+    # if test_name is None:
+    #     
+
+    if session['exp'][1] == UNTEST:
+        return redirect(url_for('practice', mode=mode, test_name=session['exp'][0]))
+    elif session['exp'][1] == COMPLETE:
+        return redirect(url_for('end_page'))
+
     template_name = test_name+'.html'
     
     expid = session['expid']
-
-    exp_result = ExpResult.query.filter_by(id=expid).first()
-
-    if exp_result is None:
-        return redirect(url_for('info_page', test_name=test_name, mode=mode))
 
     if test_name == u'fishball':
         return fishball(mode)
@@ -83,11 +99,10 @@ def exp_index_page(test_name, mode):
     if test_name == u'line':
         return line(mode)
 
-    if exp_result.test_data is not None:
-        return make_response('<h1>You have finished this test! Thank you!</h1>')
-
     form = TestForm()
     if form.validate_on_submit():
+        exp_result = ExpResult.query.filter_by(id=expid).first()
+
         exp_result.test_name = test_name
         exp_result.test_mode = mode
         exp_result.test_data = form.result.data
@@ -96,7 +111,9 @@ def exp_index_page(test_name, mode):
         db.session.add(exp_result)
         db.session.commit()
 
-        return redirect(url_for('end_page'))
+        set_test_status(test_name, COMPLETE)
+
+        return redirect(url_for('exp_index_page', mode=mode))
     else:
         if mode == 'i':
             mode = u'mode.intu'
@@ -113,8 +130,7 @@ def info_page(test_name, mode):
 
     # if nextpage is None:
     #     return redirect(url_for('end_page'))
-    if test_name not in ['words', 'line', 'fishball', 'circle'] or \
-       mode not in ['i', 'r']:
+    if mode not in ['i', 'r']:
         session.clear()
         return make_response('<h1>The test is not found. Thank you.</h1>')
 
@@ -125,11 +141,8 @@ def info_page(test_name, mode):
                         .filter_by(test_name = test_name)\
                         .filter_by(test_mode = mode)\
                         .first()
-        if exp_result is not None:
-            return redirect(url_for('end_page'))
-
-
-        exp_result = ExpResult(name = form.name.data,
+        if exp_result is None:
+            exp_result = ExpResult(name = form.name.data,
                                worker_id = form.workerid.data,
                                gender = form.gender.data,
                                race = form.race.data,
@@ -138,24 +151,24 @@ def info_page(test_name, mode):
                                screen_resolution_h = form.screen_resolution_h.data,
                                screen_resolution_w = form.screen_resolution_w.data
                             )
-        db.session.add(exp_result)
-        db.session.commit()
+            db.session.add(exp_result)
+            db.session.commit()
 
-        session['workerid'] = form.workerid.data
+        session['workerid'] = exp_result.worker_id
         session['expid'] = exp_result.id
-        session['gender'] = form.gender.data
+
+        session['gender'] = exp_result.gender
+        session['exp'] = [test_name, UNTEST]
         
         #session['sqr_size'] = round(float(form.screen_resolution_w.data) * 3.5377 / float(form.screen_size.data))
-        session['sqr_size'] = round(float(form.screen_resolution_w.data) * 1.17925 / float(form.screen_size.data))
+        session['sqr_size'] = round(float(exp_result.screen_resolution_w) * 1.17925 / float(exp_result.screen_size))
 
-        if test_name == u'line':
-            if random.randint(0,1):
-                session['line_mode'] = 'abs'
-            else:
-                session['line_mode'] = 'rel'
+        if random.randint(0,1):
+            session['line_mode'] = 'abs'
+        else:
+            session['line_mode'] = 'rel'
 
-
-        return redirect(url_for('practice', test_name=test_name, mode=mode))
+        return redirect(url_for('exp_index_page', test_name=test_name, mode=mode))
     else:
         form.screen_size.data = 23
         return render_template('info.html', form=form, pagetitle='Info')
@@ -165,13 +178,15 @@ def info_page(test_name, mode):
 def practice(test_name, mode):
     practice_page = test_name+'_practice.html'
 
+    set_test_status(test_name, TESTING)
+
     if test_name == 'line':
         return redirect(url_for('line_practice', mode=mode))
 
     return render_template(practice_page, test_name=test_name, mode=mode)
 
 
-@app.route('/exp/line/<string:mode>/practice.html', methods=["GET", "POST"])
+@app.route('/exp/<string:mode>/line/practice.html', methods=["GET", "POST"])
 def line_practice(mode):
     practice_page = "{}_{}_practice.html".format('line', session['line_mode'])
 
@@ -221,7 +236,8 @@ def line(mode):
         if session['line_count'] < 2:
             return render_template('pause.html', next=url_for('line_practice', mode=mode), pagetitle=u'Rest a while.')
         else:
-            return redirect(url_for('end_page'))
+            set_test_status(test_name, COMPLETE)
+            return redirect(url_for('exp_index_page', test_name=test_name, mode=mode))
 
     else:
         if mode == 'i':
@@ -273,7 +289,8 @@ def fishball(mode):
         if session['fishball_count'] < 3:
             return render_template('pause.html', next=url_for('exp_index_page', test_name=test_name, mode=mode), pagetitle=u'Rest a while.')
         else:
-            return redirect(url_for('end_page'))
+            set_test_status(test_name, COMPLETE)
+            return redirect(url_for('exp_index_page', mode=mode))
 
     else:
         if mode == 'i':
@@ -283,6 +300,9 @@ def fishball(mode):
 
         return render_template('fishball.html', form=form, mode=mode)
 
+
+def set_test_status(test_name, status):
+    session['exp'][1] = status
 
 
 @app.route('/manage', methods=["GET", "POST"])

@@ -343,7 +343,7 @@ var stumiView = {
 		self.expCon.on('mouseup', function() {
 			isDrawing = false;
 			respo.height = height;
-			self.clearDrawing();
+			//self.clearDrawing();
 		});
 
 		//return $line;
