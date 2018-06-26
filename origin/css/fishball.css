@@ -28,6 +28,8 @@ body {
 }
 #tips-con{
   min-height: 25px;
+  font-size: 1.5em;
+  text-align: center;
 }
 #exp-con{
   text-align: -webkit-center; 

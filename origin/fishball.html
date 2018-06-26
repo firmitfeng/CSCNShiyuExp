@@ -25,27 +25,30 @@
     <![endif]-->
   </head>
   <body>
-    <main class="main container">
-      <div class="head"><h2>Fish Ball Task</h2></div>
-      <div id="tips-con"></div>
-      <div id="exp-con" class="content">
-        <div class="frame-container">
-          <div id="fishball">
-            <div class="track"><div id="green"></div></div>
-            <div class="track"><div id="yellow"></div></div>
-            <div class="track"><div id="white"></div><div id="blue"></div></div>
-            <div class="track"><div id="red"></div></div>
-          </div>
-        </div>
-        <div id="buttom-con" class="row">
-          <button class="btn btn-default btn-lg sbt" type="button">Yes</button>
-          <button class="btn btn-default btn-lg sbt" type="button">No</button>
-        </div>
-        <div id="next-con" class="row">
-          <button class="btn btn-default btn-lg" type="button" id="next-button">next</button>
-        </div>
-      </div>
-    </main> <!-- /container -->
+<main class="main container">
+    <div class="head"><h2></h2></div>
+    <div id="tips-con"></div>
+    <div id="exp-con" class="content">
+      
+<div class="frame-container" style="display: flex;">
+  <div id="fishball" style="display: flex;">
+    <div class="track ball"><div id="green" class="" style="right: 372.283px;"></div></div>
+    <div class="track ball"><div id="yellow" class="" style="right: 337.283px;"></div></div>
+    <div class="track ball"><div id="white" class="" style="right: 407.283px;"></div><div id="blue" class="" style="right: 477.283px;"></div></div>
+    <div class="track ball"><div id="red" class="" style="right: 362.283px;"></div></div>
+  </div>
+</div>
+<div id="bottom-con" class="row">
+  <button class="btn btn-default btn-lg" id="left-button" type="button" style="display: none;">True</button>
+  <button class="btn btn-default btn-lg" id="right-button" type="button" style="display: none;">False</button>
+</div>
+<div id="next-con" class="row">
+  <button class="btn btn-default btn-lg" type="button" id="next-button" style="display: none;">next</button>
+</div>
+
+
+    </div>
+  </main>
 
     <footer class="footer">
       <div class="container">
@@ -59,5 +62,53 @@
     <script src="js/lib/bootstrap.min.js"></script>
     <script src="js/fishballmeta.js"></script>
     <script src="js/fishball.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+module.init = function() {
+
+    var fishs=[], balls=[];
+    var temp = Array.from(new Array(24),(val,index)=>(index));
+
+    for(var i=0; i<21; i++){
+      fishs[i] = {idx: temp[i], fb:'fish', mode: '', resp: ''}
+      if(i < 7){
+        fishs[i].mode = 'in';
+      }else if(i < 14){
+        fishs[i].mode = 'ex';
+      }else{
+        fishs[i].mode = 'fe';
+      }
+    }
+    this.data = fishs;
+  };
+
+stumiView.runExp = function(exper){
+    var self = this;
+    self.delay(0).then(function(args) {
+      self.dispTips(exper.topic);
+      return self.delay(QUESTIME * 1000);
+    }).then(function(args) {
+      self.clearTips();
+      self.dispStumi(exper);
+      return self.delay(STUMITIME * 1000);
+    }).then(function(args) {
+      self.clearFrameCon();
+      self.dispTips('Ture (left button) or False (right button)');
+      self.dispButtons();
+      return self.delay(RESPTIME * 1000);
+    }).then(function(args) {
+      self.dispTips('missing, click next button to continue...');
+      self.hideButtons();
+      self.nButton.show();
+    });
+
+  };
+
+  $(document).contextmenu(function(){
+    return false;
+  }); 
+  octopus.init(1);
+});
+</script>
   </body>
 </html>  
