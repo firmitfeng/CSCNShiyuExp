@@ -83,10 +83,12 @@ def exp_index_page(test_name, mode):
 
     # if test_name is None:
     #     
+    
+    print session['test_status']
 
-    if session['exp'][1] == UNTEST:
-        return redirect(url_for('practice', mode=mode, test_name=session['exp'][0]))
-    elif session['exp'][1] == COMPLETE:
+    if session['test_status'] == UNTEST:
+        return redirect(url_for('practice', mode=mode, test_name=session['test_name']))
+    elif session['test_status'] == COMPLETE:
         return redirect(url_for('end_page'))
 
     template_name = test_name+'.html'
@@ -111,9 +113,9 @@ def exp_index_page(test_name, mode):
         db.session.add(exp_result)
         db.session.commit()
 
-        set_test_status(test_name, COMPLETE)
+        session['test_status'] = COMPLETE
 
-        return redirect(url_for('exp_index_page', mode=mode))
+        return redirect(url_for('exp_index_page', test_name=test_name, mode=mode))
     else:
         if mode == 'i':
             mode = u'mode.intu'
@@ -158,7 +160,8 @@ def info_page(test_name, mode):
         session['expid'] = exp_result.id
 
         session['gender'] = exp_result.gender
-        session['exp'] = [test_name, UNTEST]
+        session['test_name'] = test_name
+        session['test_status'] = UNTEST
         
         #session['sqr_size'] = round(float(form.screen_resolution_w.data) * 3.5377 / float(form.screen_size.data))
         session['sqr_size'] = round(float(exp_result.screen_resolution_w) * 1.17925 / float(exp_result.screen_size))
@@ -178,7 +181,7 @@ def info_page(test_name, mode):
 def practice(test_name, mode):
     practice_page = test_name+'_practice.html'
 
-    set_test_status(test_name, TESTING)
+    session['test_status'] = TESTING
 
     if test_name == 'line':
         return redirect(url_for('line_practice', mode=mode))
@@ -186,9 +189,10 @@ def practice(test_name, mode):
     return render_template(practice_page, test_name=test_name, mode=mode)
 
 
-@app.route('/exp/<string:mode>/line/practice.html', methods=["GET", "POST"])
+@app.route('/exp/line/<string:mode>/practice.html', methods=["GET", "POST"])
 def line_practice(mode):
     practice_page = "{}_{}_practice.html".format('line', session['line_mode'])
+    session['test_status'] =  TESTING
 
     return render_template(practice_page, test_name='line', mode=mode, sqr_size=session['sqr_size'])
 
@@ -236,7 +240,7 @@ def line(mode):
         if session['line_count'] < 2:
             return render_template('pause.html', next=url_for('line_practice', mode=mode), pagetitle=u'Rest a while.')
         else:
-            set_test_status(test_name, COMPLETE)
+            session['test_status'] =  COMPLETE
             return redirect(url_for('exp_index_page', test_name=test_name, mode=mode))
 
     else:
@@ -289,8 +293,8 @@ def fishball(mode):
         if session['fishball_count'] < 3:
             return render_template('pause.html', next=url_for('exp_index_page', test_name=test_name, mode=mode), pagetitle=u'Rest a while.')
         else:
-            set_test_status(test_name, COMPLETE)
-            return redirect(url_for('exp_index_page', mode=mode))
+            session['test_status'] = COMPLETE
+            return redirect(url_for('exp_index_page', test_name=test_name, mode=mode))
 
     else:
         if mode == 'i':
@@ -302,7 +306,7 @@ def fishball(mode):
 
 
 def set_test_status(test_name, status):
-    session['exp'][1] = status
+    session['test_status'] = status
 
 
 @app.route('/manage', methods=["GET", "POST"])
