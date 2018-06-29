@@ -54,7 +54,7 @@ manager.add_command('db', MigrateCommand)
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if 'expid' in session:
+        if 'expid' in session and 'test_status' in session:
             return f(*args, **kwargs)
         else:
             return redirect(url_for('info_page', test_name=kwargs['test_name'], mode=kwargs['mode']))
@@ -72,20 +72,7 @@ def end_page():
 @login_required
 def exp_index_page(test_name, mode):
 
-    # test_name = None
-
-    # for exp in session['exps']:
-    #     if exp[1] == UNTEST:
-    #         
-    #     elif exp[1] == TESTING:
-    #         test_name = exp[0]
-    #         break
-
-    # if test_name is None:
-    #     
     
-    print session['test_status']
-
     if session['test_status'] == UNTEST:
         return redirect(url_for('practice', mode=mode, test_name=session['test_name']))
     elif session['test_status'] == COMPLETE:
@@ -178,6 +165,7 @@ def info_page(test_name, mode):
 
 
 @app.route('/exp/<string:test_name>/<string:mode>/practice.html', methods=["GET", "POST"])
+@login_required
 def practice(test_name, mode):
     practice_page = test_name+'_practice.html'
 
@@ -190,6 +178,7 @@ def practice(test_name, mode):
 
 
 @app.route('/exp/line/<string:mode>/practice.html', methods=["GET", "POST"])
+@login_required
 def line_practice(mode):
     practice_page = "{}_{}_practice.html".format('line', session['line_mode'])
     session['test_status'] =  TESTING
