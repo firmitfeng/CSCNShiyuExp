@@ -248,11 +248,12 @@ var stumiView = {
 				self.dispTips('if you finish thinking, please click the screen');
 				return self.clickDelay($(document));
 			}).then(function(args){
-				self.dispTips('Click the left or right button');
+				self.dispTips('Choose the left one or the right one');
 				self.dispButtons();
 				return self.delay(octopus.getRespTimer());
 			}).then(function(args){
 				self.clearScreen();
+				self.dispTips('missing, click next button to continue...');
 				self.nButton.show();
 			});
 		}
