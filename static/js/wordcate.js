@@ -205,6 +205,16 @@ var stumiView = {
 		});
 	},
 
+	mouseKeyDelay: function(clickedObj){
+		var self = this;
+		return new Promise(function(resolve, reject) {
+			clickedObj.on('click', function(e) {
+				clickedObj.off("mousedown");
+				resolve();
+			});
+		});
+	},
+
 	saveData: function () {
 		octopus.saveData();
 	},
@@ -246,7 +256,7 @@ var stumiView = {
 				return self.delay(octopus.getBlankTimer());
 			}).then(function(args){
 				self.dispTips('if you finish thinking, please click the screen');
-				return self.clickDelay($(document));
+				return self.mouseKeyDelay($(document));
 			}).then(function(args){
 				self.dispTips('Choose the left one or the right one');
 				self.dispButtons();
