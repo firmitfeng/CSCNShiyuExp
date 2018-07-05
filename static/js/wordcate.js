@@ -208,9 +208,9 @@ var stumiView = {
 	mouseKeyDelay: function(clickedObj){
 		var self = this;
 		return new Promise(function(resolve, reject) {
-			clickedObj.on('click', function(e) {
-				clickedObj.off("mousedown");
+			clickedObj.on('mousedown', function(e) {
 				resolve();
+				clickedObj.off("mousedown");
 			});
 		});
 	},
