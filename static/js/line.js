@@ -252,6 +252,7 @@ var stumiView = {
 			}).then(function(){
 				self.dispTips('Please think at least '+BLANKTIME+' seconds.');
 				self.selButtons.hide();
+				self.dispFrameCon(exper.respo);
 				return self.delay(BLANKTIME*1000);
 			}).then(function(args){
 				self.dispTips('If you are ready, please click the screen.');
@@ -263,7 +264,6 @@ var stumiView = {
 					self.dispTips('Please draw a vertical line within 3 seconds. <strong>The proportion of the line</strong> you draw to the side length of this square should be equal to that in the first graphic.');
 				}
 				self.selButtons.hide();
-				self.dispFrameCon(exper.respo);
 				self.drawLine(exper.respo);
 				return self.delay(RESPTIME*1000);
 			}).then(function(args){
