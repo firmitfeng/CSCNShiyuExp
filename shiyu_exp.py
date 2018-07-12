@@ -64,7 +64,7 @@ def login_required(f):
 @app.route('/exp/end')
 def end_page():
     session.clear()
-    return make_response('<h1>Complete! Thank you!</h1>')
+    return make_response('<h1>Complete! Thank you!</h1><p>Please close the window and finish the questionaire part.</p>')
 
 
 #mode 取值 i, r

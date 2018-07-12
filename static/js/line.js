@@ -219,15 +219,16 @@ var stumiView = {
 				return self.clickDelay($(self.selButtons[randIdx-1]));
 			}).then(function(){
 				if(exper.mode == 'abs'){
-					self.dispTips('Please draw a vertical line. <strong>The absolute length of the line</strong> you draw should be equal to that in the first graphic.');
+					self.dispTips('Please draw a vertical line within 3 seconds. <strong>The absolute length of the line</strong> you draw should be equal to that in the first graphic.');
 				}else{
-					self.dispTips('Please draw a vertical line. <strong>The proportion of the line</strong> you draw to the side length of this square should be equal to that in the first graphic.');
+					self.dispTips('Please draw a vertical line within 3 seconds. <strong>The proportion of the line</strong> you draw to the side length of this square should be equal to that in the first graphic.');
 				}
 				self.selButtons.hide();
 				self.dispFrameCon(exper.respo);
 				self.drawLine(exper.respo);
 				return self.delay(RESPTIME*1000);
 			}).then(function(args){
+				self.dispTips('Click next button to continue');
 				self.clearDrawing();
 				self.saveLine(exper);
 				self.nButton.show();
@@ -257,15 +258,16 @@ var stumiView = {
 				return self.clickDelay($(document));
 			}).then(function(args){
 				if(exper.mode == 'abs'){
-					self.dispTips('Please draw a vertical line. <strong>The absolute length of the line</strong> you draw should be equal to that in the first graphic.');
+					self.dispTips('Please draw a vertical line within 3 seconds. <strong>The absolute length of the line</strong> you draw should be equal to that in the first graphic.');
 				}else{
-					self.dispTips('Please draw a vertical line. <strong>The proportion of the line</strong> you draw to the side length of this square should be equal to that in the first graphic.');
+					self.dispTips('Please draw a vertical line within 3 seconds. <strong>The proportion of the line</strong> you draw to the side length of this square should be equal to that in the first graphic.');
 				}
 				self.selButtons.hide();
 				self.dispFrameCon(exper.respo);
 				self.drawLine(exper.respo);
 				return self.delay(RESPTIME*1000);
 			}).then(function(args){
+				self.dispTips('Click next button to continue');
 				self.clearDrawing();
 				self.saveLine(exper);
 				self.nButton.show();
