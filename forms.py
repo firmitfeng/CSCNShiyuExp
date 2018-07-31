@@ -22,7 +22,7 @@ class WorkerInfoForm(Form):
                 (6, u'Mixed; Parents are from two different groups'),
                 (7, u'Other')
             ])
-    religion =     StringField(u'religion')
+    religion = StringField(u'religion')
     screen_size = StringField(u'screen size')
     screen_resolution_h = HiddenField(u'screen_resolution_h')
     screen_resolution_w = HiddenField(u'screen_resolution_w')

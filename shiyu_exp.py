@@ -312,21 +312,28 @@ def manage_download_result():
     if form.validate_on_submit():
         if(form.name.data == 'admin' and form.passwd.data == 'cscn@psy2018'):
             session['login_count'] = 0
-            result_content = u'"ID","NAME","WORKERID","screen_size", "screen_resolution_w", "screen_resolution_h", \
-                                "test_name", "test_mode", "submit_time", "test_data"\n';
-            results = ExpResult.query.all()
 
-            fields = ['id', 'name', 'worker_id', \
+            exps = ['line', 'fishball', 'circle', 'words']
+
+            result_content = u'"NAME","WORKERID", "GENDER", "RACE", "RELIGION", \
+                                "screen_size", "screen_resolution_w", "screen_resolution_h", \
+                                "test_name", "test_mode", "submit_time", "test_data"\n';
+
+            fields = ['name', 'worker_id', 'gender', 'race', 'religion',\
                       'screen_size', 'screen_resolution_w', 'screen_resolution_h',\
                       'test_name', 'test_mode', 'submit_time', \
                       'test_data']
 
-            for result in results:
-                temp_list = []
-                for field in fields:
-                    temp_list.append(str(getattr(result, field)))
-                result_content += u','.join(temp_list)
-                result_content += u'\n'
+            for exp in exps:
+                results = ExpResult.query.filter(ExpResult.test_name.like('%'+exp+'%')).all()
+
+
+                for result in results:
+                    temp_list = []
+                    for field in fields:
+                        temp_list.append(str(getattr(result, field)))
+                    result_content += u','.join(temp_list)
+                    result_content += u'\n'
 
             response = make_response(result_content)
             response.headers["Content-Disposition"] = "attachment; filename=result.csv"
