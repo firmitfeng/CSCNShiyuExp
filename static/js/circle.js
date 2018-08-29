@@ -121,7 +121,7 @@ var octopus = {
 		if (this.currCircleIdx < module.getCircleCount()) {
 			return module.getCircle(this.currCircleIdx);
 		} else {
-			this.saveData();
+			//this.saveData();
 			return false;
 		}
 	},
@@ -196,6 +196,7 @@ var stumiView = {
 
 		var circle = octopus.getCircle();
 		if(!circle){
+			self.saveData();
 			return ;
 		}
 
@@ -207,7 +208,6 @@ var stumiView = {
 			}).then(function(args){
 				self.dispTips('Click the next button to continue...');
 				self.clearDrawing();
-				self.saveCircle(circle);
 				self.nButton.show();
 			});
 
@@ -219,13 +219,12 @@ var stumiView = {
 				self.dispTips('Click the screen to start.');
 				return self.clickDelay(self.drawCon);
 			}).then(function(args){
-				self.dispTips('Please draw a circle representing'+circle.chName+ ' in ' +octopus.getRespTimer()/1000+' seconds.');
+				self.dispTips('Please draw a circle representing '+circle.chName+ ' in ' +octopus.getRespTimer()/1000+' seconds.');
 				self.drawCircle(circle);
 				return self.delay(octopus.getRespTimer());
 			}).then(function(args){
 				self.dispTips('Click the next button to continue...');
 				self.clearDrawing();
-				self.saveCircle(circle);
 				self.nButton.show();
 			});
 
@@ -241,8 +240,8 @@ var stumiView = {
 
 	},
 
-	saveCircle: function(circle){
-		octopus.saveCircle(circle);
+	saveData: function(){
+		octopus.saveData();
 	},
 
 	drawCircle: function(circle) {

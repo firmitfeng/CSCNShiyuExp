@@ -5,22 +5,12 @@
 <link href="{{ url_for('static', filename='css/circle.css') }}" rel="stylesheet" type="text/css">
 {% endblock -%}
 
-{% block tips %}
-{% if mode == 'i' %}
-<p>In the next task, you will be asked to draw 3 circles to represent three different persons. One person will be displayed at a time. Please use your mouse <strong>to draw a circle to represent the target displayed <span class="red">within 3 seconds</span> (Otherwise you’ll fail the task)</strong>. You can now practice drawing circles by clicking and dragging your mouse in the blank space below. When you are familiar with the operation, please click the next button to proceed to the formal experiment.
-</p>
-{% else %}
-<p>In the next task, you will be asked to draw 3 circles to represent three different persons. One person will be displayed at a time. Before drawing each circle, you need to think <span class="red">at least 7 seconds</span>. When you are ready, please click the screen and <strong>draw a circle to represent the target displayed. After your first click, please finish drawing <span class="red">within 3 seconds</span> (Otherwise you’ll fail the task)</strong>. You can now practice drawing circles by clicking and dragging your mouse in the blank space below. When you are familiar with the operation, please click the next button to proceed to the formal experiment.
-</p>
-{% endif %}
-{% endblock tips %}
-
 {% block exp_con_attribs %} class="content col-xs-12 col-sm-12 col-md-12" {% endblock exp_con_attribs %}
 
 {% block exp_con %}
   <div id="drawing-con"></div>
   <div id="button-con" class="center-block">
-    <a class="btn btn-default" href="{{url_for('exp_index_page', test_name=test_name, mode=mode)}}" role="button" id="next-button">next</a>
+    <button class="btn btn-default" type="button" id="next-button">next</button>
   </div>
 {% endblock exp_con %}
 
@@ -28,7 +18,19 @@
 {{ super() }}
 <script src="{{ url_for('static', filename='js/circle.js') }}"></script>
 <script type="text/javascript">
-CHARAS = ['aunt', 'uncle', 'sister or brother'];  
+  CHARAS = ['aunt', 'uncle', 'sister or brother'];
+
+  stumiView.initRender = function() {
+	this.dispTips('Click next button to start the practice');
+	this.nButton.show();
+  };
+
+  stumiView.saveData = function(){
+    this.dispTips('Practice is over. If you are ready, please click "next" button.');
+    this.nButton.show().click(function(){
+      window.location.href="{{url_for('exp_index_page', test_name=test_name, mode=mode)}}" ;
+    });
+  };
 $(document).ready(function(){
   if ('{{mode}}' == 'r'){
     octopus.init(mode.ret);

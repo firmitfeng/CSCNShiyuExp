@@ -171,6 +171,13 @@ def practice(test_name, mode):
 
     session['test_status'] = TESTING
 
+    if test_name == 'circle':
+        p = int(request.args.get('p'))
+        print p
+        if p == 1:
+            print 12345678
+            return render_template('circle_demo.html', test_name=test_name, mode=mode)
+
     if test_name == 'line':
         return redirect(url_for('line_practice', mode=mode))
 
